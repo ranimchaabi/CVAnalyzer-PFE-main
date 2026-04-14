@@ -15,6 +15,7 @@ public class ProfileController : Controller
 
     private static readonly string[] AllowedImageExtensions = { ".jpg", ".jpeg", ".png", ".webp" };
     private static readonly string[] AllowedStatuses = { "Accepted", "Rejected", "Pending" };
+    private const long MaxImageFileSize = 2 * 1024 * 1024; // 2MB
 
     public ProfileController(AppDbContext context, IWebHostEnvironment env, PasswordService passwordService)
     {
@@ -74,6 +75,7 @@ public class ProfileController : Controller
         {
             NomComplet = utilisateur.NomUtilisateur ?? "",
             Email = utilisateur.Email ?? "",
+            PhotoUrl = utilisateur.PhotoUrl,
             DepartementOptions = deptOptions,
             DesignationOptions = DefaultDesignations,
             Applications = applications,
@@ -173,11 +175,48 @@ public class ProfileController : Controller
         HttpContext.Session.SetString("UserName", utilisateur.NomUtilisateur);
         HttpContext.Session.SetString("UserEmail", utilisateur.Email);
 
-        // Pas de table Candidat dans la BD, donc certains champs ne peuvent pas être sauvegardés ici
-        // sans modifier la base de données..
+        // Handle photo upload
+        if (photo != null && photo.Length > 0)
+        {
+            var ext = Path.GetExtension(photo.FileName).ToLowerInvariant();
+            if (!AllowedImageExtensions.Contains(ext))
+            {
+                TempData["ProfileError"] = "Format d'image non valide. Utilisez JPG, JPEG ou PNG.";
+                return RedirectToAction(nameof(Index), new { tab = "profile" });
+            }
+
+            if (photo.Length > MaxImageFileSize)
+            {
+                TempData["ProfileError"] = "La taille de l'image ne doit pas dépasser 2 MB.";
+                return RedirectToAction(nameof(Index), new { tab = "profile" });
+            }
+
+            var uploadsFolder = Path.Combine(_env.WebRootPath, "uploads", "profiles");
+            Directory.CreateDirectory(uploadsFolder);
+
+            // Delete old photo if exists
+            if (!string.IsNullOrEmpty(utilisateur.PhotoUrl))
+            {
+                var oldPath = Path.Combine(_env.WebRootPath, utilisateur.PhotoUrl.TrimStart('~').TrimStart('/').Replace('/', Path.DirectorySeparatorChar));
+                if (System.IO.File.Exists(oldPath))
+                {
+                    try { System.IO.File.Delete(oldPath); } catch { /* ignore */ }
+                }
+            }
+
+            var uniqueFileName = $"{Guid.NewGuid()}{ext}";
+            var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await photo.CopyToAsync(stream);
+            }
+
+            utilisateur.PhotoUrl = $"/uploads/profiles/{uniqueFileName}";
+        }
 
         await _context.SaveChangesAsync();
-        TempData["ProfileSuccess"] = "Profil enregistré (Seuls le nom et l'email sont persistants dans la DB).";
+        TempData["ProfileSuccess"] = "Profil enregistré avec succès.";
         return RedirectToAction(nameof(Index), new { tab = "profile" });
     }
 

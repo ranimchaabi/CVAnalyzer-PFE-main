@@ -23,14 +23,18 @@ public class UserNavViewComponent : ViewComponent
 
         var userName = HttpContext?.Session?.GetString("UserName") ?? "";
 
-        // No Candidat table exists
+        // Fetch user with PhotoUrl from database
+        var utilisateur = await _context.Utilisateurs
+            .AsNoTracking()
+            .FirstOrDefaultAsync(u => u.Id == userId);
+
         return View(new UserNavVm
         {
             IsAuthenticated = true,
             UserId = userId,
             UserName = userName,
             Designation = null,
-            PhotoUrl = null
+            PhotoUrl = utilisateur?.PhotoUrl
         });
     }
 

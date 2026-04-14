@@ -21,35 +21,34 @@
         </div>
 
         <div class="row pt-45">
-            <div class="col-lg-4 col-md-6">
-                  @foreach(var item in Model)
-{
-    <div class="blog-card">
-        <div class="blog-img">
-            <a href="/Offre/Details/@item.Id">
-                <img src="~/images/blog/blog-img1.jpg" alt="Blog Images">
-            </a>
+            @foreach(var item in Model)
+            {
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="blog-card">
+                        <div class="blog-img">
+                            <a href="/Offre/Details/@item.Id">
+                                <img src="~/images/blog/blog-img1.jpg" alt="Blog Images">
+                            </a>
 
-            <div class="blog-tag">
-                <h3>@item.DateCreation.Year</h3>
-            </div>
-        </div>
+                            <div class="blog-tag">
+                                <h3>@item.DateCreation.Year</h3>
+                            </div>
+                        </div>
 
-        <div class="content">
-            <h3>
-                <a href="/Offre/Details/@item.Id">
-                    @item.Titre
-                </a>
-            </h3>
+                        <div class="content">
+                            <h3>
+                                <a href="/Offre/Details/@item.Id">
+                                    @item.Titre
+                                </a>
+                            </h3>
 
-            <a href="/Offre/Details/@item.Id" class="read-btn">
-                Voir plus
-            </a>
-        </div>
-    </div>
-}
-                
-            </div>
+                            <a href="/Offre/Details/@item.Id" class="read-btn">
+                                Voir plus
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
         </div>
     </div>
 </div>

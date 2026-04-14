@@ -281,3 +281,4 @@ C:\Users\ranim\Downloads\CVAnalyzer-PFE-main\Candidat\obj\Debug\net8.0\refint\Cv
 C:\Users\ranim\Downloads\CVAnalyzer-PFE-main\Candidat\obj\Debug\net8.0\CvParsing.pdb
 C:\Users\ranim\Downloads\CVAnalyzer-PFE-main\Candidat\obj\Debug\net8.0\CvParsing.genruntimeconfig.cache
 C:\Users\ranim\Downloads\CVAnalyzer-PFE-main\Candidat\obj\Debug\net8.0\ref\CvParsing.dll
+C:\Users\ranim\Downloads\CVAnalyzer-PFE-main\Candidat\obj\Debug\net8.0\CvParsing.sourcelink.json

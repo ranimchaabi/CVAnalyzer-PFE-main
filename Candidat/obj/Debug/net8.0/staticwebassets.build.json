@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "SQau3Oc3Vwx5JpmAOdFTcBSuS5FVrH9+G/oRNzk3gDA=",
+  "Hash": "YTgah4V0b0oKh7vFjUSxqacGOZ1HRzN3J1zWnS0DaGg=",
   "Source": "CvParsing",
   "BasePath": "_content/CvParsing",
   "Mode": "Default",
@@ -4670,6 +4670,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\uploads\\profiles\\.gitkeep"
+    },
+    {
+      "Identity": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Candidat\\wwwroot\\uploads\\profiles\\0670194f-5f4e-471e-b790-ee7798fdf7c5.jpeg",
+      "SourceId": "CvParsing",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Candidat\\wwwroot\\",
+      "BasePath": "_content/CvParsing",
+      "RelativePath": "uploads/profiles/0670194f-5f4e-471e-b790-ee7798fdf7c5.jpeg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\profiles\\0670194f-5f4e-471e-b790-ee7798fdf7c5.jpeg"
     },
     {
       "Identity": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Candidat\\wwwroot\\uploads\\profiles\\user-1.jpeg",

@@ -20,5 +20,6 @@ public class Utilisateur
     public bool IsActive { get; set; } = true;
 
     public string? Departements { get; set; }  // départements gérés (pour directeur)
+    public string? PhotoUrl { get; set; }  // URL de la photo de profil
 
 }
