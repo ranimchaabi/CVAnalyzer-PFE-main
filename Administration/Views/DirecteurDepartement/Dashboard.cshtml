@@ -1,0 +1,70 @@
+@model Administration.ViewModels.DashboardStatsViewModel
+@{
+    ViewData["Title"] = "Tableau de bord";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid px-4 py-3">
+    <div class="row g-4 mb-4">
+        <div class="col-md-4 col-sm-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body d-flex align-items-center gap-3">
+                    <div class="rounded-circle bg-warning bg-opacity-10 p-3">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h6 class="text-muted mb-0">Postes ouverts</h6>
+                        <h2 class="mb-0 fw-bold">@Model.TotalOffres</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body d-flex align-items-center gap-3">
+                    <div class="rounded-circle bg-primary bg-opacity-10 p-3">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4f6ef7" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h6 class="text-muted mb-0">CVs reçus</h6>
+                        <h2 class="mb-0 fw-bold">@Model.TotalCvs</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body d-flex align-items-center gap-3">
+                    <div class="rounded-circle bg-success bg-opacity-10 p-3">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2">
+                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h6 class="text-muted mb-0">Analyses (Matches)</h6>
+                        <h2 class="mb-0 fw-bold">@Model.TotalMatches</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-white fw-semibold">Actions rapides</div>
+        <div class="card-body d-flex gap-2 flex-wrap">
+            <a asp-controller="DirecteurDepartement" asp-action="Postes" class="btn btn-outline-primary">
+                Voir les postes
+            </a>
+            
+            <a asp-controller="DirecteurDepartement" asp-action="ResultatsCV" class="btn btn-outline-success">
+                Décisions CV
+            </a>
+        </div>
+    </div>
+</div>

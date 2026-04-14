@@ -1,0 +1,59 @@
+﻿@model List<CvParsing.Models.OffreEmploi>
+
+@{
+    ViewData["Title"] = "Offres";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="page-strip">
+    <div class="container">
+        <nav class="page-strip__nav" aria-label="Breadcrumb">
+            <a href="/Home/Index">Accueil</a><span class="page-strip__sep">›</span><span class="page-strip__current">Offres d'emploi</span>
+        </nav>
+    </div>
+</div>
+
+<!-- Case Study Area -->
+<div class="case-study-area pt-100 pb-70">
+    <div class="container">
+        <div class="section-title text-center">
+            <h2>Découvrez nos offres d'emploi</h2>
+        </div>
+
+        <div class="row pt-45">
+            <div class="col-lg-4 col-md-6">
+                  @foreach(var item in Model)
+{
+    <div class="blog-card">
+        <div class="blog-img">
+            <a href="/Offre/Details/@item.Id">
+                <img src="~/images/blog/blog-img1.jpg" alt="Blog Images">
+            </a>
+
+            <div class="blog-tag">
+                <h3>@item.DateCreation.Year</h3>
+            </div>
+        </div>
+
+        <div class="content">
+            <h3>
+                <a href="/Offre/Details/@item.Id">
+                    @item.Titre
+                </a>
+            </h3>
+
+            <a href="/Offre/Details/@item.Id" class="read-btn">
+                Voir plus
+            </a>
+        </div>
+    </div>
+}
+                
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Case Study Area End -->
+
+
+

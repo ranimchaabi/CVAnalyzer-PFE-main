@@ -1,0 +1,119 @@
+@model Administration.Models.OffreEmploi
+@{
+    ViewData["Title"] = "Détails du poste - " + Model.Titre;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid px-4 py-3">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="mb-0 fw-semibold">Détails du poste</h5>
+        <a asp-action="Postes" class="btn btn-outline-secondary btn-sm">
+            ← Retour à la liste
+        </a>
+    </div>
+
+    <!-- Informations du poste -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <dl class="row mb-0">
+                        <dt class="col-sm-4">Titre</dt>
+                        <dd class="col-sm-8">@Model.Titre</dd>
+
+                        <dt class="col-sm-4">Département</dt>
+                        <dd class="col-sm-8">@Model.Departement</dd>
+
+                        <dt class="col-sm-4">Type</dt>
+                        <dd class="col-sm-8">@Model.Type</dd>
+
+                        <dt class="col-sm-4">Expérience requise</dt>
+                        <dd class="col-sm-8">@Model.Experience an(s)</dd>
+                    </dl>
+                </div>
+                <div class="col-md-6">
+                    <dl class="row mb-0">
+                        <dt class="col-sm-4">Niveau d'éducation</dt>
+                        <dd class="col-sm-8">@Model.NiveauEducation</dd>
+
+                        <dt class="col-sm-4">Statut</dt>
+                        <dd class="col-sm-8">
+                            <span class="badge @(Model.Statut == "ACTIF" ? "bg-success" : "bg-secondary")">
+                                @Model.Statut
+                            </span>
+                        </dd>
+
+                        <dt class="col-sm-4">Date de création</dt>
+                        <dd class="col-sm-8">@Model.DateCreation.ToString("dd/MM/yyyy")</dd>
+                    </dl>
+                </div>
+            </div>
+            @if (!string.IsNullOrWhiteSpace(Model.Description))
+            {
+                <div class="mt-3">
+                    <strong>Description :</strong>
+                    <p class="mt-1">@Model.Description</p>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Liste des candidats (CV) -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-white fw-semibold">
+            <i class="bi bi-people"></i> Candidats ayant postulé
+        </div>
+        <div class="card-body p-0">
+            @if (Model.Cvs == null || !Model.Cvs.Any())
+            {
+                <div class="text-center py-4 text-muted">
+                    Aucun CV déposé pour ce poste.
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0 align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Nom complet</th>
+                                <th>Email</th>
+                                <th>Score global</th>
+                                <th class="text-end">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var cv in Model.Cvs)
+                            {
+                                var match = cv.Matches.FirstOrDefault();
+                                var score = match?.GlobalScore.ToString("F2") ?? "Non évalué";
+                                <tr>
+                                    <td>
+                                        @(cv.DonneesCv?.NomCandidat ?? "CV sans nom")
+                                    </td>
+                                    <td>@(cv.DonneesCv?.Email ?? "—")</td>
+                                    <td>
+                                        @if (match != null)
+                                        {
+                                            <span class="badge bg-primary">@score%</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">@score</span>
+                                        }
+                                    </td>
+                                    <td class="text-end">
+                                        <a asp-action="CvResult" asp-route-offreId="@Model.Id" asp-route-cvId="@cv.Id"
+                                           class="btn btn-sm btn-outline-info">
+                                            Voir analyse
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>

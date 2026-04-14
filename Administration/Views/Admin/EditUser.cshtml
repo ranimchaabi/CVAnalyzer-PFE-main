@@ -1,0 +1,95 @@
+@using Administration.ViewModels
+@model UserEditViewModel
+@{
+    ViewData["Title"] = "Modifier utilisateur";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var roles = ViewBag.Roles as List<string> ?? new List<string>();
+}
+
+<div class="container-fluid px-4 py-3">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white fw-semibold">Modifier : @Model.NomUtilisateur</div>
+                <div class="card-body">
+                    <form method="post">
+                        @Html.AntiForgeryToken()
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2"></div>
+                        <input type="hidden" asp-for="Id" />
+
+                        <div class="mb-3">
+                            <label asp-for="NomUtilisateur" class="form-label fw-semibold">Nom d'utilisateur</label>
+                            <input asp-for="NomUtilisateur" class="form-control bg-light" readonly />
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label fw-semibold">Email</label>
+                            <input asp-for="Email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Role" class="form-label fw-semibold">Rôle</label>
+                            <select asp-for="Role" id="roleSelect" class="form-select"
+                                    asp-items="@(new SelectList(roles))">
+                            </select>
+                        </div>
+
+                        {{!-- Zone départements : visible uniquement si Directeur --}}
+                        <div class="mb-3" id="departementsGroup" style="display:none;">
+                            <label asp-for="Departements" class="form-label fw-semibold">
+                                Départements gérés
+                                <small class="text-muted fw-normal">(séparés par des virgules)</small>
+                            </label>
+                            <textarea asp-for="Departements"
+                                      class="form-control"
+                                      rows="3"
+                                      placeholder="Ex : Informatique, Ressources Humaines, Finance"></textarea>
+                            <span asp-validation-for="Departements" class="text-danger small"></span>
+                            <div class="form-text">Entrez les noms des départements séparés par des virgules.</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="NewPassword" class="form-label fw-semibold">
+                                Nouveau mot de passe
+                                <small class="text-muted fw-normal">(laisser vide pour ne pas changer)</small>
+                            </label>
+                            <input asp-for="NewPassword" type="password" class="form-control" />
+                        </div>
+
+                        <div class="mb-3 form-check">
+                            <input asp-for="IsActive" class="form-check-input" />
+                            <label asp-for="IsActive" class="form-check-label">Compte actif</label>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">Enregistrer</button>
+                            <a asp-action="Users" class="btn btn-outline-secondary">Retour</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        const roleSelect = document.getElementById('roleSelect');
+        const departementsGroup = document.getElementById('departementsGroup');
+
+        function toggleDepartements() {
+            if (roleSelect.value === 'Directeur') {
+                departementsGroup.style.display = 'block';
+            } else {
+                departementsGroup.style.display = 'none';
+            }
+        }
+
+        roleSelect.addEventListener('change', toggleDepartements);
+
+        // Initialisation au chargement — important pour l'édition d'un Directeur existant
+        toggleDepartements();
+    </script>
+}

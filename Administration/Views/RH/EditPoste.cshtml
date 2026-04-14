@@ -1,0 +1,81 @@
+@model Administration.Models.OffreEmploi
+@{
+    ViewData["Title"] = "Modifier le poste";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid px-4 py-3">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white fw-semibold">Modifier : @Model.Titre</div>
+                <div class="card-body">
+                    <form method="post">
+                        @Html.AntiForgeryToken()
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2"></div>
+                        <input type="hidden" asp-for="Id" />
+                        <input type="hidden" asp-for="IdResponsable" />
+                        <input type="hidden" asp-for="DateCreation" />
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="Titre" class="form-label fw-semibold">Titre du poste</label>
+                                <input asp-for="Titre" class="form-control">
+                                <span asp-validation-for="Titre" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Departement" class="form-label fw-semibold">Département</label>
+                                <input asp-for="Departement" class="form-control">
+                                <span asp-validation-for="Departement" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Type" class="form-label fw-semibold">Type de contrat</label>
+                                <select asp-for="Type" class="form-select">
+                                    <option value="CDI">CDI</option>
+                                    <option value="CDD">CDD</option>
+                                    <option value="Stage">Stage</option>
+                                    <option value="Freelance">Freelance</option>
+                                    <option value="Alternance">Alternance</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Experience" class="form-label fw-semibold">Expérience (années)</label>
+                                <input asp-for="Experience" type="number" min="0" class="form-control">
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="NiveauEducation" class="form-label fw-semibold">Niveau d'éducation</label>
+                                <select asp-for="NiveauEducation" class="form-select">
+                                    <option value="Bac">Bac</option>
+                                    <option value="Bac+2">Bac+2</option>
+                                    <option value="Bac+3">Bac+3 (Licence)</option>
+                                    <option value="Bac+5">Bac+5 (Master)</option>
+                                    <option value="Doctorat">Doctorat</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Statut" class="form-label fw-semibold">Statut</label>
+                                <select asp-for="Statut" class="form-select">
+                                    <option value="ACTIF">ACTIF</option>
+                                    <option value="INACTIF">INACTIF</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label asp-for="Description" class="form-label fw-semibold">Description</label>
+                                <textarea asp-for="Description" class="form-control" rows="5"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary">Enregistrer</button>
+                            <a asp-action="Postes" class="btn btn-outline-secondary">Annuler</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

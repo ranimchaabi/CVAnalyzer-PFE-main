@@ -1,0 +1,494 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - AdminPanel</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="~/css/layout.css" />
+
+    <style>
+        body {
+            background: #f1f5f9;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            width: 260px;
+            height: 100vh;
+            position: fixed;
+            background: linear-gradient(180deg, #0f172a, #020617);
+            color: white;
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
+        }
+
+        .sidebar.collapsed {
+            width: 70px;
+        }
+
+        .sidebar-brand {
+            padding: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .sidebar.collapsed .sidebar-brand {
+            padding: 20px 10px;
+            font-size: 16px;
+        }
+
+        .sidebar-brand span {
+            color: #4f6ef7;
+        }
+
+        .sidebar.collapsed .sidebar-brand span {
+            display: none;
+        }
+
+        .nav-section-label {
+            color: #94a3b8;
+            font-size: 12px;
+            padding: 10px 20px 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            transition: 0.3s;
+        }
+
+        .sidebar.collapsed .nav-section-label {
+            padding: 10px 10px 5px;
+            text-align: center;
+            font-size: 10px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 20px;
+            color: #cbd5f5;
+            text-decoration: none;
+            border-radius: 10px;
+            margin: 5px 10px;
+            transition: 0.3s;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .sidebar.collapsed .nav-item {
+            padding: 12px 10px;
+            justify-content: center;
+        }
+
+        /* Masquer le texte des liens quand la sidebar est réduite */
+        .sidebar.collapsed .nav-item span {
+            display: none;
+        }
+
+        .nav-item:hover {
+            background: rgba(79, 110, 247, 0.2);
+            color: #fff;
+        }
+
+        .nav-item.active {
+            background: #4f6ef7;
+            color: white;
+            font-weight: 600;
+        }
+
+        .nav-item i {
+            font-size: 18px;
+            min-width: 24px;
+        }
+
+        /* ===== TOGGLE BUTTON ===== */
+        .sidebar-toggle {
+            position: absolute;
+            top: 15px;
+            right: -15px;
+            width: 30px;
+            height: 30px;
+            background: #4f6ef7;
+            border: none;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+            z-index: 1001;
+        }
+
+        .sidebar-toggle:hover {
+            background: #3b5bdb;
+            transform: rotate(180deg);
+        }
+
+        .sidebar.collapsed .sidebar-toggle {
+            right: -15px;
+        }
+
+        /* ===== USER ===== */
+        .sidebar-user {
+            margin-top: auto;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            transition: 0.3s;
+        }
+
+        .sidebar.collapsed .sidebar-user {
+            padding: 15px 10px;
+            justify-content: center;
+        }
+
+        .sidebar.collapsed .sidebar-user-info {
+            display: none;
+        }
+
+        .sidebar-user-avatar {
+            width: 40px;
+            height: 40px;
+            background: #4f6ef7;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        /* ===== MAIN ===== */
+        .layout-main {
+            margin-left: 260px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            transition: 0.3s;
+        }
+
+        .layout-main.expanded {
+            margin-left: 70px;
+        }
+
+        /* ===== TOPBAR ===== */
+        .topbar {
+            height: 70px;
+            background: white;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .topbar h1 {
+            font-size: 18px;
+            margin: 0;
+        }
+
+        .topbar-search input {
+            border-radius: 10px;
+            padding: 8px 12px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .topbar-user-avatar {
+            width: 35px;
+            height: 35px;
+            background: #4f6ef7;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* ===== CONTENT ===== */
+        .page-content {
+            padding: 25px;
+            background: #f8fafc;
+            flex: 1;
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            padding: 15px 25px;
+            background: white;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* ===== CARDS ===== */
+        .card {
+            border-radius: 15px;
+            border: none;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @@media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.mobile-open {
+                transform: translateX(0);
+            }
+            
+            .layout-main {
+                margin-left: 0;
+            }
+        }
+    </style>
+
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+
+<body>
+
+@{
+    var userRole = Context.Session.GetString("UserRole") ?? "";
+    var userName = Context.Session.GetString("Username") ?? "User";
+    var initials = userName.Length >= 2 ? userName[..2].ToUpper() : userName.ToUpper();
+}
+
+<div class="sidebar" id="sidebar">
+    <button class="sidebar-toggle" onclick="toggleSidebar()">
+        <i class="bi bi-chevron-left"></i>
+    </button>
+
+    <div class="sidebar-brand">
+        Admin<span>Pro</span>
+    </div>
+
+    <!-- ADMIN -->
+    @if (userRole == "Admin")
+    {
+        <div class="nav-section-label">Principal</div>
+
+        <a asp-controller="Admin" asp-action="Dashboard" class="nav-item">
+            <i class="bi bi-speedometer2"></i> <span>Dashboard</span>
+        </a>
+
+        <div class="nav-section-label">Gestion Utilisateurs</div>
+
+        <a asp-controller="Admin" asp-action="Users" class="nav-item">
+            <i class="bi bi-people"></i> <span>Utilisateurs</span>
+        </a>
+
+        <a asp-controller="Admin" asp-action="CreateUser" class="nav-item">
+            <i class="bi bi-person-plus"></i> <span>Créer utilisateur</span>
+        </a>
+
+        <div class="nav-section-label">Gestion Postes</div>
+
+        <a asp-controller="Admin" asp-action="Postes" class="nav-item">
+            <i class="bi bi-briefcase"></i> <span>Postes</span>
+        </a>
+
+        <div class="nav-section-label">Autres</div>
+
+        <a asp-controller="Admin" asp-action="Profile" class="nav-item">
+            <i class="bi bi-person-circle"></i> <span>Profil</span>
+        </a>
+    }
+
+    <!-- RH -->
+    @if (userRole == "RH")
+    {
+        <div class="nav-section-label">Principal</div>
+
+        <a asp-controller="RH" asp-action="Dashboard" class="nav-item">
+            <i class="bi bi-speedometer2"></i> <span>Dashboard</span>
+        </a>
+
+        <div class="nav-section-label">Gestion Postes</div>
+
+        <a asp-controller="RH" asp-action="Postes" class="nav-item">
+            <i class="bi bi-briefcase"></i> <span>Postes</span>
+        </a>
+
+        <a asp-controller="RH" asp-action="CreatePoste" class="nav-item">
+            <i class="bi bi-plus-circle"></i> <span>Créer poste</span>
+        </a>
+
+        <div class="nav-section-label">Compte</div>
+
+        <a asp-controller="RH" asp-action="Profile" class="nav-item">
+            <i class="bi bi-person-circle"></i> <span>Profil</span>
+        </a>
+    }
+
+    <!-- DIRECTEUR DEPARTEMENT -->
+    @if (userRole == "Directeur")
+    {
+        <div class="nav-section-label">Principal</div>
+
+        <a asp-controller="DirecteurDepartement" asp-action="Dashboard" class="nav-item">
+            <i class="bi bi-speedometer2"></i> <span>Dashboard</span>
+        </a>
+
+        <div class="nav-section-label">Candidatures</div>
+
+        <!-- Correction : l'action 'ResultatsCV' existe dans le contrôleur -->
+        <a asp-controller="DirecteurDepartement" asp-action="ResultatsCV" class="nav-item">
+            <i class="bi bi-file-earmark-text"></i> <span>CV de chaque poste</span>
+        </a>
+        <div class="nav-section-label">Gestion Postes</div>
+
+        <a asp-controller="DirecteurDepartement" asp-action="Postes" class="nav-item">
+            <i class="bi bi-briefcase"></i> <span>Postes</span>
+        </a>
+
+        <div class="nav-section-label">Compte</div>
+
+        <a asp-controller="DirecteurDepartement" asp-action="Profile" class="nav-item">
+            <i class="bi bi-person-circle"></i> <span>Profil</span>
+        </a>
+    }
+
+    <!-- USER INFO -->
+    <div class="sidebar-user">
+        <div class="sidebar-user-avatar">@initials</div>
+        <div class="sidebar-user-info">
+            <div>@userName</div>
+            <small class="text-muted">@userRole</small>
+        </div>
+    </div>
+
+</div>
+
+<div class="layout-main" id="layoutMain">
+
+    <!-- TOPBAR -->
+    <header class="topbar">
+        <button class="btn btn-link d-md-none" onclick="toggleMobileSidebar()">
+            <i class="bi bi-list fs-4"></i>
+        </button>
+
+        <h1>@ViewData["Title"]</h1>
+
+        <div class="d-flex align-items-center gap-2">
+            <!-- Dropdown de l'avatar -->
+            <div class="dropdown">
+                <div class="topbar-user-avatar" data-bs-toggle="dropdown" aria-expanded="false">
+                    @initials
+                </div>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    @if (userRole == "Admin")
+                    {
+                        <li><a class="dropdown-item" asp-controller="Admin" asp-action="Profile">Mon profil</a></li>
+                    }
+                    else if (userRole == "RH")
+                    {
+                        <li><a class="dropdown-item" asp-controller="RH" asp-action="Profile">Mon profil</a></li>
+                    }
+                    else if (userRole == "Directeur")
+                    {
+                        <li><a class="dropdown-item" asp-controller="DirecteurDepartement" asp-action="Profile">Mon profil</a></li>
+                    }
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" asp-controller="Account" asp-action="Logout">Déconnexion</a></li>
+                </ul>
+            </div>
+        </div>
+
+    </header>
+
+    <!-- CONTENT -->
+    <main class="page-content">
+        @RenderBody()
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div>© @DateTime.Now.Year AdminPro</div>
+        <div>All rights reserved</div>
+    </footer>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // Toggle sidebar
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const layoutMain = document.getElementById('layoutMain');
+        const toggleBtn = document.querySelector('.sidebar-toggle i');
+        
+        sidebar.classList.toggle('collapsed');
+        layoutMain.classList.toggle('expanded');
+        
+        if (sidebar.classList.contains('collapsed')) {
+            toggleBtn.classList.remove('bi-chevron-left');
+            toggleBtn.classList.add('bi-chevron-right');
+            localStorage.setItem('sidebarCollapsed', 'true');
+        } else {
+            toggleBtn.classList.remove('bi-chevron-right');
+            toggleBtn.classList.add('bi-chevron-left');
+            localStorage.setItem('sidebarCollapsed', 'false');
+        }
+    }
+
+    // Toggle mobile sidebar
+    function toggleMobileSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        sidebar.classList.toggle('mobile-open');
+    }
+
+    // Restore sidebar state
+    document.addEventListener('DOMContentLoaded', function() {
+        const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+        if (isCollapsed) {
+            document.getElementById('sidebar').classList.add('collapsed');
+            document.getElementById('layoutMain').classList.add('expanded');
+            const toggleBtn = document.querySelector('.sidebar-toggle i');
+            toggleBtn.classList.remove('bi-chevron-left');
+            toggleBtn.classList.add('bi-chevron-right');
+        }
+
+        // Active link
+        const current = window.location.pathname.toLowerCase();
+        document.querySelectorAll('.nav-item').forEach(link => {
+            if (link.getAttribute('href') && current.includes(link.getAttribute('href').toLowerCase())) {
+                link.classList.add('active');
+            }
+        });
+    });
+
+    // Close mobile sidebar on link click
+    document.querySelectorAll('.nav-item').forEach(link => {
+        link.addEventListener('click', function() {
+            if (window.innerWidth <= 768) {
+                document.getElementById('sidebar').classList.remove('mobile-open');
+            }
+        });
+    });
+</script>
+
+@await RenderSectionAsync("Scripts", required: false)
+
+</body>
+</html>

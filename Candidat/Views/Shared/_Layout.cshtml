@@ -1,0 +1,219 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="~/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/css/animate.min.css">
+    <link rel="stylesheet" href="~/fonts/flaticon.css">
+    <link rel="stylesheet" href="~/css/boxicons.min.css">
+    <link rel="stylesheet" href="~/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="~/css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="~/css/magnific-popup.min.css">
+    <link rel="stylesheet" href="~/css/nice-select.min.css">
+    <link rel="stylesheet" href="~/css/meanmenu.css">
+    <link rel="stylesheet" href="~/css/style.css">
+    <link rel="stylesheet" href="~/css/responsive.css">
+    <link rel="stylesheet" href="~/css/theme-dark.css">
+    <link rel="stylesheet" href="~/css/global-nav-search.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/ux-overrides.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <title>@ViewData["Title"] - Astree</title>
+    <link rel="icon" type="image/png" href="~/images/favicon.png">
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body>
+    <!-- Pre Loader -->
+    <div class="preloader">
+        <div class="d-table">
+            <div class="d-table-cell">
+                <div class="spinner"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Start Navbar Area -->
+    <div class="navbar-area">
+        <div class="mobile-nav">
+            <a href="/Home/Index" class="logo">
+                <img src="~/images/logos/logo-1.png" class="logo-one" alt="Logo Astree">
+            </a>
+        </div>
+
+        <div class="main-nav">
+            <div class="container">
+                <nav class="navbar navbar-expand-md navbar-light">
+                    <a class="navbar-brand" href="/Home/Index">
+                        <img src="~/images/logos/logo-1.png" class="logo-one" alt="Logo Astree">
+                    </a>
+
+                    <div class="collapse navbar-collapse mean-menu" id="navbarSupportedContent">
+                        <ul class="navbar-nav mx-auto">
+                            <li class="nav-item">
+                                <a href="/Home/Index" class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" ? "active" : "")">
+                                    Accueil
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/Contact" class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Contact" ? "active" : "")">
+                                    Contact
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/Offre/Index" class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Offre" ? "active" : "")">
+                                    Offre
+                                </a>
+                            </li>
+                        </ul>
+
+                        <!-- Global search + session -->
+                        <div class="nav-right-cluster ms-auto d-flex flex-column flex-lg-row align-items-lg-center gap-2 w-lg-auto mt-3 mt-lg-0">
+                            <div class="nav-global-search position-relative" id="globalNavSearchRoot">
+                                <label class="visually-hidden" for="globalNavSearchInput">Recherche</label>
+                                <div class="nav-global-search__field">
+                                    <i class='bx bx-search nav-global-search__icon' aria-hidden="true"></i>
+                                    <input type="search"
+                                           id="globalNavSearchInput"
+                                           class="nav-global-search__input"
+                                           placeholder="Rechercher une page..."
+                                           autocomplete="off"
+                                           spellcheck="false"
+                                           aria-autocomplete="list"
+                                           aria-controls="globalNavSearchList"
+                                           aria-expanded="false" />
+                                </div>
+                                <div class="nav-global-search__panel shadow-sm" id="globalNavSearchPanel" hidden>
+                                    <ul class="nav-global-search__list" id="globalNavSearchList" role="listbox"></ul>
+                                    <div class="nav-global-search__empty" id="globalNavSearchEmpty" hidden>Aucun résultat</div>
+                                </div>
+                            </div>
+
+                            <div class="navbar-nav d-flex align-items-center flex-wrap justify-content-lg-end" style="gap:10px;">
+                                @if (Context.Session != null && !string.IsNullOrEmpty(Context.Session.GetString("UserId")))
+                                {
+                                    @await Component.InvokeAsync("UserNav")
+                                }
+                                else
+                                {
+                                    <div class="nav-item d-flex align-items-center" style="gap:8px;">
+                                        <a href="/Account/Login" class="default-btn btn-bg-two" style="padding:8px 20px; font-size:14px;">
+                                            <i class='bx bx-log-in'></i> Connexion
+                                        </a>
+                                        <a href="/Account/Register" class="default-btn btn-bg-one" style="padding:8px 20px; font-size:14px;">
+                                            <i class='bx bx-user-plus'></i> S'inscrire
+                                        </a>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <!-- End Navbar Area -->
+
+    <!-- Logout confirmation modal -->
+    <div class="modal fade" id="logoutConfirmModal" tabindex="-1" aria-labelledby="logoutConfirmModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="logoutConfirmModalLabel">Confirmation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Êtes-vous sûr de vouloir vous déconnecter ?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <a class="btn btn-primary" href="/Account/Logout">Déconnexion</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @RenderBody()
+
+    <!-- Footer Area -->
+    <footer class="footer-area footer-bg">
+        <div class="container">
+            <div class="footer-top pt-100 pb-70">
+                <div class="row">
+                    <div class="col-lg-4 col-sm-6">
+                        <div class="footer-widget">
+                            <div class="footer-logo">
+                                <a href="/Home/Index">
+                                    <img src="~/images/logos/footer-logo.png" alt="Logo Astree">
+                                </a>
+                            </div>
+                            <p>
+                                ASTREE est une compagnie d'assurances multibranches créée en 1949. Elle fête ses 76 ans en 2025,
+                                société anonyme cotée en bourse au capital de 30 MD.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="footer-widget pl-2">
+                            <h3>Domaines</h3>
+                            <ul class="footer-list">
+                                <li><a href="#">Support et gestion</a></li>
+                                <li><a href="#">Technique et assurances</a></li>
+                                <li><a href="#">Systèmes d'information et digital</a></li>
+                                <li><a href="#">Commercial et développement</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="footer-widget pl-2">
+                            <h3>Liens rapides</h3>
+                            <ul class="footer-list">
+                                <li><a href="/Home/Index">Accueil</a></li>
+                                <li><a href="/Offre/Index">Offres</a></li>
+                                <li><a href="/Account/Login">Connexion</a></li>
+                                <li><a href="/Account/Register">Inscription</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-sm-6">
+                        <div class="footer-widget pl-2">
+                            <h3>Contact</h3>
+                            <ul class="footer-list">
+                                <li><a href="#">45, Avenue Khaireddine Pacha, B.P. 780 TUNIS Cedex</a></li>
+                                <li><a href="tel:+21671904211">(+216) 71 90 42 11</a></li>
+                                <li><a href="mailto:courrier@astree.com.tn">courrier@astree.com.tn</a></li>
+                                <li><a href="https://www.astree.com.tn/fr" target="_blank" rel="noopener">https://www.astree.com.tn/fr</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="row align-items-center">
+                    <div class="col-lg-6">
+                        <div class="footer-copy-right">
+                            <p>&copy; @DateTime.Now.Year Astree. Tous droits réservés.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="~/js/jquery.min.js"></script>
+    <script src="~/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/owl.carousel.min.js"></script>
+    <script src="~/js/jquery.magnific-popup.min.js"></script>
+    <script src="~/js/jquery.nice-select.min.js"></script>
+    <script src="~/js/wow.min.js"></script>
+    <script src="~/js/meanmenu.js"></script>
+    <script src="~/js/jquery.ajaxchimp.min.js"></script>
+    <script src="~/js/form-validator.min.js"></script>
+    <script src="~/js/contact-form-script.js"></script>
+    <script src="~/js/custom.js"></script>
+    <script src="~/js/global-nav-search.js" asp-append-version="true"></script>
+    <script src="~/js/password-toggle.js" asp-append-version="true"></script>
+    <script src="~/js/user-nav.js" asp-append-version="true"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

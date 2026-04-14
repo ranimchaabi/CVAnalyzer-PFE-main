@@ -1,0 +1,143 @@
+@model List<Administration.Models.Match>
+
+@{
+    ViewData["Title"] = "Résultats CV";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var offres = ViewBag.Offres as List<Administration.Models.OffreEmploi> ?? new();
+    int? selectedId = ViewBag.SelectedOffreId;
+}
+
+<div class="container-fluid px-4 py-3">
+
+    <!-- SELECT OFFRE -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3 align-items-end">
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Sélectionner un poste</label>
+
+                    <select name="offreId" class="form-select" onchange="this.form.submit()">
+                        <option value="">-- Choisir un poste --</option>
+
+                        @foreach (var o in offres)
+                        {
+                            <option value="@o.Id" selected="@(selectedId == o.Id)">
+                                @o.Titre — @o.Departement
+                            </option>
+                        }
+                    </select>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <!-- RESULTS -->
+    @if (Model != null && Model.Any())
+    {
+        <div class="card shadow-sm">
+
+            <div class="card-header bg-white fw-semibold">
+
+                <!-- FIX HERE -->
+                Résultats — @(Model.First().Cv?.Offre?.Titre ?? "Poste")
+
+                <span class="badge bg-secondary ms-2">
+                    @Model.Count candidats
+                </span>
+            </div>
+
+            <div class="card-body p-0">
+
+                <table class="table table-hover mb-0 align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Rang</th>
+                            <th>Candidat</th>
+                            <th>Email</th>
+                            <th>Téléphone</th>
+                            <th>Compétences</th>
+                            <th>Diplôme</th>
+                            <th>Expérience</th>
+                            <th>Score Global</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                    @{
+                        int rank = 1;
+                    }
+
+                    @foreach (var m in Model)
+                    {
+                        string rowClass = rank == 1 ? "table-success" :
+                                          rank == 2 ? "table-info" :
+                                          rank == 3 ? "table-warning" : "";
+
+                        <tr class="@rowClass">
+
+                            <td><strong>@rank</strong></td>
+
+                            <td>@(m.Cv?.DonneesCv?.NomCandidat ?? "—")</td>
+                            <td>@(m.Cv?.DonneesCv?.Email ?? "—")</td>
+                            <td>@(m.Cv?.DonneesCv?.Telephone ?? "—")</td>
+
+                            <td>
+                                <div class="progress" style="height:6px;">
+                                    <div class="progress-bar bg-info"
+                                         style="width:@m.CompetenceScore%"></div>
+                                </div>
+                                <small>@m.CompetenceScore.ToString("0")%</small>
+                            </td>
+
+                            <td>
+                                <div class="progress" style="height:6px;">
+                                    <div class="progress-bar bg-warning"
+                                         style="width:@m.DiplomeScore%"></div>
+                                </div>
+                                <small>@m.DiplomeScore.ToString("0")%</small>
+                            </td>
+
+                            <td>
+                                <div class="progress" style="height:6px;">
+                                    <div class="progress-bar bg-success"
+                                         style="width:@m.ExperienceScore%"></div>
+                                </div>
+                                <small>@m.ExperienceScore.ToString("0")%</small>
+                            </td>
+
+                            <td>
+                                <span class="badge @(m.GlobalScore >= 70 ? "bg-success" :
+                                                    m.GlobalScore >= 50 ? "bg-warning text-dark" :
+                                                    "bg-danger")">
+                                    @m.GlobalScore.ToString("0.0")%
+                                </span>
+                            </td>
+
+                        </tr>
+
+                        rank++;
+                    }
+                    </tbody>
+
+                </table>
+
+            </div>
+        </div>
+    }
+    else if (selectedId.HasValue)
+    {
+        <div class="alert alert-info">
+            Aucun CV analysé pour ce poste.
+        </div>
+    }
+    else
+    {
+        <div class="text-center py-5 text-muted">
+            <p>Sélectionnez un poste pour afficher les résultats.</p>
+        </div>
+    }
+
+</div>
