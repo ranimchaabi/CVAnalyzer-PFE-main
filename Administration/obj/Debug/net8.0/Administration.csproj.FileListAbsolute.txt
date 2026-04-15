@@ -135,3 +135,4 @@ C:\Users\ranim\Downloads\CVAnalyzer-PFE-main\Administration\obj\Debug\net8.0\ref
 C:\Users\ranim\Downloads\CVAnalyzer-PFE-main\Administration\obj\Debug\net8.0\Administration.pdb
 C:\Users\ranim\Downloads\CVAnalyzer-PFE-main\Administration\obj\Debug\net8.0\Administration.genruntimeconfig.cache
 C:\Users\ranim\Downloads\CVAnalyzer-PFE-main\Administration\obj\Debug\net8.0\ref\Administration.dll
+C:\Users\ranim\Downloads\CVAnalyzer-PFE-main\Administration\obj\Debug\net8.0\Administration.sourcelink.json

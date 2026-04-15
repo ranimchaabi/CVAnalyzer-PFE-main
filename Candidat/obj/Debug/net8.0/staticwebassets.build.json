@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "YTgah4V0b0oKh7vFjUSxqacGOZ1HRzN3J1zWnS0DaGg=",
+  "Hash": "raJMXCGa4TkFcJuOmuWpBlB/qLjhfvFwy7Du6RY0VBI=",
   "Source": "CvParsing",
   "BasePath": "_content/CvParsing",
   "Mode": "Default",
@@ -4632,6 +4632,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\uploads\\cvs\\caf4bef4-1e45-462e-bfa6-e35527d3f53e.pdf"
+    },
+    {
+      "Identity": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Candidat\\wwwroot\\uploads\\cvs\\cd086289-4114-4a19-8af5-3ad36319bcdd.pdf",
+      "SourceId": "CvParsing",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Candidat\\wwwroot\\",
+      "BasePath": "_content/CvParsing",
+      "RelativePath": "uploads/cvs/cd086289-4114-4a19-8af5-3ad36319bcdd.pdf",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\cvs\\cd086289-4114-4a19-8af5-3ad36319bcdd.pdf"
     },
     {
       "Identity": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Candidat\\wwwroot\\uploads\\cvs\\daec7b00-784b-47fa-b449-b3a66aea1eb9.pdf",

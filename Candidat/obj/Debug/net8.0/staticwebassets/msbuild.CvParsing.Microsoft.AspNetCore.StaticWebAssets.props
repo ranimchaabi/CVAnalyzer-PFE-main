@@ -3872,6 +3872,22 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\cvs\caf4bef4-1e45-462e-bfa6-e35527d3f53e.pdf))</OriginalItemSpec>
     </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\cvs\cd086289-4114-4a19-8af5-3ad36319bcdd.pdf))">
+      <SourceType>Package</SourceType>
+      <SourceId>CvParsing</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/CvParsing</BasePath>
+      <RelativePath>uploads/cvs/cd086289-4114-4a19-8af5-3ad36319bcdd.pdf</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\cvs\cd086289-4114-4a19-8af5-3ad36319bcdd.pdf))</OriginalItemSpec>
+    </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\cvs\daec7b00-784b-47fa-b449-b3a66aea1eb9.pdf))">
       <SourceType>Package</SourceType>
       <SourceId>CvParsing</SourceId>
