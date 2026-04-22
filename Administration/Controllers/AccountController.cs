@@ -90,6 +90,7 @@ namespace Administration.Controllers
             HttpContext.Session.SetString("UserId", user.Id.ToString());
             HttpContext.Session.SetString("UserRole", user.Role);
             HttpContext.Session.SetString("Username", user.NomUtilisateur);
+            HttpContext.Session.SetString("UserProfileImage", user.PhotoUrl ?? "");
 
             user.DateDerniereConnexion = DateTime.Now;
             _context.SaveChanges();

@@ -4,66 +4,437 @@
     ViewData["Title"] = "Nouvel utilisateur";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var roles = ViewBag.Roles as List<string> ?? new List<string>();
+    var departements = ViewBag.Departements as List<string> ?? new List<string>();
 }
 
-<div class="container-fluid px-4 py-3">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow-sm">
-                <div class="card-header bg-white fw-semibold">Créer un utilisateur</div>
-                <div class="card-body">
-                    <form method="post">
-                        @Html.AntiForgeryToken()
-                        <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2"></div>
+<style>
+    .create-user-container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 40px 20px;
+    }
 
-                        <div class="mb-3">
-                            <label asp-for="NomUtilisateur" class="form-label fw-semibold">Nom d'utilisateur</label>
-                            <input asp-for="NomUtilisateur" class="form-control" />
-                            <span asp-validation-for="NomUtilisateur" class="text-danger small"></span>
-                        </div>
+    .create-user-card {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+        overflow: hidden;
+    }
 
-                        <div class="mb-3">
-                            <label asp-for="Email" class="form-label fw-semibold">Email</label>
-                            <input asp-for="Email" class="form-control" />
-                            <span asp-validation-for="Email" class="text-danger small"></span>
-                        </div>
+    .create-user-header {
+        background: linear-gradient(135deg, #3b82f6, #6366f1);
+        padding: 32px;
+        text-align: center;
+        color: white;
+    }
 
-                        <div class="mb-3">
-                            <label asp-for="MotPasse" class="form-label fw-semibold">Mot de passe</label>
-                            <input asp-for="MotPasse" type="password" class="form-control" />
-                            <span asp-validation-for="MotPasse" class="text-danger small"></span>
-                        </div>
+    .create-user-icon {
+        width: 64px;
+        height: 64px;
+        background: rgba(255,255,255,0.2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 16px;
+        font-size: 28px;
+    }
 
-                        <div class="mb-3">
-                            <label asp-for="Role" class="form-label fw-semibold">Rôle</label>
-                            <select asp-for="Role" id="roleSelect" class="form-select"
-                                    asp-items="@(new SelectList(roles))">
-                                <option value="">-- Sélectionner un rôle --</option>
-                            </select>
-                            <span asp-validation-for="Role" class="text-danger small"></span>
-                        </div>
+    .create-user-title {
+        font-size: 24px;
+        font-weight: 700;
+        margin: 0;
+    }
 
-                        {{!-- Zone départements : visible uniquement si Directeur --}}
-                        <div class="mb-3" id="departementsGroup" style="display:none;">
-                            <label asp-for="Departements" class="form-label fw-semibold">
-                                Départements gérés
-                                <small class="text-muted fw-normal">(séparés par des virgules)</small>
-                            </label>
-                            <textarea asp-for="Departements"
-                                      class="form-control"
-                                      rows="3"
-                                      placeholder="Ex : Informatique, Ressources Humaines, Finance"></textarea>
-                            <span asp-validation-for="Departements" class="text-danger small"></span>
-                            <div class="form-text">Entrez les noms des départements séparés par des virgules.</div>
-                        </div>
+    .create-user-subtitle {
+        font-size: 14px;
+        opacity: 0.9;
+        margin-top: 4px;
+    }
 
-                        <div class="d-flex gap-2">
-                            <button type="submit" class="btn btn-primary">Créer</button>
-                            <a asp-action="Users" class="btn btn-outline-secondary">Retour</a>
-                        </div>
-                    </form>
-                </div>
+    .create-user-body {
+        padding: 32px;
+    }
+
+    .form-group {
+        margin-bottom: 24px;
+    }
+
+    .form-label {
+        display: block;
+        font-size: 14px;
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 8px;
+    }
+
+    .form-label .required {
+        color: #ef4444;
+        margin-left: 2px;
+    }
+
+    .form-control-wrapper {
+        position: relative;
+    }
+
+    .form-control-wrapper i {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #9ca3af;
+        font-size: 18px;
+    }
+
+    .form-control-wrapper textarea ~ i {
+        top: 16px;
+        transform: none;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 14px 16px;
+        font-size: 15px;
+        border: 2px solid #e5e7eb;
+        border-radius: 12px;
+        transition: all 0.2s;
+        background: #fafafa;
+    }
+
+    .form-control-wrapper i ~ .form-control {
+        padding-left: 48px;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: #3b82f6;
+        background: white;
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+    }
+
+    .form-control.is-invalid {
+        border-color: #ef4444;
+        background: #fef2f2;
+    }
+
+    .form-select {
+        width: 100%;
+        padding: 14px 16px;
+        font-size: 15px;
+        border: 2px solid #e5e7eb;
+        border-radius: 12px;
+        transition: all 0.2s;
+        background: #fafafa;
+        cursor: pointer;
+    }
+
+    .form-select:focus {
+        outline: none;
+        border-color: #3b82f6;
+        background: white;
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+    }
+
+    textarea.form-control {
+        min-height: 100px;
+        resize: vertical;
+    }
+
+    .validation-message {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        color: #ef4444;
+        margin-top: 8px;
+        font-weight: 500;
+    }
+
+    .validation-message::before {
+        content: "\F332";
+        font-family: "bootstrap-icons";
+        font-size: 14px;
+    }
+
+    .form-hint {
+        font-size: 13px;
+        color: #6b7280;
+        margin-top: 8px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .form-hint::before {
+        content: "\F430";
+        font-family: "bootstrap-icons";
+        font-size: 14px;
+        color: #9ca3af;
+    }
+
+    .departements-group {
+        background: #fef3c7;
+        border: 1px solid #fcd34d;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 24px;
+    }
+
+    .departements-group .form-label {
+        color: #92400e;
+    }
+
+    .departements-group .form-control {
+        background: white;
+        border-color: #fcd34d;
+    }
+
+    .departements-group .form-control:focus {
+        border-color: #f59e0b;
+        box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.1);
+    }
+
+    .departements-group .form-hint {
+        color: #a16207;
+    }
+
+    .departements-group .form-hint::before {
+        color: #f59e0b;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 32px;
+        padding-top: 24px;
+        border-top: 1px solid #e5e7eb;
+    }
+
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 14px 28px;
+        font-size: 15px;
+        font-weight: 600;
+        border-radius: 12px;
+        transition: all 0.2s;
+        cursor: pointer;
+        border: none;
+        flex: 1;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #3b82f6, #6366f1);
+        color: white;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+    }
+
+    .btn-outline {
+        background: white;
+        color: #6b7280;
+        border: 2px solid #e5e7eb;
+    }
+
+    .btn-outline:hover {
+        background: #f9fafb;
+        border-color: #d1d5db;
+        color: #374151;
+    }
+
+    .alert-validation {
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+        border-radius: 12px;
+        padding: 16px;
+        margin-bottom: 24px;
+        color: #991b1b;
+    }
+
+    .alert-validation ul {
+        margin: 0;
+        padding-left: 20px;
+    }
+
+    .alert-validation li {
+        margin-bottom: 4px;
+    }
+
+    .alert-validation li:last-child {
+        margin-bottom: 0;
+    }
+
+    /* Password Toggle Button */
+    .password-toggle {
+        position: absolute;
+        right: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: #9ca3af;
+        cursor: pointer;
+        font-size: 18px;
+        padding: 4px;
+        z-index: 10;
+    }
+
+    .password-toggle:hover {
+        color: #6b7280;
+    }
+
+    .form-control-wrapper i ~ .form-control {
+        padding-left: 48px;
+    }
+
+    .form-control-wrapper .form-control {
+        padding-right: 48px;
+    }
+</style>
+
+<div class="create-user-container">
+    <div class="create-user-card">
+        <div class="create-user-header">
+            <div class="create-user-icon">
+                <i class="bi bi-person-plus-fill"></i>
             </div>
+            <h1 class="create-user-title">Nouvel utilisateur</h1>
+            <p class="create-user-subtitle">Créez un nouveau compte utilisateur</p>
+        </div>
+
+        <div class="create-user-body">
+            <form method="post" novalidate>
+                @Html.AntiForgeryToken()
+
+                @if (!ViewData.ModelState.IsValid && ViewData.ModelState.ErrorCount > 0)
+                {
+                    <div asp-validation-summary="ModelOnly" class="alert-validation"></div>
+                }
+
+                <!-- Nom d'utilisateur -->
+                <div class="form-group">
+                    <label asp-for="NomUtilisateur" class="form-label">
+                        Nom d'utilisateur <span class="required">*</span>
+                    </label>
+                    <div class="form-control-wrapper">
+                        <i class="bi bi-person-fill"></i>
+                        <input asp-for="NomUtilisateur" class="form-control" placeholder="Entrez le nom d'utilisateur" required />
+                    </div>
+                    <span asp-validation-for="NomUtilisateur" class="validation-message"></span>
+                </div>
+
+                <!-- Email -->
+                <div class="form-group">
+                    <label asp-for="Email" class="form-label">
+                        Adresse email <span class="required">*</span>
+                    </label>
+                    <div class="form-control-wrapper">
+                        <i class="bi bi-envelope-fill"></i>
+                        <input asp-for="Email" type="email" class="form-control" placeholder="exemple@email.com" required />
+                    </div>
+                    <span asp-validation-for="Email" class="validation-message"></span>
+                </div>
+
+                <!-- Mot de passe -->
+                <div class="form-group">
+                    <label asp-for="MotPasse" class="form-label">
+                        Mot de passe <span class="required">*</span>
+                    </label>
+                    <div class="form-control-wrapper">
+                        <i class="bi bi-lock-fill"></i>
+                        <input asp-for="MotPasse" type="password" id="passwordInput" class="form-control" placeholder="••••••••" required />
+                        <button type="button" class="password-toggle" onclick="togglePassword('passwordInput', 'passwordToggleIcon')">
+                            <i id="passwordToggleIcon" class="bi bi-eye"></i>
+                        </button>
+                    </div>
+                    <span asp-validation-for="MotPasse" class="validation-message"></span>
+                    <div class="form-hint">Au moins 8 caractères, avec des lettres (A-Z, a-z) et des chiffres (0-9).</div>
+                </div>
+
+                <!-- Confirmer Mot de passe -->
+                <div class="form-group">
+                    <label asp-for="ConfirmMotPasse" class="form-label">
+                        Confirmer le mot de passe <span class="required">*</span>
+                    </label>
+                    <div class="form-control-wrapper">
+                        <i class="bi bi-lock-fill"></i>
+                        <input asp-for="ConfirmMotPasse" type="password" id="confirmPasswordInput" class="form-control" placeholder="••••••••" required />
+                        <button type="button" class="password-toggle" onclick="togglePassword('confirmPasswordInput', 'confirmPasswordToggleIcon')">
+                            <i id="confirmPasswordToggleIcon" class="bi bi-eye"></i>
+                        </button>
+                    </div>
+                    <span asp-validation-for="ConfirmMotPasse" class="validation-message"></span>
+                </div>
+
+                <!-- Rôle -->
+                <div class="form-group">
+                    <label asp-for="Role" class="form-label">
+                        Rôle <span class="required">*</span>
+                    </label>
+                    <select asp-for="Role" id="roleSelect" class="form-select" required>
+                        <option value="">-- Sélectionner un rôle --</option>
+                        @foreach (var role in roles)
+                        {
+                            <option value="@role">@role</option>
+                        }
+                    </select>
+                    <span asp-validation-for="Role" class="validation-message"></span>
+                </div>
+
+                <!-- Département (un seul — visible uniquement si Directeur) -->
+                <div class="departements-group" id="departementsGroup" style="@(Model.Role == "Directeur" ? "" : "display:none;")">
+                    <label asp-for="Departements" class="form-label">
+                        Département <span class="required">*</span>
+                    </label>
+
+                    <div class="form-control-wrapper mb-3">
+                        <i class="bi bi-building-fill"></i>
+                        <select asp-for="Departements" id="departementSingle" class="form-select" disabled="@(Model.Role != "Directeur")">
+                            <option value="">-- Sélectionner un département --</option>
+                            @foreach (var dept in departements)
+                            {
+                                <option value="@dept">@dept</option>
+                            }
+                            <option value="__NEW__">➕ Créer un nouveau département</option>
+                        </select>
+                    </div>
+
+                    <div id="newDepartementInput" class="mb-3" style="display:none;">
+                        <div class="form-control-wrapper">
+                            <i class="bi bi-plus-circle-fill"></i>
+                            <input type="text" id="newDepartementName" class="form-control" placeholder="Nom du nouveau département" />
+                        </div>
+                        <div class="d-flex gap-2 mt-2">
+                            <button type="button" id="saveNewDepartement" class="btn btn-sm btn-success">
+                                <i class="bi bi-check-lg me-1"></i>Créer
+                            </button>
+                            <button type="button" id="cancelNewDepartement" class="btn btn-sm btn-outline-secondary">
+                                <i class="bi bi-x-lg me-1"></i>Annuler
+                            </button>
+                        </div>
+                    </div>
+
+                    <span asp-validation-for="Departements" class="validation-message"></span>
+                    <div class="form-hint">Un seul département peut être assigné au directeur.</div>
+                </div>
+
+                <!-- Actions -->
+                <div class="form-actions">
+                    <a asp-action="Users" class="btn btn-outline">
+                        <i class="bi bi-arrow-left"></i>
+                        Retour
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-person-plus-fill"></i>
+                        Créer l'utilisateur
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -71,23 +442,99 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <script>
-        // Affiche/masque le champ Départements selon le rôle choisi
         const roleSelect = document.getElementById('roleSelect');
         const departementsGroup = document.getElementById('departementsGroup');
+        const departementSingle = document.getElementById('departementSingle');
+        const newDepartementInput = document.getElementById('newDepartementInput');
+        const newDepartementName = document.getElementById('newDepartementName');
+        const saveNewDepartementBtn = document.getElementById('saveNewDepartement');
+        const cancelNewDepartementBtn = document.getElementById('cancelNewDepartement');
 
         function toggleDepartements() {
             if (roleSelect.value === 'Directeur') {
                 departementsGroup.style.display = 'block';
+                departementSingle.disabled = false;
+                departementSingle.setAttribute('required', 'required');
             } else {
                 departementsGroup.style.display = 'none';
-                // Vider le champ si on change de rôle
-                departementsGroup.querySelector('textarea').value = '';
+                departementSingle.disabled = true;
+                departementSingle.removeAttribute('required');
+                departementSingle.value = '';
+                newDepartementInput.style.display = 'none';
+                newDepartementName.value = '';
             }
         }
 
         roleSelect.addEventListener('change', toggleDepartements);
 
-        // Au chargement (cas de retour avec erreur de validation)
+        departementSingle.addEventListener('change', function() {
+            if (this.value === '__NEW__') {
+                newDepartementInput.style.display = 'block';
+                newDepartementName.focus();
+                this.value = '';
+            }
+        });
+
+        cancelNewDepartementBtn.addEventListener('click', function() {
+            newDepartementInput.style.display = 'none';
+            newDepartementName.value = '';
+        });
+
+        saveNewDepartementBtn.addEventListener('click', async function() {
+            const nom = newDepartementName.value.trim();
+            if (!nom) {
+                if (typeof showToast === 'function') showToast('Veuillez entrer un nom de département.', 'warning');
+                else alert('Veuillez entrer un nom de département.');
+                return;
+            }
+
+            try {
+                const response = await fetch('@Url.Action("CreateDepartement", "Admin")', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value
+                    },
+                    body: JSON.stringify({ nom: nom })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    const option = document.createElement('option');
+                    option.value = result.nom;
+                    option.textContent = result.nom;
+                    const newOpt = departementSingle.querySelector('option[value="__NEW__"]');
+                    departementSingle.insertBefore(option, newOpt);
+                    departementSingle.value = result.nom;
+                    newDepartementInput.style.display = 'none';
+                    newDepartementName.value = '';
+                    if (typeof showToast === 'function') showToast('Département créé avec succès.', 'success');
+                } else {
+                    if (typeof showToast === 'function') showToast(result.message, 'error');
+                    else alert(result.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                if (typeof showToast === 'function') showToast('Une erreur est survenue.', 'error');
+                else alert('Une erreur est survenue.');
+            }
+        });
+
+        window.togglePassword = function(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('bi-eye');
+                icon.classList.add('bi-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('bi-eye-slash');
+                icon.classList.add('bi-eye');
+            }
+        };
+
         toggleDepartements();
     </script>
 }

@@ -1,64 +1,360 @@
 @model Administration.Models.Utilisateur
 @{
     ViewData["Title"] = "Détails utilisateur";
-    string badge = Model.Role switch
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    
+    string roleBadgeClass = Model.Role switch
     {
-        "Admin"     => "bg-danger",
-        "RH"        => "bg-primary",
-        "Directeur" => "bg-warning text-dark",
-        _           => "bg-secondary"
+        "Admin"     => "role-admin",
+        "RH"        => "role-rh",
+        "Directeur" => "role-directeur",
+        _           => "role-candidat"
     };
+    
+    string roleIcon = Model.Role switch
+    {
+        "Admin"     => "shield-fill",
+        "RH"        => "person-badge-fill",
+        "Directeur" => "briefcase-fill",
+        _           => "person-fill"
+    };
+    
+    string roleColor = Model.Role switch
+    {
+        "Admin"     => "#ef4444",
+        "RH"        => "#10b981",
+        "Directeur" => "#f59e0b",
+        _           => "#6366f1"
+    };
+    
+    var candidatBase = ViewBag.CandidatPublicBaseUrl as string ?? "";
+    string? photoUrl = ProfileImageUrlHelper.ResolveDisplayUrl(Model.PhotoUrl, Model.Role, candidatBase);
 }
 
-<div class="container-fluid px-4 py-3">
-    <div class="card shadow-sm">
-        <div class="card-header d-flex justify-content-between">
-            <h5>@Model.NomUtilisateur</h5>
-            <span class="badge @badge">@Model.Role</span>
-        </div>
-        <div class="card-body">
-            <dl class="row">
-                <dt class="col-sm-4">Nom utilisateur</dt>
-                <dd class="col-sm-8">@Model.NomUtilisateur</dd>
+<style>
+    .profile-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 24px;
+    }
 
-                <dt class="col-sm-4">Email</dt>
-                <dd class="col-sm-8">@Model.Email</dd>
+    .profile-card {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        overflow: hidden;
+    }
 
-                <dt class="col-sm-4">Rôle</dt>
-                <dd class="col-sm-8"><span class="badge @badge">@Model.Role</span></dd>
+    .profile-header {
+        background: linear-gradient(135deg, @roleColor, @(roleColor + "dd"));
+        padding: 40px;
+        text-align: center;
+        color: white;
+        position: relative;
+    }
 
-                @if (Model.Role == "Directeur" && !string.IsNullOrWhiteSpace(Model.Departements))
-                {
-                    <dt class="col-sm-4">Départements gérés</dt>
-                    <dd class="col-sm-8">
-                        @foreach (var dep in Model.Departements.Split(',',
-                            StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
-                        {
-                            <span class="badge bg-warning text-dark me-1">@dep</span>
-                        }
-                    </dd>
+    .profile-avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background: white;
+        margin: 0 auto 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 48px;
+        font-weight: 700;
+        color: @roleColor;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        overflow: hidden;
+        border: 4px solid rgba(255,255,255,0.3);
+    }
+
+    .profile-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .profile-name {
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    .profile-role-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(255,255,255,0.2);
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .profile-body {
+        padding: 40px;
+    }
+
+    .info-section {
+        margin-bottom: 32px;
+    }
+
+    .info-section:last-child {
+        margin-bottom: 0;
+    }
+
+    .section-title {
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #94a3b8;
+        margin-bottom: 16px;
+    }
+
+    .info-grid {
+        display: grid;
+        gap: 20px;
+    }
+
+    .info-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 16px;
+        padding: 16px;
+        background: #f8fafc;
+        border-radius: 12px;
+    }
+
+    .info-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        flex-shrink: 0;
+    }
+
+    .info-icon.primary { background: #eff6ff; color: #3b82f6; }
+    .info-icon.success { background: #f0fdf4; color: #22c55e; }
+    .info-icon.warning { background: #fef3c7; color: #f59e0b; }
+    .info-icon.danger { background: #fef2f2; color: #ef4444; }
+    .info-icon.secondary { background: #f1f5f9; color: #64748b; }
+
+    .info-content {
+        flex: 1;
+    }
+
+    .info-label {
+        font-size: 12px;
+        color: #64748b;
+        margin-bottom: 4px;
+        font-weight: 500;
+    }
+
+    .info-value {
+        font-size: 16px;
+        font-weight: 600;
+        color: #1e293b;
+    }
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .status-badge.active {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .status-badge.inactive {
+        background: #fee2e2;
+        color: #dc2626;
+    }
+
+    .departments-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .department-tag {
+        background: linear-gradient(135deg, #f59e0b, #fbbf24);
+        color: white;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .profile-actions {
+        display: flex;
+        gap: 12px;
+        padding: 24px 40px;
+        background: #f8fafc;
+        border-top: 1px solid #e2e8f0;
+    }
+
+    .btn-action {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 24px;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 14px;
+        transition: all 0.2s;
+        border: none;
+        cursor: pointer;
+    }
+
+    .btn-action:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .btn-back {
+        background: white;
+        color: #64748b;
+        border: 1px solid #e2e8f0;
+    }
+
+    .btn-back:hover {
+        background: #f1f5f9;
+        color: #475569;
+    }
+
+    .btn-edit {
+        background: #3b82f6;
+        color: white;
+    }
+
+    .btn-edit:hover {
+        background: #2563eb;
+    }
+</style>
+
+<div class="profile-container">
+    <div class="profile-card">
+        <!-- Header with Avatar -->
+        <div class="profile-header">
+            <div class="profile-avatar" style="position:relative;">
+                @{
+                    var udInitial = Model.NomUtilisateur.Length > 0 ? Model.NomUtilisateur.Substring(0, 1).ToUpper() : "?";
                 }
+                <span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">@udInitial</span>
+                @if (!string.IsNullOrEmpty(photoUrl))
+                {
+                    <img src="@photoUrl" alt="" loading="lazy" style="position:relative;z-index:1;width:100%;height:100%;object-fit:cover;border-radius:50%;" onerror="this.remove();" />
+                }
+            </div>
+            <div class="profile-name">@Model.NomUtilisateur</div>
+            <div class="profile-role-badge">
+                <i class="bi bi-@roleIcon"></i>
+                @Model.Role
+            </div>
+        </div>
 
-                <dt class="col-sm-4">Statut</dt>
-                <dd class="col-sm-8">
-                    @if (Model.IsActive)
-                    { <span class="badge bg-success">Actif</span> }
-                    else
-                    { <span class="badge bg-danger">Désactivé</span> }
-                </dd>
+        <!-- Body with Info -->
+        <div class="profile-body">
+            <!-- Account Info -->
+            <div class="info-section">
+                <div class="section-title">Informations du compte</div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-icon primary">
+                            <i class="bi bi-envelope-fill"></i>
+                        </div>
+                        <div class="info-content">
+                            <div class="info-label">Adresse email</div>
+                            <div class="info-value">@Model.Email</div>
+                        </div>
+                    </div>
 
-                <dt class="col-sm-4">Date création</dt>
-                <dd class="col-sm-8">@Model.DateCreation.ToString("dd/MM/yyyy HH:mm")</dd>
+                    <div class="info-item">
+                        <div class="info-icon @(Model.IsActive ? "success" : "danger")">
+                            <i class="bi bi-@(Model.IsActive ? "check-circle-fill" : "x-circle-fill")"></i>
+                        </div>
+                        <div class="info-content">
+                            <div class="info-label">Statut du compte</div>
+                            <div class="info-value">
+                                <span class="status-badge @(Model.IsActive ? "active" : "inactive")">
+                                    <i class="bi bi-@(Model.IsActive ? "check-circle-fill" : "x-circle-fill")"></i>
+                                    @(Model.IsActive ? "Actif" : "Inactif")
+                                </span>
+                            </div>
+                        </div>
+                    </div>
 
-                <dt class="col-sm-4">Dernière connexion</dt>
-                <dd class="col-sm-8">
-                    @(Model.DateDerniereConnexion.HasValue
-                        ? Model.DateDerniereConnexion.Value.ToString("dd/MM/yyyy HH:mm")
-                        : "Jamais")
-                </dd>
-            </dl>
+                    @if (Model.Role == "Directeur" && !string.IsNullOrWhiteSpace(Model.Departements))
+                    {
+                        <div class="info-item">
+                            <div class="info-icon warning">
+                                <i class="bi bi-building-fill"></i>
+                            </div>
+                            <div class="info-content">
+                                <div class="info-label">Départements gérés</div>
+                                <div class="departments-list">
+                                    @foreach (var dep in Model.Departements.Split(',',
+                                        StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+                                    {
+                                        <span class="department-tag">@dep</span>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
 
-            <a asp-action="Users" class="btn btn-secondary btn-sm">Retour</a>
+            <!-- Activity Info -->
+            <div class="info-section">
+                <div class="section-title">Activité</div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-icon secondary">
+                            <i class="bi bi-calendar-fill"></i>
+                        </div>
+                        <div class="info-content">
+                            <div class="info-label">Date de création</div>
+                            <div class="info-value">@Model.DateCreation.ToString("dd MMMM yyyy à HH:mm", new System.Globalization.CultureInfo("fr-FR"))</div>
+                        </div>
+                    </div>
+
+                    <div class="info-item">
+                        <div class="info-icon secondary">
+                            <i class="bi bi-clock-history"></i>
+                        </div>
+                        <div class="info-content">
+                            <div class="info-label">Dernière connexion</div>
+                            <div class="info-value">
+                                @(Model.DateDerniereConnexion.HasValue
+                                    ? Model.DateDerniereConnexion.Value.ToString("dd MMMM yyyy à HH:mm", new System.Globalization.CultureInfo("fr-FR"))
+                                    : "Jamais connecté")
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="profile-actions">
+            <a asp-action="Users" class="btn-action btn-back">
+                <i class="bi bi-arrow-left"></i>
+                Retour à la liste
+            </a>
+            
         </div>
     </div>
 </div>

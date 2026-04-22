@@ -119,6 +119,7 @@ C:\Users\ranim\Downloads\CVAnalyzer-PFE-main\Administration\obj\Debug\net8.0\Adm
 C:\Users\ranim\Downloads\CVAnalyzer-PFE-main\Administration\obj\Debug\net8.0\Administration.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\ranim\Downloads\CVAnalyzer-PFE-main\Administration\obj\Debug\net8.0\Administration.RazorAssemblyInfo.cache
 C:\Users\ranim\Downloads\CVAnalyzer-PFE-main\Administration\obj\Debug\net8.0\Administration.RazorAssemblyInfo.cs
+C:\Users\ranim\Downloads\CVAnalyzer-PFE-main\Administration\obj\Debug\net8.0\Administration.sourcelink.json
 C:\Users\ranim\Downloads\CVAnalyzer-PFE-main\Administration\obj\Debug\net8.0\staticwebassets.build.json
 C:\Users\ranim\Downloads\CVAnalyzer-PFE-main\Administration\obj\Debug\net8.0\staticwebassets.development.json
 C:\Users\ranim\Downloads\CVAnalyzer-PFE-main\Administration\obj\Debug\net8.0\staticwebassets\msbuild.Administration.Microsoft.AspNetCore.StaticWebAssets.props
@@ -135,4 +136,3 @@ C:\Users\ranim\Downloads\CVAnalyzer-PFE-main\Administration\obj\Debug\net8.0\ref
 C:\Users\ranim\Downloads\CVAnalyzer-PFE-main\Administration\obj\Debug\net8.0\Administration.pdb
 C:\Users\ranim\Downloads\CVAnalyzer-PFE-main\Administration\obj\Debug\net8.0\Administration.genruntimeconfig.cache
 C:\Users\ranim\Downloads\CVAnalyzer-PFE-main\Administration\obj\Debug\net8.0\ref\Administration.dll
-C:\Users\ranim\Downloads\CVAnalyzer-PFE-main\Administration\obj\Debug\net8.0\Administration.sourcelink.json

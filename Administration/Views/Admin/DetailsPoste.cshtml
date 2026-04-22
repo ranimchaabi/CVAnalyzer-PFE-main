@@ -2,118 +2,506 @@
 @{
     ViewData["Title"] = "Détails du poste - " + Model.Titre;
     Layout = "~/Views/Shared/_Layout.cshtml";
+    
+    var statusColor = Model.Statut == "ACTIF" ? "#22c55e" : "#6b7280";
+    var statusBg = Model.Statut == "ACTIF" ? "#f0fdf4" : "#f3f4f6";
+    var candidateCount = Model.Cvs?.Count ?? 0;
 }
 
-<div class="container-fluid px-4 py-3">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h5 class="mb-0 fw-semibold">Détails du poste</h5>
-        <a asp-action="Postes" class="btn btn-outline-secondary btn-sm">
-            ← Retour à la liste
+<style>
+    .poste-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 32px 24px;
+    }
+
+    .poste-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 32px;
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+
+    .poste-title-section {
+        flex: 1;
+    }
+
+    .poste-breadcrumb {
+        font-size: 13px;
+        color: #6b7280;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .poste-breadcrumb a {
+        color: #6b7280;
+        text-decoration: none;
+        transition: color 0.2s;
+    }
+
+    .poste-breadcrumb a:hover {
+        color: #3b82f6;
+    }
+
+    .poste-title {
+        font-size: 28px;
+        font-weight: 700;
+        color: #1f2937;
+        margin: 0;
+    }
+
+    .poste-meta {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-top: 12px;
+        flex-wrap: wrap;
+    }
+
+    .poste-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 600;
+        background: @statusBg;
+        color: @statusColor;
+    }
+
+    .poste-department {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 14px;
+        color: #6b7280;
+    }
+
+    .poste-date {
+        font-size: 13px;
+        color: #9ca3af;
+    }
+
+    .btn-back {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 20px;
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        color: #374151;
+        font-size: 14px;
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.2s;
+    }
+
+    .btn-back:hover {
+        background: #f9fafb;
+        border-color: #d1d5db;
+        color: #1f2937;
+    }
+
+    .poste-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 24px;
+    }
+
+    .info-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        overflow: hidden;
+    }
+
+    .card-header-custom {
+        padding: 20px 24px;
+        border-bottom: 1px solid #f3f4f6;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .card-header-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+    }
+
+    .card-header-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: #1f2937;
+    }
+
+    .card-body-custom {
+        padding: 24px;
+    }
+
+    .description-text {
+        font-size: 15px;
+        line-height: 1.7;
+        color: #4b5563;
+        margin: 0;
+    }
+
+    .details-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+
+    .detail-item {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .detail-label {
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #9ca3af;
+    }
+
+    .detail-value {
+        font-size: 15px;
+        font-weight: 500;
+        color: #1f2937;
+    }
+
+    .candidates-section {
+        margin-top: 32px;
+    }
+
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .section-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: #1f2937;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .candidate-count {
+        background: #eff6ff;
+        color: #3b82f6;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .candidate-grid {
+        display: grid;
+        gap: 16px;
+    }
+
+    .candidate-card {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        transition: all 0.2s;
+    }
+
+    .candidate-card:hover {
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        transform: translateY(-2px);
+    }
+
+    .candidate-avatar {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        font-weight: 600;
+        flex-shrink: 0;
+    }
+
+    .candidate-info {
+        flex: 1;
+    }
+
+    .candidate-name {
+        font-size: 16px;
+        font-weight: 600;
+        color: #1f2937;
+        margin-bottom: 4px;
+    }
+
+    .candidate-email {
+        font-size: 13px;
+        color: #6b7280;
+    }
+
+    .candidate-score {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        padding: 0 16px;
+        border-right: 1px solid #e5e7eb;
+    }
+
+    .score-value {
+        font-size: 20px;
+        font-weight: 700;
+        color: #3b82f6;
+    }
+
+    .score-label {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #9ca3af;
+    }
+
+    .btn-view {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 10px 18px;
+        background: #eff6ff;
+        color: #3b82f6;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.2s;
+        white-space: nowrap;
+    }
+
+    .btn-view:hover {
+        background: #3b82f6;
+        color: white;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 60px 24px;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .empty-state-icon {
+        width: 80px;
+        height: 80px;
+        background: #f3f4f6;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        font-size: 36px;
+        color: #9ca3af;
+    }
+
+    .empty-state-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 8px;
+    }
+
+    .empty-state-text {
+        font-size: 14px;
+        color: #6b7280;
+    }
+
+    @@media (max-width: 968px) {
+        .poste-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @@media (max-width: 640px) {
+        .details-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .candidate-card {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .candidate-score {
+            border-right: none;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 16px 0;
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="poste-container">
+    <!-- Header -->
+    <div class="poste-header">
+        <div class="poste-title-section">
+            <div class="poste-breadcrumb">
+                <a asp-action="Postes"><i class="bi bi-briefcase-fill"></i> Postes</a>
+                <i class="bi bi-chevron-right" style="font-size: 12px;"></i>
+                <span>Détails du poste</span>
+            </div>
+            <h1 class="poste-title">@Model.Titre</h1>
+            <div class="poste-meta">
+                <span class="poste-status">
+                    <i class="bi bi-@(Model.Statut == "ACTIF" ? "check-circle-fill" : "pause-circle-fill")"></i>
+                    @Model.Statut
+                </span>
+                <span class="poste-department">
+                    <i class="bi bi-building"></i>
+                    @Model.Departement
+                </span>
+                <span class="poste-date">
+                    <i class="bi bi-calendar3"></i>
+                    Créé le @Model.DateCreation.ToString("dd MMMM yyyy", new System.Globalization.CultureInfo("fr-FR"))
+                </span>
+            </div>
+        </div>
+        <a asp-action="Postes" class="btn-back">
+            <i class="bi bi-arrow-left"></i>
+            Retour
         </a>
     </div>
 
-    <!-- Informations du poste -->
-    <div class="card shadow-sm mb-4">
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-6">
-                    <dl class="row mb-0">
-                        <dt class="col-sm-4">Titre</dt>
-                        <dd class="col-sm-8">@Model.Titre</dd>
-
-                        <dt class="col-sm-4">Département</dt>
-                        <dd class="col-sm-8">@Model.Departement</dd>
-
-                        <dt class="col-sm-4">Type</dt>
-                        <dd class="col-sm-8">@Model.Type</dd>
-
-                        <dt class="col-sm-4">Expérience requise</dt>
-                        <dd class="col-sm-8">@Model.Experience an(s)</dd>
-                    </dl>
+    <!-- Main Content Grid -->
+    <div class="poste-grid">
+        <!-- Left Column - Description -->
+        <div class="info-card">
+            <div class="card-header-custom">
+                <div class="card-header-icon" style="background: #eff6ff; color: #3b82f6;">
+                    <i class="bi bi-file-text-fill"></i>
                 </div>
-                <div class="col-md-6">
-                    <dl class="row mb-0">
-                        <dt class="col-sm-4">Niveau d'éducation</dt>
-                        <dd class="col-sm-8">@Model.NiveauEducation</dd>
+                <div class="card-header-title">Description du poste</div>
+            </div>
+            <div class="card-body-custom">
+                @if (!string.IsNullOrWhiteSpace(Model.Description))
+                {
+                    <p class="description-text">@Model.Description</p>
+                }
+                else
+                {
+                    <p class="description-text" style="color: #9ca3af; font-style: italic;">
+                        Aucune description disponible pour ce poste.
+                    </p>
+                }
+            </div>
+        </div>
 
-                        <dt class="col-sm-4">Statut</dt>
-                        <dd class="col-sm-8">
-                            <span class="badge @(Model.Statut == "ACTIF" ? "bg-success" : "bg-secondary")">
-                                @Model.Statut
-                            </span>
-                        </dd>
-
-                        <dt class="col-sm-4">Date de création</dt>
-                        <dd class="col-sm-8">@Model.DateCreation.ToString("dd/MM/yyyy")</dd>
-                    </dl>
+        <!-- Right Column - Details -->
+        <div class="info-card">
+            <div class="card-header-custom">
+                <div class="card-header-icon" style="background: #f0fdf4; color: #22c55e;">
+                    <i class="bi bi-info-circle-fill"></i>
+                </div>
+                <div class="card-header-title">Informations</div>
+            </div>
+            <div class="card-body-custom">
+                <div class="details-grid">
+                    <div class="detail-item">
+                        <span class="detail-label">Type de contrat</span>
+                        <span class="detail-value">@Model.Type</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Expérience requise</span>
+                        <span class="detail-value">@Model.Experience an(s)</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Niveau d'éducation</span>
+                        <span class="detail-value">@Model.NiveauEducation</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Date de création</span>
+                        <span class="detail-value">@Model.DateCreation.ToString("dd/MM/yyyy")</span>
+                    </div>
                 </div>
             </div>
-            @if (!string.IsNullOrWhiteSpace(Model.Description))
-            {
-                <div class="mt-3">
-                    <strong>Description :</strong>
-                    <p class="mt-1">@Model.Description</p>
-                </div>
-            }
         </div>
     </div>
 
-    <!-- Liste des candidats (CV) -->
-    <div class="card shadow-sm">
-        <div class="card-header bg-white fw-semibold">
-            <i class="bi bi-people"></i> Candidats ayant postulé
-        </div>
-        <div class="card-body p-0">
-            @if (Model.Cvs == null || !Model.Cvs.Any())
+    <!-- Candidates Section -->
+    <div class="candidates-section">
+        <div class="section-header">
+            <h2 class="section-title">
+                <i class="bi bi-people-fill" style="color: #6366f1;"></i>
+                Candidats ayant postulé
+            </h2>
+            @if (candidateCount > 0)
             {
-                <div class="text-center py-4 text-muted">
-                    Aucun CV déposé pour ce poste.
-                </div>
-            }
-            else
-            {
-                <div class="table-responsive">
-                    <table class="table table-hover mb-0 align-middle">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Nom complet</th>
-                                <th>Email</th>
-                                <th>Score global</th>
-                                <th class="text-end">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var cv in Model.Cvs)
-                            {
-                                var match = cv.Matches.FirstOrDefault();
-                                var score = match?.GlobalScore.ToString("F2") ?? "Non évalué";
-                                <tr>
-                                    <td>
-                                        @(cv.DonneesCv?.NomCandidat ?? "CV sans nom")
-                                    </td>
-                                    <td>@(cv.DonneesCv?.Email ?? "—")</td>
-                                    <td>
-                                        @if (match != null)
-                                        {
-                                            <span class="badge bg-primary">@score%</span>
-                                        }
-                                        else
-                                        {
-                                            <span class="badge bg-secondary">@score</span>
-                                        }
-                                    </td>
-                                    <td class="text-end">
-                                        <a asp-action="CvResult" asp-route-offreId="@Model.Id" asp-route-cvId="@cv.Id"
-                                           class="btn btn-sm btn-outline-info">
-                                            Voir analyse
-                                        </a>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
+                <span class="candidate-count">@candidateCount candidat@(candidateCount > 1 ? "s" : "")</span>
             }
         </div>
+
+        @if (Model.Cvs == null || !Model.Cvs.Any())
+        {
+            <div class="empty-state">
+                <div class="empty-state-icon">
+                    <i class="bi bi-inbox"></i>
+                </div>
+                <div class="empty-state-title">Aucun candidat</div>
+                <div class="empty-state-text">Aucun CV n'a encore été déposé pour ce poste.</div>
+            </div>
+        }
+        else
+        {
+            <div class="candidate-grid">
+                @foreach (var cv in Model.Cvs)
+                {
+                    var match = cv.Matches.FirstOrDefault();
+                    var score = match?.GlobalScore ?? 0;
+                    var candidateName = cv.DonneesCv?.NomCandidat ?? "Candidat inconnu";
+                    var candidateEmail = cv.DonneesCv?.Email ?? "Email non disponible";
+                    var initial = !string.IsNullOrEmpty(candidateName) && candidateName.Length > 0 
+                        ? candidateName.Substring(0, 1).ToUpper() 
+                        : "?";
+                    <div class="candidate-card">
+                        <div class="candidate-avatar">@initial</div>
+                        <div class="candidate-info">
+                            <div class="candidate-name">@candidateName</div>
+                            <div class="candidate-email">
+                                <i class="bi bi-envelope-fill me-1"></i>@candidateEmail
+                            </div>
+                        </div>
+                        <div class="candidate-score">
+                            <span class="score-value">@(match != null ? score.ToString("F0") + "%" : "0%")</span>
+                            <span class="score-label">Score</span>
+                        </div>
+                        <a asp-action="CvResult" asp-route-offreId="@Model.Id" asp-route-cvId="@cv.Id" class="btn-view">
+                            <i class="bi bi-eye-fill"></i>
+                            Voir analyse
+                        </a>
+                    </div>
+                }
+            </div>
+        }
     </div>
 </div>

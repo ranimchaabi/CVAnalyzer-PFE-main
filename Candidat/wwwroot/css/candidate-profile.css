@@ -155,6 +155,32 @@
     background: #fff;
 }
 
+.candidate-profile-page .cp-password-field {
+    position: relative;
+}
+
+.candidate-profile-page .cp-password-field .cp-input {
+    padding-right: 2.75rem;
+}
+
+.candidate-profile-page .cp-password-toggle {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #9ca3af;
+    cursor: pointer;
+    padding: 4px;
+    font-size: 1.15rem;
+    line-height: 1;
+}
+
+.candidate-profile-page .cp-password-toggle:hover {
+    color: #4b5563;
+}
+
 .candidate-profile-page .cp-textarea {
     min-height: 120px;
     resize: vertical;

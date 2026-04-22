@@ -15,6 +15,7 @@ namespace Administration.Data
         public DbSet<Competence> Competences { get; set; }
         public DbSet<CvCompetence> CvCompetences { get; set; }
         public DbSet<DonneesCv> DonneesCvs { get; set; }
+        public DbSet<Departement> Departements { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -25,6 +26,7 @@ namespace Administration.Data
             modelBuilder.Entity<OffreEmploi>().ToTable("OffreEmploi");
             modelBuilder.Entity<Cv>().ToTable("Cv");
             modelBuilder.Entity<Match>().ToTable("Match");
+            modelBuilder.Entity<Departement>().ToTable("Departement");
 
             // MANY TO MANY
             modelBuilder.Entity<CvCompetence>()

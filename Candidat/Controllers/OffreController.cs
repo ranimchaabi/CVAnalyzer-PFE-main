@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace CvParsing.Controllers;
 
@@ -120,7 +121,8 @@ public class OffreController : Controller
 
     [HttpPost]
     public async Task<IActionResult> UploadCv(int offreId, string nomComplet,
-        string email, string? telephone, IFormFile cvFile, string? lettreMotivation)
+        string email, string? telephone, string? competences, string? experience,
+        string? niveauEducation, string? autresInfos, IFormFile cvFile)
     {
         ViewData["OffreId"] = offreId;
         var userId = HttpContext.Session.GetString("UserId");
@@ -131,22 +133,33 @@ public class OffreController : Controller
 
         var offre = _context.OffresEmploi.FirstOrDefault(o => o.Id == offreId);
 
+        // Validation des champs obligatoires
+        if (string.IsNullOrWhiteSpace(nomComplet))
+        {
+            ViewBag.UploadError = "Le nom complet est obligatoire.";
+            ViewBag.IsLoggedIn = true;
+            return View("~/Views/Offre/offer-details.cshtml", offre);
+        }
+
+        if (string.IsNullOrWhiteSpace(email))
+        {
+            ViewBag.UploadError = "L'email est obligatoire.";
+            ViewBag.IsLoggedIn = true;
+            return View("~/Views/Offre/offer-details.cshtml", offre);
+        }
+
         if (cvFile == null || cvFile.Length == 0)
         {
             ViewBag.UploadError = "Veuillez sélectionner un fichier CV.";
             ViewBag.IsLoggedIn = true;
-            ViewBag.NomUtilisateur = nomComplet;
-            ViewBag.EmailUtilisateur = email;
             return View("~/Views/Offre/offer-details.cshtml", offre);
         }
 
         var ext = Path.GetExtension(cvFile.FileName).ToLowerInvariant();
-        if (ext != ".pdf" && ext != ".jpg" && ext != ".jpeg" && ext != ".png")
+        if (ext != ".pdf" && ext != ".doc" && ext != ".docx")
         {
-            ViewBag.UploadError = "Format non accepté. Utilisez PDF, JPG, JPEG ou PNG.";
+            ViewBag.UploadError = "Format non accepté. Utilisez PDF, DOC ou DOCX.";
             ViewBag.IsLoggedIn = true;
-            ViewBag.NomUtilisateur = nomComplet;
-            ViewBag.EmailUtilisateur = email;
             return View("~/Views/Offre/offer-details.cshtml", offre);
         }
 
@@ -160,6 +173,12 @@ public class OffreController : Controller
 
         if (previous != null)
         {
+            var previousMatches = _context.Matches.Where(m => m.CvId == previous.Id).ToList();
+            if (previousMatches.Count > 0)
+            {
+                _context.Matches.RemoveRange(previousMatches);
+            }
+
             if (!string.IsNullOrWhiteSpace(previous.CheminFichier))
             {
                 var rel = previous.CheminFichier.TrimStart('~').TrimStart('/').Replace('/', Path.DirectorySeparatorChar);
@@ -196,14 +215,104 @@ public class OffreController : Controller
             NomCandidat = nomComplet,
             Email = email,
             Telephone = telephone,
+            Competences = competences,
+            Experience = experience,
+            NiveauEducation = niveauEducation,
+            AutresInfos = autresInfos,
             Cv = newCv
         };
 
         _context.DonneesCvs.Add(newDonneesCv);
         await _context.SaveChangesAsync();
 
+        var detailedScores = CalculateScores(newDonneesCv, offre);
+        var match = await _context.Matches.FirstOrDefaultAsync(m => m.CvId == newCv.Id && m.OffreId == offreId);
+        if (match == null)
+        {
+            match = new CvParsing.Models.Match
+            {
+                CvId = newCv.Id,
+                OffreId = offreId
+            };
+            _context.Matches.Add(match);
+        }
+
+        match.DiplomeScore = detailedScores.diploma;
+        match.ExperienceScore = detailedScores.experience;
+        match.CompetenceScore = detailedScores.skills;
+        match.GlobalScore = detailedScores.global;
+        await _context.SaveChangesAsync();
+
         TempData["CvSubmitted"] = "1";
         return RedirectToAction(nameof(Details), new { id = offreId });
+    }
+
+    private static (float diploma, float experience, float skills, float global) CalculateScores(DonneesCv cvData, OffreEmploi? offre)
+    {
+        if (offre == null)
+        {
+            return (0f, 0f, 0f, 0f);
+        }
+
+        static float Clamp(float value) => MathF.Max(0f, MathF.Min(100f, value));
+
+        var candidateEducationRank = EducationRank(cvData.NiveauEducation);
+        var requiredEducationRank = EducationRank(offre.NiveauEducation);
+        var diplomaScore = requiredEducationRank <= 0
+            ? 100f
+            : Clamp((candidateEducationRank / (float)requiredEducationRank) * 100f);
+
+        var candidateYears = ExtractYears(cvData.Experience);
+        var requiredYears = Math.Max(0, offre.Experience);
+        var experienceScore = requiredYears <= 0
+            ? 100f
+            : Clamp((candidateYears / (float)requiredYears) * 100f);
+
+        var candidateSkills = ParseSkills(cvData.Competences);
+        var requiredSkills = ParseSkills(offre.Description);
+        float skillsScore;
+        if (requiredSkills.Count == 0)
+        {
+            skillsScore = candidateSkills.Count > 0 ? 100f : 50f;
+        }
+        else
+        {
+            var matched = candidateSkills.Intersect(requiredSkills).Count();
+            skillsScore = Clamp((matched / (float)requiredSkills.Count) * 100f);
+        }
+
+        // Weighted global score aligned with matching_score.py defaults.
+        var globalScore = Clamp((diplomaScore * 0.30f) + (experienceScore * 0.30f) + (skillsScore * 0.40f));
+        return (diplomaScore, experienceScore, skillsScore, globalScore);
+    }
+
+    private static int EducationRank(string? education)
+    {
+        var value = (education ?? string.Empty).Trim().ToLowerInvariant();
+        if (string.IsNullOrWhiteSpace(value)) return 0;
+        if (value.Contains("doctor") || value.Contains("phd")) return 5;
+        if (value.Contains("ing") || value.Contains("engineer")) return 4;
+        if (value.Contains("master") || value.Contains("bac+5")) return 3;
+        if (value.Contains("licence") || value.Contains("bachelor") || value.Contains("bac+3")) return 2;
+        if (value.Contains("bac")) return 1;
+        return 0;
+    }
+
+    private static int ExtractYears(string? experience)
+    {
+        if (string.IsNullOrWhiteSpace(experience)) return 0;
+        var match = Regex.Match(experience, @"(\d+)");
+        return match.Success && int.TryParse(match.Groups[1].Value, out var years) ? years : 0;
+    }
+
+    private static HashSet<string> ParseSkills(string? text)
+    {
+        if (string.IsNullOrWhiteSpace(text)) return new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        var separators = new[] { ',', ';', '|', '/', '\n' };
+        return text.Split(separators, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .Select(s => s.Trim().ToLowerInvariant())
+            .Where(s => s.Length > 1)
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
     }
 
     // ===== SEARCH HELPERS (UNCHANGED) =====

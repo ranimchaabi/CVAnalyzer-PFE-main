@@ -94,17 +94,27 @@
                         }
                         <form asp-controller="Profile" asp-action="ChangePassword" method="post" class="mt-2">
                             @Html.AntiForgeryToken()
+                            <p class="text-muted small mb-3">Au moins 8 caractères, avec des lettres et des chiffres.</p>
                             <div class="mb-3">
                                 <label class="cp-label">Mot de passe actuel</label>
-                                <input class="cp-input" type="password" name="motDePasseActuel" required autocomplete="current-password" />
+                                <div class="cp-password-field">
+                                    <input class="cp-input" type="password" id="pwdActuel" name="motDePasseActuel" required autocomplete="current-password" />
+                                    <button type="button" class="cp-password-toggle" onclick="toggleCpPwd('pwdActuel','pwdActuelI')" aria-label="Afficher le mot de passe"><i id="pwdActuelI" class="bx bx-show"></i></button>
+                                </div>
                             </div>
                             <div class="mb-3">
                                 <label class="cp-label">Nouveau mot de passe</label>
-                                <input class="cp-input" type="password" name="nouveauMotDePasse" required autocomplete="new-password" />
+                                <div class="cp-password-field">
+                                    <input class="cp-input" type="password" id="pwdNew" name="nouveauMotDePasse" required autocomplete="new-password" />
+                                    <button type="button" class="cp-password-toggle" onclick="toggleCpPwd('pwdNew','pwdNewI')" aria-label="Afficher le mot de passe"><i id="pwdNewI" class="bx bx-show"></i></button>
+                                </div>
                             </div>
                             <div class="mb-3">
                                 <label class="cp-label">Confirmation</label>
-                                <input class="cp-input" type="password" name="confirmation" required autocomplete="new-password" />
+                                <div class="cp-password-field">
+                                    <input class="cp-input" type="password" id="pwdConf" name="confirmation" required autocomplete="new-password" />
+                                    <button type="button" class="cp-password-toggle" onclick="toggleCpPwd('pwdConf','pwdConfI')" aria-label="Afficher le mot de passe"><i id="pwdConfI" class="bx bx-show"></i></button>
+                                </div>
                             </div>
                             <div class="cp-form-actions">
                                 <a class="cp-btn-cancel" href="@Url.Action("Index", new { tab = "password" })">Annuler</a>
@@ -139,13 +149,27 @@
 
 @section Scripts {
     <script>
+        function toggleCpPwd(inputId, iconId) {
+            var input = document.getElementById(inputId);
+            var icon = document.getElementById(iconId);
+            if (!input || !icon) return;
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('bx-show');
+                icon.classList.add('bx-hide');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('bx-hide');
+                icon.classList.add('bx-show');
+            }
+        }
         (function () {
             var input = document.getElementById('profilePhotoInput');
             var img = document.getElementById('profilePreviewImg');
             if (!input || !img) return;
             input.addEventListener('change', function () {
                 var f = input.files && input.files[0];
-                if (!f || !f.Type.match(/^image\//)) return;
+                if (!f || !f.type.match(/^image\//)) return;
                 var r = new FileReader();
                 r.onload = function (e) { img.src = e.target.result; };
                 r.readAsDataURL(f);

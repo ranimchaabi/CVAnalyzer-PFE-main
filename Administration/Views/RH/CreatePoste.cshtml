@@ -2,76 +2,378 @@
 @{
     ViewData["Title"] = "Créer un poste";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var departements = ViewBag.Departements as List<string> ?? new List<string>();
 }
 
-<div class="container-fluid px-4 py-3">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow-sm">
-                <div class="card-header bg-white fw-semibold">Nouveau poste</div>
-                <div class="card-body">
-                    <form method="post">
-                        @Html.AntiForgeryToken()
-                        <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2"></div>
+<style>
+    .job-form-container {
+        background: #f8fafc;
+        min-height: calc(100vh - 100px);
+        padding: 32px;
+    }
 
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label asp-for="Titre" class="form-label fw-semibold">Titre du poste</label>
-                                <input asp-for="Titre" class="form-control" placeholder="Ex: Développeur .NET">
-                                <span asp-validation-for="Titre" class="text-danger small"></span>
+    .job-form-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        overflow: hidden;
+    }
+
+    .job-form-header {
+        padding: 24px 32px;
+        border-bottom: 1px solid #e2e8f0;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .job-form-header-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #10b981, #14b8a6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+    }
+
+    .job-form-header h4 {
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0;
+        font-size: 18px;
+    }
+
+    .job-form-header .job-subtitle {
+        color: #64748b;
+        font-size: 14px;
+        margin-left: 8px;
+    }
+
+    .job-form-body {
+        padding: 32px;
+    }
+
+    .form-section {
+        margin-bottom: 32px;
+    }
+
+    .form-section-title {
+        font-size: 14px;
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 20px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid #e2e8f0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .form-section-title i {
+        color: #10b981;
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 0;
+    }
+
+    .form-group.full-width {
+        grid-column: 1 / -1;
+    }
+
+    .form-label {
+        display: block;
+        font-size: 13px;
+        font-weight: 600;
+        color: #334155;
+        margin-bottom: 8px;
+    }
+
+    .form-label .required {
+        color: #ef4444;
+        margin-left: 2px;
+    }
+
+    .form-control-custom {
+        width: 100%;
+        padding: 10px 14px;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 14px;
+        transition: all 0.2s;
+        background: white;
+        color: #1e293b;
+    }
+
+    .form-control-custom:focus {
+        outline: none;
+        border-color: #10b981;
+        box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+    }
+
+    .form-control-custom::placeholder {
+        color: #94a3b8;
+    }
+
+    .form-select-custom {
+        width: 100%;
+        padding: 10px 14px;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 14px;
+        transition: all 0.2s;
+        background: white;
+        color: #1e293b;
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%2364748b' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 12px center;
+        background-size: 16px;
+        padding-right: 36px;
+    }
+
+    .form-select-custom:focus {
+        outline: none;
+        border-color: #10b981;
+        box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+    }
+
+    textarea.form-control-custom {
+        min-height: 120px;
+        resize: vertical;
+        line-height: 1.6;
+    }
+
+    .form-hint {
+        font-size: 12px;
+        color: #64748b;
+        margin-top: 6px;
+    }
+
+    .validation-error {
+        color: #ef4444;
+        font-size: 12px;
+        margin-top: 4px;
+        display: block;
+    }
+
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        padding-top: 24px;
+        border-top: 1px solid #e2e8f0;
+        margin-top: 32px;
+    }
+
+    .btn-cancel {
+        padding: 10px 24px;
+        border: 1px solid #e2e8f0;
+        background: white;
+        color: #475569;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.2s;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .btn-cancel:hover {
+        background: #f1f5f9;
+        border-color: #cbd5e1;
+    }
+
+    .btn-create {
+        padding: 10px 32px;
+        border: none;
+        background: linear-gradient(135deg, #10b981, #14b8a6);
+        color: white;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .btn-create:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+    }
+
+    .quick-tips {
+        background: #f0fdf4;
+        border: 1px solid #bbf7d0;
+        border-radius: 8px;
+        padding: 16px;
+        margin-bottom: 24px;
+    }
+
+    .quick-tips-title {
+        font-size: 13px;
+        font-weight: 600;
+        color: #166534;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .quick-tips-list {
+        font-size: 12px;
+        color: #15803d;
+        margin: 0;
+        padding-left: 20px;
+    }
+
+    .quick-tips-list li {
+        margin-bottom: 4px;
+    }
+
+    @@media (max-width: 768px) {
+        .job-form-container {
+            padding: 16px;
+        }
+
+        .job-form-body {
+            padding: 20px;
+        }
+
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .job-form-header {
+            padding: 16px 20px;
+        }
+    }
+</style>
+
+<div class="job-form-container">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="job-form-card">
+                <!-- Header -->
+                <div class="job-form-header">
+                    <div class="job-form-header-icon">
+                        <i class="bi bi-plus-lg"></i>
+                    </div>
+                    <div>
+                        <h4>Nouveau poste</h4>
+                        <span class="job-subtitle">Créez une offre d'emploi</span>
+                    </div>
+                </div>
+
+                <!-- Body -->
+                <div class="job-form-body">
+
+
+                    <form method="post" id="createJobForm">
+                        @Html.AntiForgeryToken()
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2 mb-4"></div>
+
+                        <!-- Section: Informations principales -->
+                        <div class="form-section">
+                            <div class="form-section-title">
+                                <i class="bi bi-info-circle"></i>
+                                Informations principales
                             </div>
-                            <div class="col-md-6">
-                                <label asp-for="Departement" class="form-label fw-semibold">Département</label>
-                                <input asp-for="Departement" class="form-control" placeholder="Ex: Informatique">
-                                <span asp-validation-for="Departement" class="text-danger small"></span>
-                            </div>
-                            <div class="col-md-6">
-                                <label asp-for="Type" class="form-label fw-semibold">Type de contrat</label>
-                                <select asp-for="Type" class="form-select">
-                                    <option value="">-- Sélectionner --</option>
-                                    <option value="CDI">CDI</option>
-                                    <option value="CDD">CDD</option>
-                                    <option value="Stage">Stage</option>
-                                    <option value="Freelance">Freelance</option>
-                                    <option value="Alternance">Alternance</option>
-                                </select>
-                                <span asp-validation-for="Type" class="text-danger small"></span>
-                            </div>
-                            <div class="col-md-6">
-                                <label asp-for="Experience" class="form-label fw-semibold">Expérience requise (années)</label>
-                                <input asp-for="Experience" type="number" min="0" class="form-control" placeholder="0">
-                                <span asp-validation-for="Experience" class="text-danger small"></span>
-                            </div>
-                            <div class="col-md-6">
-                                <label asp-for="NiveauEducation" class="form-label fw-semibold">Niveau d'éducation</label>
-                                <select asp-for="NiveauEducation" class="form-select">
-                                    <option value="">-- Sélectionner --</option>
-                                    <option value="Bac">Bac</option>
-                                    <option value="Bac+2">Bac+2</option>
-                                    <option value="Bac+3">Bac+3 (Licence)</option>
-                                    <option value="Bac+5">Bac+5 (Master)</option>
-                                    <option value="Doctorat">Doctorat</option>
-                                </select>
-                                <span asp-validation-for="NiveauEducation" class="text-danger small"></span>
-                            </div>
-                            <div class="col-md-6">
-                                <label asp-for="Statut" class="form-label fw-semibold">Statut</label>
-                                <select asp-for="Statut" class="form-select">
-                                    <option value="ACTIF">ACTIF</option>
-                                    <option value="INACTIF">INACTIF</option>
-                                </select>
-                            </div>
-                            <div class="col-12">
-                                <label asp-for="Description" class="form-label fw-semibold">Description</label>
-                                <textarea asp-for="Description" class="form-control" rows="5"
-                                          placeholder="Décrivez le poste, les responsabilités, les compétences requises..."></textarea>
-                                <span asp-validation-for="Description" class="text-danger small"></span>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label asp-for="Titre" class="form-label">Titre du poste <span class="required">*</span></label>
+                                    <input asp-for="Titre" class="form-control-custom" placeholder="Ex: Développeur Full Stack">
+                                    <span asp-validation-for="Titre" class="validation-error"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Departement" class="form-label">Département <span class="required">*</span></label>
+                                    <select asp-for="Departement" class="form-select-custom" required>
+                                        <option value="">-- Sélectionner un département --</option>
+                                        @foreach (var dept in departements)
+                                        {
+                                            <option value="@dept">@dept</option>
+                                        }
+                                    </select>
+                                    <span asp-validation-for="Departement" class="validation-error"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Type" class="form-label">Type de contrat <span class="required">*</span></label>
+                                    <select asp-for="Type" class="form-select-custom">
+                                        <option value="">-- Sélectionner --</option>
+                                        <option value="CDI">CDI</option>
+                                        <option value="CDD">CDD</option>
+                                        <option value="Stage">Stage</option>
+                                        <option value="Freelance">Freelance</option>
+                                        <option value="Alternance">Alternance</option>
+                                    </select>
+                                    <span asp-validation-for="Type" class="validation-error"></span>
+                                </div>
+                                <input type="hidden" asp-for="Statut" value="ACTIF" />
                             </div>
                         </div>
 
-                        <div class="d-flex gap-2 mt-4">
-                            <button type="submit" class="btn btn-primary">Créer le poste</button>
-                            <a asp-action="Postes" class="btn btn-outline-secondary">Annuler</a>
+                        <!-- Section: Prérequis -->
+                        <div class="form-section">
+                            <div class="form-section-title">
+                                <i class="bi bi-clipboard-check"></i>
+                                Prérequis du poste
+                            </div>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label asp-for="Experience" class="form-label">Expérience requise (années)</label>
+                                    <input asp-for="Experience" type="number" min="0" max="30" class="form-control-custom" placeholder="0">
+                                    <span class="form-hint">0 pour poste junior</span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="NiveauEducation" class="form-label">Niveau d'éducation</label>
+                                    <select asp-for="NiveauEducation" class="form-select-custom">
+                                        <option value="">-- Sélectionner --</option>
+                                        <option value="Bac">Bac</option>
+                                        <option value="Bac+2">Bac+2</option>
+                                        <option value="Bac+3">Bac+3 (Licence)</option>
+                                        <option value="Bac+5">Bac+5 (Master)</option>
+                                        <option value="Doctorat">Doctorat</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section: Description -->
+                        <div class="form-section">
+                            <div class="form-section-title">
+                                <i class="bi bi-card-text"></i>
+                                Description détaillée
+                            </div>
+                            <div class="form-group full-width">
+                                <label asp-for="Description" class="form-label">Description du poste <span class="required">*</span></label>
+                                <textarea asp-for="Description" class="form-control-custom" 
+                                          placeholder="Décrivez les missions, responsabilités, compétences requises, avantages..."></textarea>
+                                <span asp-validation-for="Description" class="validation-error"></span>
+                                <span class="form-hint">Soyez précis pour attirer les meilleurs candidats</span>
+                            </div>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="form-actions">
+                            <a asp-action="Postes" class="btn-cancel">
+                                <i class="bi bi-x-lg"></i> Annuler
+                            </a>
+                            <button type="submit" class="btn-create">
+                                <i class="bi bi-check-lg"></i> Créer le poste
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -82,4 +384,41 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        // Auto-resize textarea
+        const textarea = document.querySelector('textarea.form-control-custom');
+        if (textarea) {
+            textarea.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = (this.scrollHeight) + 'px';
+            });
+        }
+
+        // Form validation visual feedback
+        document.getElementById('createJobForm')?.addEventListener('submit', function(e) {
+            const requiredFields = this.querySelectorAll('[required]');
+            let isValid = true;
+            
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    isValid = false;
+                    field.style.borderColor = '#ef4444';
+                } else {
+                    field.style.borderColor = '#e2e8f0';
+                }
+            });
+            
+            if (!isValid) {
+                e.preventDefault();
+                alert('Veuillez remplir tous les champs obligatoires.');
+            }
+        });
+
+        // Clear validation style on input
+        document.querySelectorAll('.form-control-custom, .form-select-custom').forEach(input => {
+            input.addEventListener('input', function() {
+                this.style.borderColor = '#e2e8f0';
+            });
+        });
+    </script>
 }

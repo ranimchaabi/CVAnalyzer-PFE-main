@@ -8,4 +8,8 @@ public class ApplicationRowViewModel
     public string DepartementOuEntreprise { get; set; } = string.Empty;
     public DateTime DateCandidature { get; set; }
     public string Statut { get; set; } = "Pending";
+    public float GlobalScore { get; set; }
+    public float CompetenceScore { get; set; }
+    public float DiplomeScore { get; set; }
+    public float ExperienceScore { get; set; }
 }

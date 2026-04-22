@@ -56,39 +56,21 @@
                                 </a>
                             </li>
                             <li class="nav-item">
+                                <a href="/Offre/Index" class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Offre" ? "active" : "")">
+                                    Offres
+                                </a>
+                            </li>
+                            <li class="nav-item">
                                 <a href="/Contact" class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Contact" ? "active" : "")">
                                     Contact
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a href="/Offre/Index" class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Offre" ? "active" : "")">
-                                    Offre
-                                </a>
-                            </li>
+                            
                         </ul>
 
                         <!-- Global search + session -->
                         <div class="nav-right-cluster ms-auto d-flex flex-column flex-lg-row align-items-lg-center gap-2 w-lg-auto mt-3 mt-lg-0">
-                            <div class="nav-global-search position-relative" id="globalNavSearchRoot">
-                                <label class="visually-hidden" for="globalNavSearchInput">Recherche</label>
-                                <div class="nav-global-search__field">
-                                    <i class='bx bx-search nav-global-search__icon' aria-hidden="true"></i>
-                                    <input type="search"
-                                           id="globalNavSearchInput"
-                                           class="nav-global-search__input"
-                                           placeholder="Rechercher une page..."
-                                           autocomplete="off"
-                                           spellcheck="false"
-                                           aria-autocomplete="list"
-                                           aria-controls="globalNavSearchList"
-                                           aria-expanded="false" />
-                                </div>
-                                <div class="nav-global-search__panel shadow-sm" id="globalNavSearchPanel" hidden>
-                                    <ul class="nav-global-search__list" id="globalNavSearchList" role="listbox"></ul>
-                                    <div class="nav-global-search__empty" id="globalNavSearchEmpty" hidden>Aucun résultat</div>
-                                </div>
-                            </div>
-
+                       
                             <div class="navbar-nav d-flex align-items-center flex-wrap justify-content-lg-end" style="gap:10px;">
                                 @if (Context.Session != null && !string.IsNullOrEmpty(Context.Session.GetString("UserId")))
                                 {

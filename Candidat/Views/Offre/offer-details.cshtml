@@ -66,17 +66,116 @@
                             <div class="apply-form-area" id="applyCvFormWrap" style="background:#f9f9f9; border:1px solid #e0e0e0; border-radius:8px; padding:30px; margin-top:20px; @(hasSubmitted ? "display:none;" : "")">
                                 <form asp-action="UploadCv" asp-controller="Offre" method="post" enctype="multipart/form-data">
                                     <input type="hidden" name="offreId" value="@Model?.Id" />
+
+                                    <h4 style="margin-bottom:20px; color:#333;"><i class='bx bx-user'></i> Informations personnelles</h4>
+
+                                    <!-- Nom complet -->
+                                    <div class="form-group mb-3">
+                                        <label for="nomComplet" style="font-weight:600; margin-bottom:8px; display:block;">
+                                            Nom complet <span style="color:#e74c3c;">*</span>
+                                        </label>
+                                        <input type="text" name="nomComplet" id="nomComplet"
+                                               class="form-control"
+                                               placeholder="Votre nom et prénom"
+                                               required
+                                               style="width:100%; padding:12px; border:1px solid #ddd; border-radius:6px;">
+                                    </div>
+
+                                    <!-- Email -->
+                                    <div class="form-group mb-3">
+                                        <label for="email" style="font-weight:600; margin-bottom:8px; display:block;">
+                                            Email <span style="color:#e74c3c;">*</span>
+                                        </label>
+                                        <input type="email" name="email" id="email"
+                                               class="form-control"
+                                               placeholder="votre@email.com"
+                                               required
+                                               style="width:100%; padding:12px; border:1px solid #ddd; border-radius:6px;">
+                                    </div>
+
+                                    <!-- Téléphone -->
+                                    <div class="form-group mb-3">
+                                        <label for="telephone" style="font-weight:600; margin-bottom:8px; display:block;">
+                                            Téléphone
+                                        </label>
+                                        <input type="tel" name="telephone" id="telephone"
+                                               class="form-control"
+                                               placeholder="+33 6 12 34 56 78"
+                                               style="width:100%; padding:12px; border:1px solid #ddd; border-radius:6px;">
+                                    </div>
+
+                                    <hr style="margin:25px 0; border-color:#e0e0e0;">
+                                    <h4 style="margin-bottom:20px; color:#333;"><i class='bx bx-briefcase'></i> Expérience et compétences</h4>
+
+                                    <!-- Compétences -->
+                                    <div class="form-group mb-3">
+                                        <label for="competences" style="font-weight:600; margin-bottom:8px; display:block;">
+                                            Compétences
+                                        </label>
+                                        <textarea name="competences" id="competences"
+                                                  class="form-control"
+                                                  placeholder="Listez vos compétences principales (ex: C#, SQL, ASP.NET, React...)"
+                                                  rows="4"
+                                                  style="width:100%; padding:12px; border:1px solid #ddd; border-radius:6px; resize:vertical;"></textarea>
+                                    </div>
+
+                                    <!-- Expérience -->
+                                    <div class="form-group mb-3">
+                                        <label for="experience" style="font-weight:600; margin-bottom:8px; display:block;">
+                                            Expérience professionnelle
+                                        </label>
+                                        <textarea name="experience" id="experience"
+                                                  class="form-control"
+                                                  placeholder="Décrivez votre expérience professionnelle..."
+                                                  rows="4"
+                                                  style="width:100%; padding:12px; border:1px solid #ddd; border-radius:6px; resize:vertical;"></textarea>
+                                    </div>
+
+                                    <!-- Niveau d'éducation -->
+                                    <div class="form-group mb-3">
+                                        <label for="niveauEducation" style="font-weight:600; margin-bottom:8px; display:block;">
+                                            Niveau d'éducation
+                                        </label>
+                                        <select name="niveauEducation" id="niveauEducation"
+                                                class="form-control"
+                                                style="width:100%; padding:12px; border:1px solid #ddd; border-radius:6px; background:#fff;">
+                                            <option value="">-- Sélectionnez votre niveau --</option>
+                                            <option value="Bac">Baccalauréat</option>
+                                            <option value="Bac+2">Bac+2 (BTS, DUT)</option>
+                                            <option value="Bac+3">Bac+3 (Licence)</option>
+                                            <option value="Bac+5">Bac+5 (Master, Ingénieur)</option>
+                                            <option value="Doctorat">Doctorat</option>
+                                            <option value="Autre">Autre</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Autres informations -->
+                                    <div class="form-group mb-3">
+                                        <label for="autresInfos" style="font-weight:600; margin-bottom:8px; display:block;">
+                                            Autres informations (optionnel)
+                                        </label>
+                                        <textarea name="autresInfos" id="autresInfos"
+                                                  class="form-control"
+                                                  placeholder="Informations complémentaires, certifications, langues..."
+                                                  rows="3"
+                                                  style="width:100%; padding:12px; border:1px solid #ddd; border-radius:6px; resize:vertical;"></textarea>
+                                    </div>
+
+                                    <hr style="margin:25px 0; border-color:#e0e0e0;">
+                                    <h4 style="margin-bottom:20px; color:#333;"><i class='bx bx-upload'></i> Votre CV</h4>
+
+                                    <!-- Upload CV -->
                                     <div class="form-group mb-3">
                                         <label style="font-weight:600; margin-bottom:8px; display:block;">
-                                            <i class='bx bx-upload'></i> Télécharger votre CV
+                                            Télécharger votre CV <span style="color:#e74c3c;">*</span>
                                         </label>
                                         <div style="border:2px dashed #ccc; border-radius:8px; padding:20px; text-align:center; background:#fff;">
                                             <i class='bx bx-file' style="font-size:40px; color:#aaa;"></i>
                                             <p style="color:#888; margin:10px 0 5px;">Glissez votre fichier ici ou cliquez pour parcourir</p>
-                                            <small style="color:#aaa;">Formats acceptés : PDF, JPG, JPEG, PNG (max 5 MB)</small>
+                                            <small style="color:#aaa;">Formats acceptés : PDF, DOC, DOCX (max 5 MB)</small>
                                             <br><br>
                                             <input type="file" name="cvFile" id="cvFile"
-                                                   accept=".pdf,.jpg,.jpeg,.png"
+                                                   accept=".pdf,.doc,.docx"
                                                    required
                                                    style="display:none;"
                                                    onchange="document.getElementById('fileName').textContent = this.files[0]?.name || ''">
@@ -87,7 +186,7 @@
                                         </div>
                                     </div>
 
-                                    <button type="submit" class="default-btn btn-bg-two" style="margin-top:10px;">
+                                    <button type="submit" class="default-btn btn-bg-two" style="margin-top:10px; width:100%; padding:15px;">
                                         <i class='bx bx-send'></i> Envoyer ma candidature
                                     </button>
                                 </form>

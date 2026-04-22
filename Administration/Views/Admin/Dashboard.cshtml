@@ -1,121 +1,410 @@
 @model Administration.ViewModels.DashboardStatsViewModel
 @{
-    ViewData["Title"] = "Tableau de bord";
+    ViewData["Title"] = "Tableau de bord Administrateur";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container-fluid px-4 py-4">
+<style>
+    .admin-dashboard {
+        padding: 24px;
+        background: #f8fafc;
+        min-height: calc(100vh - 60px);
+    }
 
-    <!-- HEADER -->
-    <div class="mb-4">
-        <h3 class="fw-bold">Dashboard</h3>
-        <p class="text-muted">Overview of your platform statistics</p>
+    .dashboard-header {
+        margin-bottom: 32px;
+    }
+
+    .dashboard-title {
+        font-size: 28px;
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 8px;
+    }
+
+    .dashboard-subtitle {
+        color: #64748b;
+        font-size: 15px;
+    }
+
+    .stat-card {
+        background: white;
+        border-radius: 16px;
+        border: none;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        overflow: hidden;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    }
+
+    .stat-card .card-body {
+        padding: 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .stat-info h6 {
+        color: #64748b;
+        font-size: 13px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 8px;
+    }
+
+    .stat-info h2 {
+        font-size: 32px;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0;
+    }
+
+    .stat-icon {
+        width: 56px;
+        height: 56px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+    }
+
+    .stat-icon.users {
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        color: white;
+    }
+
+    .stat-icon.rh {
+        background: linear-gradient(135deg, #10b981 0%, #14b8a6 100%);
+        color: white;
+    }
+
+    .stat-icon.directeurs {
+        background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+        color: white;
+    }
+
+    .stat-icon.offres {
+        background: linear-gradient(135deg, #06b6d4 0%, #22d3ee 100%);
+        color: white;
+    }
+
+    .stat-icon.cvs {
+        background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
+        color: white;
+    }
+
+    .stat-icon.matches {
+        background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+        color: white;
+    }
+
+    .chart-card {
+        background: white;
+        border-radius: 16px;
+        border: none;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        overflow: hidden;
+    }
+
+    .chart-card .card-header {
+        background: white;
+        border-bottom: 1px solid #f1f5f9;
+        padding: 20px 24px;
+        font-weight: 600;
+        color: #1e293b;
+    }
+
+    .chart-container {
+        position: relative;
+        height: 300px;
+        padding: 20px;
+    }
+
+    .quick-actions-card {
+        background: white;
+        border-radius: 16px;
+        border: none;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .quick-actions-card .card-header {
+        background: white;
+        border-bottom: 1px solid #f1f5f9;
+        padding: 20px 24px;
+        font-weight: 600;
+        color: #1e293b;
+    }
+
+    .btn-action {
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 14px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.2s;
+    }
+
+    .theme-toggle {
+        position: fixed;
+        top: 80px;
+        right: 24px;
+        z-index: 1000;
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 50px;
+        padding: 8px 16px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+    }
+
+    .theme-toggle:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+</style>
+
+<div class="admin-dashboard" id="adminDashboard">
+    <!-- Theme Toggle -->
+    
+
+    <!-- Header -->
+    <div class="dashboard-header">
+        <h1 class="dashboard-title">Tableau de bord Administrateur</h1>
+        <p class="dashboard-subtitle">Vue d'ensemble de la plateforme et statistiques globales</p>
     </div>
 
-    <!-- STATS -->
+    <!-- Stats Cards -->
     <div class="row g-4 mb-4">
-
-        <!-- USERS -->
-        <div class="col-md-3 col-sm-6">
+        <div class="col-xl-2 col-md-4 col-sm-6">
             <div class="card stat-card h-100">
-                <div class="card-body d-flex justify-content-between align-items-center">
-                    <div>
-                        <h6 class="text-muted">Utilisateurs</h6>
-                        <h2 class="fw-bold">@Model.TotalUsers</h2>
+                <div class="card-body">
+                    <div class="stat-info">
+                        <h6>Utilisateurs</h6>
+                        <h2>@Model.TotalUsers</h2>
                     </div>
-                    <div class="icon-box bg-primary">
-                        👤
+                    <div class="stat-icon users">
+                        <i class="bi bi-people-fill"></i>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- RH -->
-        <div class="col-md-3 col-sm-6">
+        <div class="col-xl-2 col-md-4 col-sm-6">
             <div class="card stat-card h-100">
-                <div class="card-body d-flex justify-content-between align-items-center">
-                    <div>
-                        <h6 class="text-muted">RH</h6>
-                        <h2 class="fw-bold">@Model.TotalRH</h2>
+                <div class="card-body">
+                    <div class="stat-info">
+                        <h6>RH</h6>
+                        <h2>@Model.TotalRH</h2>
                     </div>
-                    <div class="icon-box bg-success">
-                        👥
+                    <div class="stat-icon rh">
+                        <i class="bi bi-person-badge-fill"></i>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- DIRECTEUR -->
-        <div class="col-md-3 col-sm-6">
+        <div class="col-xl-2 col-md-4 col-sm-6">
             <div class="card stat-card h-100">
-                <div class="card-body d-flex justify-content-between align-items-center">
-                    <div>
-                        <h6 class="text-muted">Directeurs</h6>
-                        <h2 class="fw-bold">@Model.TotalDirecteurs</h2>
+                <div class="card-body">
+                    <div class="stat-info">
+                        <h6>Directeurs</h6>
+                        <h2>@Model.TotalDirecteurs</h2>
                     </div>
-                    <div class="icon-box bg-warning">
-                        🧑‍💼
+                    <div class="stat-icon directeurs">
+                        <i class="bi bi-briefcase-fill"></i>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- OFFRES -->
-        <div class="col-md-3 col-sm-6">
+        <div class="col-xl-2 col-md-4 col-sm-6">
             <div class="card stat-card h-100">
-                <div class="card-body d-flex justify-content-between align-items-center">
-                    <div>
-                        <h6 class="text-muted">Offres</h6>
-                        <h2 class="fw-bold">@Model.TotalOffres</h2>
+                <div class="card-body">
+                    <div class="stat-info">
+                        <h6>Offres</h6>
+                        <h2>@Model.TotalOffres</h2>
                     </div>
-                    <div class="icon-box bg-info">
-                        📄
+                    <div class="stat-icon offres">
+                        <i class="bi bi-file-text-fill"></i>
                     </div>
                 </div>
             </div>
         </div>
 
+        <div class="col-xl-2 col-md-4 col-sm-6">
+            <div class="card stat-card h-100">
+                <div class="card-body">
+                    <div class="stat-info">
+                        <h6>CVs déposés</h6>
+                        <h2>@Model.TotalCvs</h2>
+                    </div>
+                    <div class="stat-icon cvs">
+                        <i class="bi bi-file-earmark-person-fill"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-2 col-md-4 col-sm-6">
+            <div class="card stat-card h-100">
+                <div class="card-body">
+                    <div class="stat-info">
+                        <h6>Matches</h6>
+                        <h2>@Model.TotalMatches</h2>
+                    </div>
+                    <div class="stat-icon matches">
+                        <i class="bi bi-graph-up-arrow"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- BIG CARDS -->
-    <div class="row g-4">
-
-        <div class="col-md-6">
-            <div class="card big-card">
-                <div class="card-body">
-                    <h6 class="text-muted">CVs déposés</h6>
-                    <h1 class="display-4 fw-bold text-primary">@Model.TotalCvs</h1>
+    <!-- Charts Section -->
+    <div class="row g-4 mb-4">
+        <div class="col-lg-6">
+            <div class="card chart-card h-100">
+                <div class="card-header">
+                    <i class="bi bi-graph-up me-2 text-primary"></i>Répartition des utilisateurs par rôle
+                </div>
+                <div class="chart-container">
+                    <canvas id="usersChart"></canvas>
                 </div>
             </div>
         </div>
-
-        <div class="col-md-6">
-            <div class="card big-card">
-                <div class="card-body">
-                    <h6 class="text-muted">Matches générés</h6>
-                    <h1 class="display-4 fw-bold text-success">@Model.TotalMatches</h1>
+        <div class="col-lg-6">
+            <div class="card chart-card h-100">
+                <div class="card-header">
+                    <i class="bi bi-pie-chart me-2 text-success"></i>Statistiques globales
+                </div>
+                <div class="chart-container">
+                    <canvas id="statsChart"></canvas>
                 </div>
             </div>
         </div>
-
     </div>
 
-    <!-- ACTIONS -->
-    <div class="card shadow-sm mt-4">
-        <div class="card-header bg-white fw-semibold">Actions rapides</div>
+    <!-- Quick Actions -->
+    <div class="card quick-actions-card">
+        <div class="card-header">
+            <i class="bi bi-lightning me-2 text-warning"></i>Actions rapides
+        </div>
         <div class="card-body d-flex gap-3 flex-wrap">
-
-            <a asp-controller="Admin" asp-action="Users" class="btn btn-outline-primary">
-                👁️ Utilisateurs
+            <a asp-controller="Admin" asp-action="Users" class="btn btn-outline-primary btn-action">
+                <i class="bi bi-people"></i>Gérer les utilisateurs
             </a>
-
-            <a asp-controller="Admin" asp-action="CreateUser" class="btn btn-primary">
-                ➕ Ajouter
+            <a asp-controller="Admin" asp-action="CreateUser" class="btn btn-primary btn-action">
+                <i class="bi bi-plus-lg"></i>Ajouter un utilisateur
             </a>
-
-            
-
+            <a asp-controller="Admin" asp-action="Postes" class="btn btn-outline-info btn-action">
+                <i class="bi bi-briefcase"></i>Voir les postes
+            </a>
         </div>
     </div>
-
 </div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Theme Management
+        function toggleTheme() {
+            const dashboard = document.getElementById('adminDashboard');
+            const icon = document.getElementById('themeIcon');
+            const text = document.getElementById('themeText');
+            
+         
+        }
+
+        // Load saved theme
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('adminDashboardTheme');
+            if (savedTheme === 'dark') {
+                toggleTheme();
+            }
+        });
+
+        let usersChart, statsChart;
+
+        // Users Chart (Doughnut)
+        const usersCtx = document.getElementById('usersChart').getContext('2d');
+        usersChart = new Chart(usersCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Admin', 'RH', 'Directeurs', 'Candidats'],
+                datasets: [{
+                    data: [@Model.TotalUsers - @Model.TotalRH - @Model.TotalDirecteurs - 1, @Model.TotalRH, @Model.TotalDirecteurs, 1],
+                    backgroundColor: [
+                        '#6366f1',
+                        '#10b981',
+                        '#f59e0b',
+                        '#ec4899'
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 15,
+                            font: { size: 12 }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Stats Chart (Bar)
+        const statsCtx = document.getElementById('statsChart').getContext('2d');
+        statsChart = new Chart(statsCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Offres', 'CVs', 'Matches'],
+                datasets: [{
+                    label: 'Nombre',
+                    data: [@Model.TotalOffres, @Model.TotalCvs, @Model.TotalMatches],
+                    backgroundColor: [
+                        '#06b6d4',
+                        '#ec4899',
+                        '#8b5cf6'
+                    ],
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+
+        function updateChartsTheme(isDark) {
+            const textColor = isDark ? '#e2e8f0' : '#1e293b';
+            usersChart.options.plugins.legend.labels.color = textColor;
+            usersChart.update();
+            statsChart.options.scales.x = { ticks: { color: textColor } };
+            statsChart.options.scales.y = { ticks: { color: textColor } };
+            statsChart.update();
+        }
+    </script>
+}

@@ -4,94 +4,549 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container-fluid px-4 py-3">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h5 class="mb-0 fw-semibold">Postes disponibles</h5>
-        <a asp-action="CreatePoste" class="btn btn-primary btn-sm">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-1">
-                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-            </svg>
-            Nouveau poste
-        </a>
-    </div>
+<style>
+    .jobs-header {
+        background: #fff;
+        border-radius: 12px;
+        padding: 20px 24px;
+        margin-bottom: 24px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
 
-    <div class="card shadow-sm">
-        <div class="card-body p-0">
-            @if (!Model.Any())
-            {
-                <div class="text-center py-5 text-muted">
-                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="mb-3 opacity-50">
-                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                        <polyline points="14 2 14 8 20 8"/>
-                    </svg>
-                    <p>Aucun poste trouvé.</p>
-                    <a asp-action="CreatePoste" class="btn btn-primary btn-sm">Créer le premier poste</a>
+    .search-box {
+        position: relative;
+        max-width: 300px;
+    }
+
+    .search-box input {
+        padding-left: 40px;
+        border-radius: 8px;
+        border: 1px solid #e2e8f0;
+        background: #f8fafc;
+    }
+
+    .search-box i {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #94a3b8;
+    }
+
+    .job-table {
+        background: #fff;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .job-table thead {
+        background: #f8fafc;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .job-table th {
+        font-weight: 600;
+        color: #64748b;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        padding: 16px 20px;
+        border: none;
+    }
+
+    .job-table td {
+        padding: 16px 20px;
+        border-bottom: 1px solid #f1f5f9;
+        vertical-align: middle;
+    }
+
+    .job-table tbody tr:hover {
+        background: #f8fafc;
+    }
+
+    .job-title-cell {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .job-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        font-weight: bold;
+        font-size: 18px;
+        flex-shrink: 0;
+    }
+
+    .job-info h6 {
+        margin: 0;
+        font-weight: 600;
+        color: #1e293b;
+        font-size: 14px;
+    }
+
+    .job-info small {
+        color: #94a3b8;
+        font-size: 12px;
+    }
+
+    .status-badge {
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        display: inline-block;
+    }
+
+    .status-actif {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .status-inactif {
+        background: #f1f5f9;
+        color: #64748b;
+    }
+
+    .action-btns {
+        display: flex;
+        gap: 6px;
+        justify-content: flex-end;
+    }
+
+    .action-btn {
+        width: 32px;
+        height: 32px;
+        border-radius: 6px;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .action-btn.view {
+        background: #eff6ff;
+        color: #3b82f6;
+    }
+
+    .action-btn.edit {
+        background: #fef3c7;
+        color: #f59e0b;
+    }
+
+    .action-btn.delete {
+        background: #fee2e2;
+        color: #ef4444;
+    }
+
+    .action-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .pagination-wrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 24px;
+        background: #fff;
+        border-top: 1px solid #e2e8f0;
+    }
+
+    .pagination-info {
+        color: #64748b;
+        font-size: 14px;
+    }
+
+    .pagination {
+        gap: 4px;
+        margin: 0;
+    }
+
+    .page-link {
+        border: 1px solid #e2e8f0;
+        color: #64748b;
+        padding: 8px 12px;
+        border-radius: 6px;
+        margin: 0 2px;
+    }
+
+    .page-link.active {
+        background: #6366f1;
+        border-color: #6366f1;
+        color: white;
+    }
+
+    .page-link:hover {
+        background: #f1f5f9;
+        color: #1e293b;
+    }
+
+    .custom-checkbox {
+        width: 18px;
+        height: 18px;
+        border: 2px solid #cbd5e1;
+        border-radius: 4px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+    }
+
+    .custom-checkbox:hover {
+        border-color: #6366f1;
+    }
+
+    .custom-checkbox.checked {
+        background: #6366f1;
+        border-color: #6366f1;
+    }
+
+    .custom-checkbox.checked::after {
+        content: '✓';
+        color: white;
+        font-size: 12px;
+    }
+
+    .filter-badge {
+        background: #f1f5f9;
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 13px;
+        color: #64748b;
+        margin-right: 8px;
+    }
+
+    .selection-bar {
+        background: #eff6ff;
+        border: 1px solid #bfdbfe;
+        border-radius: 8px;
+        padding: 12px 20px;
+        margin-bottom: 16px;
+        display: none;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .selection-bar.active {
+        display: flex;
+    }
+
+    .selection-info {
+        font-size: 14px;
+        color: #1e40af;
+        font-weight: 500;
+    }
+
+    .btn-delete-selection {
+        padding: 8px 16px;
+        background: #ef4444;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: all 0.2s;
+    }
+
+    .btn-delete-selection:hover {
+        background: #dc2626;
+    }
+
+    .custom-checkbox input[type="checkbox"] {
+        display: none;
+    }
+
+    .custom-checkbox {
+        width: 18px;
+        height: 18px;
+        border: 2px solid #cbd5e1;
+        border-radius: 4px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+    }
+
+    .custom-checkbox:hover {
+        border-color: #6366f1;
+    }
+
+    .custom-checkbox.checked {
+        background: #6366f1;
+        border-color: #6366f1;
+    }
+
+    .custom-checkbox.checked::after {
+        content: '✓';
+        color: white;
+        font-size: 12px;
+    }
+</style>
+
+<div class="container-fluid px-4 py-3">
+    <!-- Header Section -->
+    <div class="jobs-header">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div>
+                <h5 class="mb-1 fw-bold text-dark">Liste des postes</h5>
+                <small class="text-muted">@Model.Count() postes disponibles</small>
+            </div>
+            
+            <div class="d-flex align-items-center gap-3 flex-wrap">
+                <!-- Search Box -->
+                <div class="search-box">
+                    <i class="bi bi-search"></i>
+                    <input type="text" id="searchInput" class="form-control" placeholder="Rechercher..." 
+                           value="@ViewBag.Search" onkeyup="searchJobs()">
                 </div>
-            }
-            else
-            {
-                <div class="table-responsive">
-                    <table class="table table-hover mb-0 align-middle">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Titre</th>
-                                <th>Département</th>
-                                <th>Type</th>
-                                <th>Expérience</th>
-                                <th>Niveau Éducation</th>
-                                <th>Statut</th>
-                                <th>Date création</th>
-                                <th class="text-end">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var o in Model)
-                            {
-                                <tr>
-                                    <td><strong>@o.Titre</strong></td>
-                                    <td>@o.Departement</td>
-                                    <td>@o.Type</td>
-                                    <td>@o.Experience an(s)</td>
-                                    <td>@o.NiveauEducation</td>
-                                    <td>
-                                        <span class="badge @(o.Statut == "ACTIF" ? "bg-success" : "bg-secondary")">
-                                            @o.Statut
-                                        </span>
-                                    </td>
-                                    <td>@o.DateCreation.ToString("dd/MM/yyyy")</td>
-                                    <td class="text-end">
-                                        <a asp-action="ResultatsCV" asp-route-offreId="@o.Id"
-                                           class="btn btn-sm btn-outline-success" title="Décisions CV">
-                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                <polyline points="20 6 9 17 4 12"/>
-                                            </svg>
-                                        </a>
-                                        <a asp-action="EditPoste" asp-route-id="@o.Id"
-                                           class="btn btn-sm btn-outline-primary" title="Modifier">
-                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-                                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-                                            </svg>
-                                        </a>
-                                        <form asp-action="DeletePoste" asp-route-id="@o.Id" method="post" class="d-inline"
-                                              onsubmit="return confirm('Supprimer ce poste ?')">
-                                            @Html.AntiForgeryToken()
-                                            <button type="submit" class="btn btn-sm btn-outline-danger" title="Supprimer">
-                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                    <polyline points="3 6 5 6 21 6"/>
-                                                    <path d="M19 6l-1 14H6L5 6"/>
-                                                    <path d="M10 11v6"/><path d="M14 11v6"/>
-                                                    <path d="M9 6V4h6v2"/>
-                                                </svg>
-                                            </button>
-                                        </form>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            }
+
+                <!-- New Post Button -->
+                <a asp-action="CreatePoste" class="btn btn-primary btn-sm" 
+                   style="background: #6366f1; border: none; border-radius: 8px; padding: 8px 16px;">
+                    <i class="bi bi-plus-lg me-1"></i> Créer un poste
+                </a>
+            </div>
         </div>
     </div>
+
+    <!-- Table Section -->
+    @if (!Model.Any())
+    {
+        <div class="job-table text-center py-5">
+            <div class="text-muted py-5">
+                <i class="bi bi-briefcase display-4 d-block mb-3 opacity-25"></i>
+                <p class="mb-3">Aucun poste trouvé.</p>
+                <a asp-action="CreatePoste" class="btn btn-primary btn-sm">Créer le premier poste</a>
+            </div>
+        </div>
+    }
+    else
+    {
+        <!-- Selection Bar -->
+        <div class="selection-bar" id="selectionBar">
+            <div class="selection-info">
+                <i class="bi bi-check-square me-2"></i>
+                <span id="selectionCount">0</span> poste(s) sélectionné(s)
+            </div>
+            <form method="post" asp-action="DeletePostesSelection" id="deleteSelectionForm" style="display: inline;">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="selectedIds" id="selectedIdsInput" value="" />
+                <button type="submit" class="btn-delete-selection" onclick="return confirmDeleteSelection()">
+                    <i class="bi bi-trash"></i> Supprimer la sélection
+                </button>
+            </form>
+        </div>
+
+        <div class="job-table">
+            <form id="selectionForm">
+            <table class="table mb-0" id="jobsTable">
+                <thead>
+                    <tr>
+                        <th style="width: 40px;">
+                            <div class="custom-checkbox" onclick="toggleAllCheckboxes(this)"></div>
+                        </th>
+                        <th>Titre du poste</th>
+                        <th>Département</th>
+                        <th>Type</th>
+                        <th>Expérience</th>
+                        <th>Niveau d'éducation</th>
+                        <th>Statut</th>
+                        <th>Date de création</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var o in Model)
+                    {
+                        var firstLetter = o.Titre.Substring(0, 1).ToUpper();
+                        <tr class="job-row">
+                            <td>
+                                <div class="custom-checkbox" onclick="toggleCheckbox(this, @o.Id)">
+                                    <input type="checkbox" name="selectedPostes" value="@o.Id" style="display: none;" />
+                                </div>
+                            </td>
+                            <td>
+                                <div class="job-title-cell">
+                                    <div class="job-icon">@firstLetter</div>
+                                    <div class="job-info">
+                                        <h6>@o.Titre</h6>
+                                        
+                                    </div>
+                                </div>
+                            </td>
+                            <td>@o.Departement</td>
+                            <td>@o.Type</td>
+                            <td>@o.Experience an(s)</td>
+                            <td>@o.NiveauEducation</td>
+                            <td>
+                                <span class="status-badge @(o.Statut == "ACTIF" ? "status-actif" : "status-inactif")">
+                                    @o.Statut
+                                </span>
+                            </td>
+                            <td>@o.DateCreation.ToString("MMM dd yyyy")</td>
+                            <td>
+                                <div class="action-btns">
+                                    <a asp-action="DetailPoste" asp-route-id="@o.Id"
+                                       class="action-btn view" title="Voir les CV">
+                                        <i class="bi bi-eye" style="font-size: 14px;"></i>
+                                    </a>
+                                    <a asp-action="EditPoste" asp-route-id="@o.Id"
+                                       class="action-btn edit" title="Modifier">
+                                        <i class="bi bi-pencil" style="font-size: 14px;"></i>
+                                    </a>
+                                    <form asp-action="DeletePoste" asp-route-id="@o.Id" method="post" 
+                                          onsubmit="return confirm('Supprimer ce poste ?')" style="display: inline;">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="action-btn delete" title="Supprimer">
+                                            <i class="bi bi-trash" style="font-size: 14px;"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            </form>
+
+            <!-- Pagination -->
+            <div class="pagination-wrapper">
+                <div class="pagination-info">
+                    Affichage de <strong>1 à @Model.Count</strong> sur <strong>@Model.Count</strong> entrées
+                </div>
+                <nav>
+                    <ul class="pagination">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#">Précédent</a>
+                        </li>
+                        <li class="page-item active"><a class="page-link active" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">Suivant</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    }
 </div>
+
+<script>
+    // Track selected IDs
+    let selectedIds = [];
+
+    // Toggle single checkbox
+    function toggleCheckbox(element, posteId) {
+        element.classList.toggle('checked');
+        const checkbox = element.querySelector('input[type="checkbox"]');
+        checkbox.checked = element.classList.contains('checked');
+        
+        if (element.classList.contains('checked')) {
+            if (!selectedIds.includes(posteId)) {
+                selectedIds.push(posteId);
+            }
+        } else {
+            selectedIds = selectedIds.filter(id => id !== posteId);
+        }
+        
+        updateSelectionBar();
+    }
+
+    // Toggle all checkboxes
+    function toggleAllCheckboxes(element) {
+        element.classList.toggle('checked');
+        const isChecked = element.classList.contains('checked');
+        const checkboxes = document.querySelectorAll('.job-row .custom-checkbox');
+        
+        selectedIds = [];
+        
+        checkboxes.forEach(cb => {
+            const checkbox = cb.querySelector('input[type="checkbox"]');
+            checkbox.checked = isChecked;
+            if (isChecked) {
+                cb.classList.add('checked');
+                const posteId = parseInt(checkbox.value);
+                if (!selectedIds.includes(posteId)) {
+                    selectedIds.push(posteId);
+                }
+            } else {
+                cb.classList.remove('checked');
+            }
+        });
+        
+        updateSelectionBar();
+    }
+
+    // Update selection bar visibility and count
+    function updateSelectionBar() {
+        const selectionBar = document.getElementById('selectionBar');
+        const selectionCount = document.getElementById('selectionCount');
+        const selectedIdsInput = document.getElementById('selectedIdsInput');
+        
+        if (selectedIds.length > 0) {
+            selectionBar.classList.add('active');
+            selectionCount.textContent = selectedIds.length;
+            selectedIdsInput.value = selectedIds.join(',');
+        } else {
+            selectionBar.classList.remove('active');
+            selectionCount.textContent = '0';
+            selectedIdsInput.value = '';
+        }
+    }
+
+    // Confirm delete selection
+    function confirmDeleteSelection() {
+        if (selectedIds.length === 0) {
+            alert('Veuillez sélectionner au moins un poste à supprimer.');
+            return false;
+        }
+        return confirm('Êtes-vous sûr de vouloir supprimer les ' + selectedIds.length + ' poste(s) sélectionné(s) ?');
+    }
+
+    // Search functionality
+    function searchJobs() {
+        const input = document.getElementById('searchInput');
+        const filter = input.value.toLowerCase();
+        const table = document.getElementById('jobsTable');
+        const tr = table.getElementsByTagName('tr');
+
+        for (let i = 1; i < tr.length; i++) {
+            const tdTitle = tr[i].getElementsByTagName('td')[1];
+            const tdDept = tr[i].getElementsByTagName('td')[2];
+            const tdType = tr[i].getElementsByTagName('td')[3];
+            
+            if (tdTitle || tdDept || tdType) {
+                const titleValue = tdTitle.textContent || tdTitle.innerText;
+                const deptValue = tdDept.textContent || tdDept.innerText;
+                const typeValue = tdType.textContent || tdType.innerText;
+                
+                if (titleValue.toLowerCase().indexOf(filter) > -1 || 
+                    deptValue.toLowerCase().indexOf(filter) > -1 ||
+                    typeValue.toLowerCase().indexOf(filter) > -1) {
+                    tr[i].style.display = '';
+                } else {
+                    tr[i].style.display = 'none';
+                }
+            }
+        }
+    }
+
+
+</script>

@@ -4,71 +4,497 @@
     ViewData["Title"] = "Modifier utilisateur";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var roles = ViewBag.Roles as List<string> ?? new List<string>();
+    var photoUrl = ViewBag.PhotoUrl as string;
+    var userInitial = ViewBag.UserInitial as string ?? "?";
+    var avatarColor = ViewBag.AvatarColor as string ?? "#6366f1";
 }
 
-<div class="container-fluid px-4 py-3">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow-sm">
-                <div class="card-header bg-white fw-semibold">Modifier : @Model.NomUtilisateur</div>
-                <div class="card-body">
-                    <form method="post">
-                        @Html.AntiForgeryToken()
-                        <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2"></div>
-                        <input type="hidden" asp-for="Id" />
+<style>
+    .edit-user-container {
+        max-width: 700px;
+        margin: 0 auto;
+        padding: 40px 20px;
+    }
 
-                        <div class="mb-3">
-                            <label asp-for="NomUtilisateur" class="form-label fw-semibold">Nom d'utilisateur</label>
-                            <input asp-for="NomUtilisateur" class="form-control bg-light" readonly />
-                        </div>
+    .edit-user-card {
+        background: white;
+        border-radius: 24px;
+        box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+        overflow: hidden;
+    }
 
-                        <div class="mb-3">
-                            <label asp-for="Email" class="form-label fw-semibold">Email</label>
-                            <input asp-for="Email" class="form-control" />
-                            <span asp-validation-for="Email" class="text-danger small"></span>
-                        </div>
+    .edit-user-header {
+        background: linear-gradient(135deg, @avatarColor, @(avatarColor + "dd"));
+        padding: 48px 32px 64px;
+        text-align: center;
+        color: white;
+        position: relative;
+    }
 
-                        <div class="mb-3">
-                            <label asp-for="Role" class="form-label fw-semibold">Rôle</label>
-                            <select asp-for="Role" id="roleSelect" class="form-select"
-                                    asp-items="@(new SelectList(roles))">
-                            </select>
-                        </div>
+    .edit-user-avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background: white;
+        margin: 0 auto 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 48px;
+        font-weight: 700;
+        color: @avatarColor;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        overflow: hidden;
+        border: 4px solid rgba(255,255,255,0.3);
+    }
 
-                        {{!-- Zone départements : visible uniquement si Directeur --}}
-                        <div class="mb-3" id="departementsGroup" style="display:none;">
-                            <label asp-for="Departements" class="form-label fw-semibold">
-                                Départements gérés
-                                <small class="text-muted fw-normal">(séparés par des virgules)</small>
-                            </label>
-                            <textarea asp-for="Departements"
-                                      class="form-control"
-                                      rows="3"
-                                      placeholder="Ex : Informatique, Ressources Humaines, Finance"></textarea>
-                            <span asp-validation-for="Departements" class="text-danger small"></span>
-                            <div class="form-text">Entrez les noms des départements séparés par des virgules.</div>
-                        </div>
+    .edit-user-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
 
-                        <div class="mb-3">
-                            <label asp-for="NewPassword" class="form-label fw-semibold">
-                                Nouveau mot de passe
-                                <small class="text-muted fw-normal">(laisser vide pour ne pas changer)</small>
-                            </label>
-                            <input asp-for="NewPassword" type="password" class="form-control" />
-                        </div>
+    .edit-user-name {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 4px;
+    }
 
-                        <div class="mb-3 form-check">
-                            <input asp-for="IsActive" class="form-check-input" />
-                            <label asp-for="IsActive" class="form-check-label">Compte actif</label>
-                        </div>
+    .edit-user-role {
+        font-size: 14px;
+        opacity: 0.9;
+        background: rgba(255,255,255,0.2);
+        padding: 6px 16px;
+        border-radius: 20px;
+        display: inline-block;
+    }
 
-                        <div class="d-flex gap-2">
-                            <button type="submit" class="btn btn-primary">Enregistrer</button>
-                            <a asp-action="Users" class="btn btn-outline-secondary">Retour</a>
-                        </div>
-                    </form>
-                </div>
+    .edit-user-body {
+        padding: 32px;
+        margin-top: -32px;
+        background: white;
+        border-radius: 24px 24px 0 0;
+        position: relative;
+    }
+
+    .form-section {
+        margin-bottom: 32px;
+    }
+
+    .form-section:last-child {
+        margin-bottom: 0;
+    }
+
+    .section-title {
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #94a3b8;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .section-title::before {
+        content: "";
+        width: 4px;
+        height: 16px;
+        background: @avatarColor;
+        border-radius: 2px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group:last-child {
+        margin-bottom: 0;
+    }
+
+    .form-label {
+        display: block;
+        font-size: 14px;
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 8px;
+    }
+
+    .form-label .required {
+        color: #ef4444;
+        margin-left: 2px;
+    }
+
+    .form-control-wrapper {
+        position: relative;
+    }
+
+    .form-control-wrapper i {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #9ca3af;
+        font-size: 18px;
+    }
+
+    .form-control-wrapper textarea ~ i {
+        top: 16px;
+        transform: none;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 14px 16px 14px 48px;
+        font-size: 15px;
+        border: 2px solid #e5e7eb;
+        border-radius: 12px;
+        transition: all 0.2s;
+        background: #fafafa;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: @avatarColor;
+        background: white;
+        box-shadow: 0 0 0 4px @(avatarColor + "20");
+    }
+
+    .form-control.is-invalid {
+        border-color: #ef4444;
+        background: #fef2f2;
+    }
+
+    .form-select {
+        width: 100%;
+        padding: 14px 16px;
+        font-size: 15px;
+        border: 2px solid #e5e7eb;
+        border-radius: 12px;
+        transition: all 0.2s;
+        background: #fafafa;
+        cursor: pointer;
+    }
+
+    .form-select:focus {
+        outline: none;
+        border-color: @avatarColor;
+        background: white;
+        box-shadow: 0 0 0 4px @(avatarColor + "20");
+    }
+
+    textarea.form-control {
+        min-height: 100px;
+        resize: vertical;
+        padding-left: 16px;
+    }
+
+    .validation-message {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        color: #ef4444;
+        margin-top: 8px;
+        font-weight: 500;
+    }
+
+    .form-hint {
+        font-size: 13px;
+        color: #6b7280;
+        margin-top: 8px;
+    }
+
+    .departements-group {
+        background: linear-gradient(135deg, #fef3c7, #fffbeb);
+        border: 2px solid #fcd34d;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+
+    .departements-group .form-label {
+        color: #92400e;
+    }
+
+    .departements-group .form-control {
+        background: white;
+        border-color: #fcd34d;
+    }
+
+    .departements-group .form-control:focus {
+        border-color: #f59e0b;
+        box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.1);
+    }
+
+    .status-toggle {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 16px;
+        background: #f8fafc;
+        border-radius: 12px;
+        border: 2px solid #e2e8f0;
+    }
+
+    .status-toggle.active {
+        background: #f0fdf4;
+        border-color: #86efac;
+    }
+
+    .status-toggle.inactive {
+        background: #fef2f2;
+        border-color: #fecaca;
+    }
+
+    .toggle-switch {
+        position: relative;
+        width: 52px;
+        height: 28px;
+        background: #e2e8f0;
+        border-radius: 14px;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .toggle-switch.active {
+        background: #22c55e;
+    }
+
+    .toggle-switch::after {
+        content: "";
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        width: 24px;
+        height: 24px;
+        background: white;
+        border-radius: 50%;
+        transition: all 0.3s;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .toggle-switch.active::after {
+        left: 26px;
+    }
+
+    .toggle-input {
+        display: none;
+    }
+
+    .status-label {
+        font-weight: 600;
+        font-size: 15px;
+    }
+
+    .status-label.active {
+        color: #166534;
+    }
+
+    .status-label.inactive {
+        color: #991b1b;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 32px;
+        padding-top: 24px;
+        border-top: 1px solid #e5e7eb;
+    }
+
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 14px 28px;
+        font-size: 15px;
+        font-weight: 600;
+        border-radius: 12px;
+        transition: all 0.2s;
+        cursor: pointer;
+        border: none;
+        flex: 1;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, @avatarColor, @(avatarColor + "dd"));
+        color: white;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px @(avatarColor + "40");
+    }
+
+    .btn-outline {
+        background: white;
+        color: #6b7280;
+        border: 2px solid #e5e7eb;
+    }
+
+    .btn-outline:hover {
+        background: #f9fafb;
+        border-color: #d1d5db;
+        color: #374151;
+    }
+
+    .alert-validation {
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+        border-radius: 12px;
+        padding: 16px;
+        margin-bottom: 24px;
+        color: #991b1b;
+    }
+
+    .alert-validation ul {
+        margin: 0;
+        padding-left: 20px;
+    }
+
+    .password-hint {
+        font-size: 12px;
+        color: #6b7280;
+        margin-top: 6px;
+        font-style: italic;
+    }
+</style>
+
+<div class="edit-user-container">
+    <div class="edit-user-card">
+        <!-- Header with Avatar -->
+        <div class="edit-user-header">
+            <div class="edit-user-avatar">
+                @if (!string.IsNullOrEmpty(photoUrl))
+                {
+                    <img src="@photoUrl" alt="@Model.NomUtilisateur" />
+                }
+                else
+                {
+                    @userInitial
+                }
             </div>
+            <div class="edit-user-name">@Model.NomUtilisateur</div>
+            <div class="edit-user-role">
+                <i class="bi bi-person-badge-fill me-1"></i>
+                @Model.Role
+            </div>
+        </div>
+
+        <!-- Form Body -->
+        <div class="edit-user-body">
+            <form method="post" id="editUserForm">
+                @Html.AntiForgeryToken()
+                
+                @if (!ViewData.ModelState.IsValid && ViewData.ModelState.ErrorCount > 0)
+                {
+                    <div asp-validation-summary="ModelOnly" class="alert-validation"></div>
+                }
+                
+                <input type="hidden" asp-for="Id" />
+
+                <!-- Account Information Section -->
+                <div class="form-section">
+                    <div class="section-title">Informations du compte</div>
+                    
+                    <div class="form-group">
+                        <label asp-for="NomUtilisateur" class="form-label">
+                            Nom d'utilisateur <span class="required">*</span>
+                        </label>
+                        <div class="form-control-wrapper">
+                            <i class="bi bi-person-fill"></i>
+                            <input asp-for="NomUtilisateur" class="form-control" placeholder="Entrez le nom d'utilisateur" required />
+                        </div>
+                        <span asp-validation-for="NomUtilisateur" class="validation-message"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Email" class="form-label">
+                            Adresse email <span class="required">*</span>
+                        </label>
+                        <div class="form-control-wrapper">
+                            <i class="bi bi-envelope-fill"></i>
+                            <input asp-for="Email" type="email" class="form-control" placeholder="exemple@email.com" required />
+                        </div>
+                        <span asp-validation-for="Email" class="validation-message"></span>
+                    </div>
+                </div>
+
+                <!-- Role Section -->
+                <div class="form-section">
+                    <div class="section-title">Rôle et permissions</div>
+                    
+                    <div class="form-group">
+                        <label asp-for="Role" class="form-label">
+                            Rôle <span class="required">*</span>
+                        </label>
+                        <select asp-for="Role" id="roleSelect" class="form-select" required>
+                            @foreach (var role in roles)
+                            {
+                                <option value="@role">@role</option>
+                            }
+                        </select>
+                    </div>
+
+                    <!-- Départements (visible uniquement si Directeur) -->
+                    <div class="departements-group" id="departementsGroup" style="display:none;">
+                        <label asp-for="Departements" class="form-label">
+                            Départements gérés <span class="required">*</span>
+                        </label>
+                        <textarea asp-for="Departements"
+                                  class="form-control"
+                                  rows="3"
+                                  placeholder="Ex : Informatique, Ressources Humaines, Finance"></textarea>
+                        <span asp-validation-for="Departements" class="validation-message"></span>
+                        <div class="form-hint">Entrez les noms des départements séparés par des virgules.</div>
+                    </div>
+                </div>
+
+                <!-- Security Section -->
+                <div class="form-section">
+                    <div class="section-title">Sécurité</div>
+                    
+                    <div class="form-group">
+                        <label asp-for="NewPassword" class="form-label">
+                            Nouveau mot de passe
+                        </label>
+                        <div class="form-control-wrapper">
+                            <i class="bi bi-lock-fill"></i>
+                            <input asp-for="NewPassword" type="password" class="form-control" placeholder="••••••••" />
+                        </div>
+                        <div class="password-hint">Laissez vide pour conserver le mot de passe actuel</div>
+                    </div>
+                </div>
+
+                <!-- Status Section -->
+                <div class="form-section">
+                    <div class="section-title">Statut du compte</div>
+                    
+                    <div class="status-toggle @(Model.IsActive ? "active" : "inactive")" id="statusToggle">
+                        <label class="toggle-switch @(Model.IsActive ? "active" : "")" onclick="toggleStatus()">
+                            <input type="checkbox" asp-for="IsActive" class="toggle-input" />
+                        </label>
+                        <span class="status-label @(Model.IsActive ? "active" : "inactive")" id="statusLabel">
+                            @(Model.IsActive ? "Compte actif" : "Compte inactif")
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="form-actions">
+                    <a asp-action="Users" class="btn btn-outline">
+                        <i class="bi bi-x-lg"></i>
+                        Annuler
+                    </a>
+                    <button type="submit" class="btn btn-primary" onclick="return confirmSave()">
+                        <i class="bi bi-check-lg"></i>
+                        Enregistrer
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -78,18 +504,51 @@
     <script>
         const roleSelect = document.getElementById('roleSelect');
         const departementsGroup = document.getElementById('departementsGroup');
+        const statusToggle = document.getElementById('statusToggle');
+        const statusLabel = document.getElementById('statusLabel');
+        const isActiveInput = document.querySelector('input[name="IsActive"]');
 
+        // Toggle departements visibility
         function toggleDepartements() {
             if (roleSelect.value === 'Directeur') {
                 departementsGroup.style.display = 'block';
+                departementsGroup.querySelector('textarea').setAttribute('required', 'required');
             } else {
                 departementsGroup.style.display = 'none';
+                departementsGroup.querySelector('textarea').removeAttribute('required');
             }
         }
 
         roleSelect.addEventListener('change', toggleDepartements);
 
-        // Initialisation au chargement — important pour l'édition d'un Directeur existant
+        // Toggle status
+        function toggleStatus() {
+            const toggleSwitch = statusToggle.querySelector('.toggle-switch');
+            isActiveInput.checked = !isActiveInput.checked;
+            
+            if (isActiveInput.checked) {
+                toggleSwitch.classList.add('active');
+                statusToggle.classList.remove('inactive');
+                statusToggle.classList.add('active');
+                statusLabel.classList.remove('inactive');
+                statusLabel.classList.add('active');
+                statusLabel.textContent = 'Compte actif';
+            } else {
+                toggleSwitch.classList.remove('active');
+                statusToggle.classList.remove('active');
+                statusToggle.classList.add('inactive');
+                statusLabel.classList.remove('active');
+                statusLabel.classList.add('inactive');
+                statusLabel.textContent = 'Compte inactif';
+            }
+        }
+
+        // Confirmation before save
+        function confirmSave() {
+            return confirm('Êtes-vous sûr de vouloir enregistrer ces modifications ?');
+        }
+
+        // Initialize on load
         toggleDepartements();
     </script>
 }

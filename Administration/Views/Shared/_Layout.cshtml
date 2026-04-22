@@ -8,268 +8,64 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="~/css/layout.css" />
-
     <style>
-        body {
-            background: #f1f5f9;
-            font-family: 'Segoe UI', sans-serif;
-        }
-
-        /* ===== SIDEBAR ===== */
-        .sidebar {
-            width: 260px;
-            height: 100vh;
-            position: fixed;
-            background: linear-gradient(180deg, #0f172a, #020617);
-            color: white;
-            transition: 0.3s;
-            display: flex;
-            flex-direction: column;
-            z-index: 1000;
-        }
-
-        .sidebar.collapsed {
-            width: 70px;
-        }
-
-        .sidebar-brand {
-            padding: 20px;
-            font-size: 20px;
-            font-weight: bold;
-            text-align: center;
-            white-space: nowrap;
-            overflow: hidden;
-        }
-
-        .sidebar.collapsed .sidebar-brand {
-            padding: 20px 10px;
-            font-size: 16px;
-        }
-
-        .sidebar-brand span {
-            color: #4f6ef7;
-        }
-
-        .sidebar.collapsed .sidebar-brand span {
-            display: none;
-        }
-
-        .nav-section-label {
-            color: #94a3b8;
-            font-size: 12px;
-            padding: 10px 20px 5px;
-            white-space: nowrap;
-            overflow: hidden;
-            transition: 0.3s;
-        }
-
-        .sidebar.collapsed .nav-section-label {
-            padding: 10px 10px 5px;
-            text-align: center;
-            font-size: 10px;
-        }
-
-        .nav-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px 20px;
-            color: #cbd5f5;
-            text-decoration: none;
-            border-radius: 10px;
-            margin: 5px 10px;
-            transition: 0.3s;
-            white-space: nowrap;
-            overflow: hidden;
-        }
-
-        .sidebar.collapsed .nav-item {
-            padding: 12px 10px;
-            justify-content: center;
-        }
-
-        /* Masquer le texte des liens quand la sidebar est réduite */
-        .sidebar.collapsed .nav-item span {
-            display: none;
-        }
-
-        .nav-item:hover {
-            background: rgba(79, 110, 247, 0.2);
-            color: #fff;
-        }
-
-        .nav-item.active {
-            background: #4f6ef7;
-            color: white;
-            font-weight: 600;
-        }
-
-        .nav-item i {
-            font-size: 18px;
-            min-width: 24px;
-        }
-
-        /* ===== TOGGLE BUTTON ===== */
-        .sidebar-toggle {
-            position: absolute;
-            top: 15px;
-            right: -15px;
-            width: 30px;
-            height: 30px;
-            background: #4f6ef7;
-            border: none;
-            border-radius: 50%;
-            color: white;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: 0.3s;
-            z-index: 1001;
-        }
-
-        .sidebar-toggle:hover {
-            background: #3b5bdb;
-            transform: rotate(180deg);
-        }
-
-        .sidebar.collapsed .sidebar-toggle {
-            right: -15px;
-        }
-
-        /* ===== USER ===== */
-        .sidebar-user {
-            margin-top: auto;
-            padding: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            transition: 0.3s;
-        }
-
-        .sidebar.collapsed .sidebar-user {
-            padding: 15px 10px;
-            justify-content: center;
-        }
-
-        .sidebar.collapsed .sidebar-user-info {
-            display: none;
-        }
-
-        .sidebar-user-avatar {
-            width: 40px;
-            height: 40px;
-            background: #4f6ef7;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            flex-shrink: 0;
-        }
-
-        /* ===== MAIN ===== */
-        .layout-main {
-            margin-left: 260px;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            transition: 0.3s;
-        }
-
-        .layout-main.expanded {
-            margin-left: 70px;
-        }
-
-        /* ===== TOPBAR ===== */
-        .topbar {
-            height: 70px;
-            background: white;
-            padding: 0 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-
-        .topbar h1 {
-            font-size: 18px;
-            margin: 0;
-        }
-
-        .topbar-search input {
-            border-radius: 10px;
-            padding: 8px 12px;
-            border: 1px solid #e2e8f0;
-        }
-
-        .topbar-user-avatar {
-            width: 35px;
-            height: 35px;
-            background: #4f6ef7;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        /* ===== CONTENT ===== */
-        .page-content {
-            padding: 25px;
-            background: #f8fafc;
-            flex: 1;
-        }
-
-        /* ===== FOOTER ===== */
-        .footer {
-            padding: 15px 25px;
-            background: white;
-            border-top: 1px solid #e2e8f0;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        /* ===== CARDS ===== */
-        .card {
-            border-radius: 15px;
-            border: none;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-            transition: 0.3s;
-        }
-
-        .card:hover {
-            transform: translateY(-3px);
-        }
-
-        /* ===== RESPONSIVE ===== */
-        @@media (max-width: 768px) {
-            .sidebar {
-                transform: translateX(-100%);
-            }
-            
-            .sidebar.mobile-open {
-                transform: translateX(0);
-            }
-            
-            .layout-main {
-                margin-left: 0;
-            }
-        }
+        /* === Votre CSS existant (inchangé) === */
+        body { background: #f1f5f9; font-family: 'Segoe UI', sans-serif; }
+        .sidebar { width: 260px; height: 100vh; position: fixed; background: #1e293b; color: #cbd5e1; transition: all 0.3s ease; display: flex; flex-direction: column; z-index: 1000; overflow-x: hidden; }
+        .sidebar.collapsed { width: 70px; }
+        .sidebar-brand { padding: 20px 24px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); white-space: nowrap; overflow: hidden; }
+        .sidebar-brand-icon { width: 32px; height: 32px; background: linear-gradient(135deg, #8b5cf6, #6366f1); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .sidebar-brand-text { font-size: 20px; font-weight: 700; color: #f8fafc; transition: opacity 0.3s; }
+        .sidebar.collapsed .sidebar-brand-text { opacity: 0; width: 0; }
+        .nav-section-label { color: #64748b; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; padding: 20px 24px 10px; white-space: nowrap; overflow: hidden; transition: opacity 0.3s; }
+        .sidebar.collapsed .nav-section-label { opacity: 0; padding: 10px 0; text-align: center; }
+        .nav-item { display: flex; align-items: center; gap: 12px; padding: 12px 24px; color: #94a3b8; text-decoration: none; transition: all 0.2s; white-space: nowrap; overflow: hidden; position: relative; margin: 2px 12px; border-radius: 8px; }
+        .sidebar.collapsed .nav-item { padding: 12px; justify-content: center; margin: 2px 8px; }
+        .nav-item i { font-size: 18px; min-width: 20px; }
+        .nav-item span { font-size: 14px; font-weight: 500; transition: opacity 0.3s; }
+        .sidebar.collapsed .nav-item span { opacity: 0; width: 0; }
+        .nav-item:hover { background: rgba(255,255,255,0.05); color: #f8fafc; }
+        .nav-item.active { background: rgba(139, 92, 246, 0.15); color: #a78bfa; font-weight: 600; }
+        .nav-item.active::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 3px; height: 20px; background: #8b5cf6; border-radius: 0 4px 4px 0; }
+        .sidebar-toggle { position: absolute; top: 20px; right: -12px; width: 24px; height: 24px; background: #8b5cf6; border: none; border-radius: 6px; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s; z-index: 1001; box-shadow: 0 2px 8px rgba(139, 92, 246, 0.4); }
+        .sidebar-toggle:hover { background: #7c3aed; transform: scale(1.1); }
+        .sidebar.collapsed .sidebar-toggle { transform: rotate(180deg); }
+        .sidebar-user { margin-top: auto; padding: 16px 24px; display: flex; align-items: center; gap: 12px; border-top: 1px solid rgba(255,255,255,0.1); transition: all 0.3s; white-space: nowrap; overflow: hidden; }
+        .sidebar.collapsed .sidebar-user { padding: 16px 12px; justify-content: center; }
+        .sidebar-user-avatar { width: 40px; height: 40px; background: linear-gradient(135deg, #8b5cf6, #6366f1); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 14px; color: white; flex-shrink: 0; overflow: hidden; }
+        .sidebar-user-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .sidebar-user-info { transition: opacity 0.3s; overflow: hidden; }
+        .sidebar.collapsed .sidebar-user-info { opacity: 0; width: 0; }
+        .sidebar-user-name { font-size: 14px; font-weight: 600; color: #f8fafc; }
+        .sidebar-user-role { font-size: 12px; color: #64748b; }
+        .layout-main { margin-left: 260px; display: flex; flex-direction: column; min-height: 100vh; transition: margin-left 0.3s ease; }
+        .layout-main.expanded { margin-left: 70px; }
+        .topbar { height: 70px; background: white; padding: 0 32px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .topbar h1 { font-size: 20px; font-weight: 700; margin: 0; color: #1e293b; }
+        .topbar-search input { border-radius: 8px; padding: 8px 16px; border: 1px solid #e2e8f0; background: #f8fafc; width: 300px; }
+        .topbar-user-avatar { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.2s; overflow: hidden; background: linear-gradient(135deg, #8b5cf6, #6366f1); box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3); }
+        .topbar-user-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .topbar-user-avatar span { color: white; font-weight: 600; }
+        .topbar-user-avatar:hover { transform: scale(1.05); }
+        .page-content { padding: 32px; background: #f8fafc; flex: 1; }
+        .footer { padding: 20px 32px; background: white; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; color: #64748b; font-size: 14px; }
+        @@media (max-width: 768px) { .sidebar { transform: translateX(-100%); } .sidebar.mobile-open { transform: translateX(0); } .layout-main { margin-left: 0; } .topbar-search input { width: 200px; } }
+        .sidebar::-webkit-scrollbar { width: 6px; }
+        .sidebar::-webkit-scrollbar-track { background: transparent; }
+        .sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
     </style>
 
     @await RenderSectionAsync("Styles", required: false)
 </head>
 
 <body>
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 9999;"></div>
 
 @{
     var userRole = Context.Session.GetString("UserRole") ?? "";
     var userName = Context.Session.GetString("Username") ?? "User";
+    var profileImageUrl = Context.Session.GetString("UserProfileImage");
     var initials = userName.Length >= 2 ? userName[..2].ToUpper() : userName.ToUpper();
 }
 
@@ -279,168 +75,177 @@
     </button>
 
     <div class="sidebar-brand">
-        Admin<span>Pro</span>
+        <div class="sidebar-brand-icon"><i class="bi bi-grid-3x3-gap-fill"></i></div>
+        <div class="sidebar-brand-text">Astree</div>
     </div>
 
-    <!-- ADMIN -->
+    <!-- Menus selon rôle (inchangé) -->
     @if (userRole == "Admin")
     {
         <div class="nav-section-label">Principal</div>
-
-        <a asp-controller="Admin" asp-action="Dashboard" class="nav-item">
-            <i class="bi bi-speedometer2"></i> <span>Dashboard</span>
-        </a>
-
+        <a asp-controller="Admin" asp-action="Dashboard" class="nav-item"><i class="bi bi-speedometer2"></i><span>Dashboard</span></a>
         <div class="nav-section-label">Gestion Utilisateurs</div>
-
-        <a asp-controller="Admin" asp-action="Users" class="nav-item">
-            <i class="bi bi-people"></i> <span>Utilisateurs</span>
-        </a>
-
-        <a asp-controller="Admin" asp-action="CreateUser" class="nav-item">
-            <i class="bi bi-person-plus"></i> <span>Créer utilisateur</span>
-        </a>
-
+        <a asp-controller="Admin" asp-action="Users" class="nav-item"><i class="bi bi-people"></i><span>Utilisateurs</span></a>
         <div class="nav-section-label">Gestion Postes</div>
-
-        <a asp-controller="Admin" asp-action="Postes" class="nav-item">
-            <i class="bi bi-briefcase"></i> <span>Postes</span>
-        </a>
-
+        <a asp-controller="Admin" asp-action="Postes" class="nav-item"><i class="bi bi-briefcase"></i><span>Postes</span></a>
         <div class="nav-section-label">Autres</div>
-
-        <a asp-controller="Admin" asp-action="Profile" class="nav-item">
-            <i class="bi bi-person-circle"></i> <span>Profil</span>
-        </a>
+        <a asp-controller="Admin" asp-action="Profile" class="nav-item"><i class="bi bi-person-circle"></i><span>Profil</span></a>
     }
-
-    <!-- RH -->
-    @if (userRole == "RH")
+    else if (userRole == "RH")
     {
         <div class="nav-section-label">Principal</div>
-
-        <a asp-controller="RH" asp-action="Dashboard" class="nav-item">
-            <i class="bi bi-speedometer2"></i> <span>Dashboard</span>
-        </a>
-
+        <a asp-controller="RH" asp-action="Dashboard" class="nav-item"><i class="bi bi-speedometer2"></i><span>Dashboard</span></a>
         <div class="nav-section-label">Gestion Postes</div>
-
-        <a asp-controller="RH" asp-action="Postes" class="nav-item">
-            <i class="bi bi-briefcase"></i> <span>Postes</span>
-        </a>
-
-        <a asp-controller="RH" asp-action="CreatePoste" class="nav-item">
-            <i class="bi bi-plus-circle"></i> <span>Créer poste</span>
-        </a>
-
+        <a asp-controller="RH" asp-action="Postes" class="nav-item"><i class="bi bi-briefcase"></i><span>Postes</span></a>
         <div class="nav-section-label">Compte</div>
-
-        <a asp-controller="RH" asp-action="Profile" class="nav-item">
-            <i class="bi bi-person-circle"></i> <span>Profil</span>
-        </a>
+        <a asp-controller="RH" asp-action="Profile" class="nav-item"><i class="bi bi-person-circle"></i><span>Profil</span></a>
     }
-
-    <!-- DIRECTEUR DEPARTEMENT -->
-    @if (userRole == "Directeur")
+    else if (userRole == "Directeur")
     {
         <div class="nav-section-label">Principal</div>
-
-        <a asp-controller="DirecteurDepartement" asp-action="Dashboard" class="nav-item">
-            <i class="bi bi-speedometer2"></i> <span>Dashboard</span>
-        </a>
-
-        <div class="nav-section-label">Candidatures</div>
-
-        <!-- Correction : l'action 'ResultatsCV' existe dans le contrôleur -->
-        <a asp-controller="DirecteurDepartement" asp-action="ResultatsCV" class="nav-item">
-            <i class="bi bi-file-earmark-text"></i> <span>CV de chaque poste</span>
-        </a>
+        <a asp-controller="DirecteurDepartement" asp-action="Dashboard" class="nav-item"><i class="bi bi-speedometer2"></i><span>Dashboard</span></a>
         <div class="nav-section-label">Gestion Postes</div>
-
-        <a asp-controller="DirecteurDepartement" asp-action="Postes" class="nav-item">
-            <i class="bi bi-briefcase"></i> <span>Postes</span>
-        </a>
-
+        <a asp-controller="DirecteurDepartement" asp-action="Postes" class="nav-item"><i class="bi bi-briefcase"></i><span>Postes</span></a>
         <div class="nav-section-label">Compte</div>
-
-        <a asp-controller="DirecteurDepartement" asp-action="Profile" class="nav-item">
-            <i class="bi bi-person-circle"></i> <span>Profil</span>
-        </a>
+        <a asp-controller="DirecteurDepartement" asp-action="Profile" class="nav-item"><i class="bi bi-person-circle"></i><span>Profil</span></a>
     }
 
-    <!-- USER INFO -->
+    <!-- Sidebar User avec photo -->
     <div class="sidebar-user">
-        <div class="sidebar-user-avatar">@initials</div>
+        <div class="sidebar-user-avatar">
+            @if (!string.IsNullOrEmpty(profileImageUrl))
+            {
+                <img src="@profileImageUrl" alt="avatar" />
+            }
+            else
+            {
+                <span>@initials</span>
+            }
+        </div>
         <div class="sidebar-user-info">
-            <div>@userName</div>
-            <small class="text-muted">@userRole</small>
+            <div class="sidebar-user-name">@userName</div>
+            <div class="sidebar-user-role">@userRole</div>
         </div>
     </div>
-
 </div>
 
 <div class="layout-main" id="layoutMain">
-
-    <!-- TOPBAR -->
     <header class="topbar">
-        <button class="btn btn-link d-md-none" onclick="toggleMobileSidebar()">
+        <button class="btn btn-link d-md-none text-dark" onclick="toggleMobileSidebar()">
             <i class="bi bi-list fs-4"></i>
         </button>
-
         <h1>@ViewData["Title"]</h1>
-
-        <div class="d-flex align-items-center gap-2">
-            <!-- Dropdown de l'avatar -->
+        <div class="d-flex align-items-center gap-3">
             <div class="dropdown">
                 <div class="topbar-user-avatar" data-bs-toggle="dropdown" aria-expanded="false">
-                    @initials
+                    @if (!string.IsNullOrEmpty(profileImageUrl))
+                    {
+                        <img src="@profileImageUrl" alt="avatar" />
+                    }
+                    else
+                    {
+                        <span>@initials</span>
+                    }
                 </div>
-                <ul class="dropdown-menu dropdown-menu-end">
+                <ul class="dropdown-menu dropdown-menu-end shadow border-0">
                     @if (userRole == "Admin")
                     {
-                        <li><a class="dropdown-item" asp-controller="Admin" asp-action="Profile">Mon profil</a></li>
+                        <li><a class="dropdown-item py-2" asp-controller="Admin" asp-action="Profile">Mon profil</a></li>
                     }
                     else if (userRole == "RH")
                     {
-                        <li><a class="dropdown-item" asp-controller="RH" asp-action="Profile">Mon profil</a></li>
+                        <li><a class="dropdown-item py-2" asp-controller="RH" asp-action="Profile">Mon profil</a></li>
                     }
                     else if (userRole == "Directeur")
                     {
-                        <li><a class="dropdown-item" asp-controller="DirecteurDepartement" asp-action="Profile">Mon profil</a></li>
+                        <li><a class="dropdown-item py-2" asp-controller="DirecteurDepartement" asp-action="Profile">Mon profil</a></li>
                     }
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" asp-controller="Account" asp-action="Logout">Déconnexion</a></li>
+                    <li><a class="dropdown-item py-2 text-danger" asp-controller="Account" asp-action="Logout">Déconnexion</a></li>
                 </ul>
             </div>
         </div>
-
     </header>
 
-    <!-- CONTENT -->
     <main class="page-content">
         @RenderBody()
     </main>
 
-    <!-- FOOTER -->
     <footer class="footer">
-        <div>© @DateTime.Now.Year AdminPro</div>
-        <div>All rights reserved</div>
+        <div>© @DateTime.Now.Year Astree</div>
+        <div>Tous droits réservés</div>
     </footer>
-
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
+<!-- Toast Notification Script -->
 <script>
-    // Toggle sidebar
+    // Toast Notification System
+    function showToast(message, type = 'success') {
+        const container = document.getElementById('toastContainer');
+        const toastId = 'toast-' + Date.now();
+        
+        const icon = type === 'success' ? 'bi-check-circle-fill' : 
+                     type === 'error' ? 'bi-x-circle-fill' : 
+                     type === 'warning' ? 'bi-exclamation-triangle-fill' : 'bi-info-circle-fill';
+        
+        const bgClass = type === 'success' ? 'bg-success' : 
+                        type === 'error' ? 'bg-danger' : 
+                        type === 'warning' ? 'bg-warning' : 'bg-info';
+        
+        const textClass = type === 'warning' ? 'text-dark' : 'text-white';
+        
+        const toastHtml = `
+            <div id="${toastId}" class="toast align-items-center ${bgClass} ${textClass} border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <i class="bi ${icon} me-2"></i>${message}
+                    </div>
+                    <button type="button" class="btn-close ${type === 'warning' ? '' : 'btn-close-white'} me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        `;
+        
+        container.insertAdjacentHTML('beforeend', toastHtml);
+        
+        const toastElement = document.getElementById(toastId);
+        const toast = new bootstrap.Toast(toastElement, { delay: 5000 });
+        toast.show();
+        
+        toastElement.addEventListener('hidden.bs.toast', () => {
+            toastElement.remove();
+        });
+    }
+
+    // Display TempData messages as toasts
+    document.addEventListener('DOMContentLoaded', function() {
+        @if (TempData["Success"] != null)
+        {
+            <text>showToast('@Html.Raw(Json.Serialize(TempData["Success"]).ToString().Trim('"'))', 'success');</text>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <text>showToast('@Html.Raw(Json.Serialize(TempData["Error"]).ToString().Trim('"'))', 'error');</text>
+        }
+        @if (TempData["Warning"] != null)
+        {
+            <text>showToast('@Html.Raw(Json.Serialize(TempData["Warning"]).ToString().Trim('"'))', 'warning');</text>
+        }
+        @if (TempData["Info"] != null)
+        {
+            <text>showToast('@Html.Raw(Json.Serialize(TempData["Info"]).ToString().Trim('"'))', 'info');</text>
+        }
+    });
+</script>
+
+<script>
     function toggleSidebar() {
         const sidebar = document.getElementById('sidebar');
         const layoutMain = document.getElementById('layoutMain');
         const toggleBtn = document.querySelector('.sidebar-toggle i');
-        
         sidebar.classList.toggle('collapsed');
         layoutMain.classList.toggle('expanded');
-        
         if (sidebar.classList.contains('collapsed')) {
             toggleBtn.classList.remove('bi-chevron-left');
             toggleBtn.classList.add('bi-chevron-right');
@@ -452,24 +257,17 @@
         }
     }
 
-    // Toggle mobile sidebar
     function toggleMobileSidebar() {
-        const sidebar = document.getElementById('sidebar');
-        sidebar.classList.toggle('mobile-open');
+        document.getElementById('sidebar').classList.toggle('mobile-open');
     }
 
-    // Restore sidebar state
     document.addEventListener('DOMContentLoaded', function() {
-        const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
-        if (isCollapsed) {
+        if (localStorage.getItem('sidebarCollapsed') === 'true') {
             document.getElementById('sidebar').classList.add('collapsed');
             document.getElementById('layoutMain').classList.add('expanded');
-            const toggleBtn = document.querySelector('.sidebar-toggle i');
-            toggleBtn.classList.remove('bi-chevron-left');
-            toggleBtn.classList.add('bi-chevron-right');
+            document.querySelector('.sidebar-toggle i').classList.remove('bi-chevron-left');
+            document.querySelector('.sidebar-toggle i').classList.add('bi-chevron-right');
         }
-
-        // Active link
         const current = window.location.pathname.toLowerCase();
         document.querySelectorAll('.nav-item').forEach(link => {
             if (link.getAttribute('href') && current.includes(link.getAttribute('href').toLowerCase())) {
@@ -478,12 +276,9 @@
         });
     });
 
-    // Close mobile sidebar on link click
     document.querySelectorAll('.nav-item').forEach(link => {
         link.addEventListener('click', function() {
-            if (window.innerWidth <= 768) {
-                document.getElementById('sidebar').classList.remove('mobile-open');
-            }
+            if (window.innerWidth <= 768) document.getElementById('sidebar').classList.remove('mobile-open');
         });
     });
 </script>

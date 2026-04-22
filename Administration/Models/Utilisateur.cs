@@ -23,5 +23,8 @@ namespace Administration.Models
 
         // Nouveau : départements gérés par ce directeur (séparés par virgule)
         public string? Departements { get; set; }
+        
+        // Photo de profil (maps to PhotoUrl column in database)
+        public string? PhotoUrl { get; set; }
     }
 }

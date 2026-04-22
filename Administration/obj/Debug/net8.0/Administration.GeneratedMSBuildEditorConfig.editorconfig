@@ -98,6 +98,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUkhcRGFzaGJvYXJkLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/ranim/Downloads/CVAnalyzer-PFE-main/Administration/Views/RH/DetailPoste.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUkhcRGV0YWlsUG9zdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/ranim/Downloads/CVAnalyzer-PFE-main/Administration/Views/RH/EditPoste.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUkhcRWRpdFBvc3RlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
@@ -106,12 +110,12 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUkhcUG9zdGVzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ranim/Downloads/CVAnalyzer-PFE-main/Administration/Views/RH/Profile.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUkhcUHJvZmlsZS5jc2h0bWw=
+[C:/Users/ranim/Downloads/CVAnalyzer-PFE-main/Administration/Views/RH/ProfilCandidat.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUkhcUHJvZmlsQ2FuZGlkYXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ranim/Downloads/CVAnalyzer-PFE-main/Administration/Views/RH/ResultatsCV.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUkhcUmVzdWx0YXRzQ1YuY3NodG1s
+[C:/Users/ranim/Downloads/CVAnalyzer-PFE-main/Administration/Views/RH/Profile.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUkhcUHJvZmlsZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/ranim/Downloads/CVAnalyzer-PFE-main/Administration/Views/Shared/Error.cshtml]

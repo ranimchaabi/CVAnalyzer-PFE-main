@@ -1,0 +1,488 @@
+@model Administration.Models.Utilisateur
+@{
+    ViewData["Title"] = "Profil candidat";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    
+    // Static score for demonstration
+    var score = 75;
+    var scoreClass = score >= 80 ? "high" : (score >= 70 ? "medium" : "low");
+    
+    // Avatar color
+    var avatarColors = new[] { "#6366f1", "#8b5cf6", "#10b981", "#f59e0b", "#ef4444", "#3b82f6", "#14b8a6", "#ec4899" };
+    var colorIndex = (Model.Id * 7) % avatarColors.Length;
+    var color = avatarColors[colorIndex];
+    var initial = Model.NomUtilisateur?.Length > 0 ? Model.NomUtilisateur[0].ToString().ToUpper() : "?";
+}
+
+<style>
+    .profile-container {
+        background: #f8fafc;
+        min-height: calc(100vh - 100px);
+        padding: 32px;
+    }
+
+    .profile-header {
+        background: white;
+        border-radius: 16px;
+        padding: 32px;
+        margin-bottom: 24px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        flex-wrap: wrap;
+    }
+
+    .profile-avatar {
+        width: 100px;
+        height: 100px;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 40px;
+        font-weight: 700;
+        color: white;
+        flex-shrink: 0;
+    }
+
+    .profile-info h2 {
+        font-size: 24px;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0 0 8px 0;
+    }
+
+    .profile-info p {
+        color: #64748b;
+        margin: 0 0 16px 0;
+        font-size: 15px;
+    }
+
+    .profile-meta {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+    }
+
+    .meta-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        background: #f8fafc;
+        border-radius: 8px;
+        font-size: 13px;
+        color: #475569;
+    }
+
+    .meta-item i {
+        color: #6366f1;
+    }
+
+    .score-section {
+        background: white;
+        border-radius: 16px;
+        padding: 32px;
+        margin-bottom: 24px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        text-align: center;
+    }
+
+    .score-title {
+        font-size: 14px;
+        font-weight: 600;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 16px;
+    }
+
+    .score-value {
+        font-size: 64px;
+        font-weight: 800;
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        line-height: 1;
+    }
+
+    .score-value.high {
+        background: linear-gradient(135deg, #10b981 0%, #14b8a6 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .score-value.medium {
+        background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .score-value.low {
+        background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .score-label {
+        font-size: 14px;
+        color: #64748b;
+        margin-top: 8px;
+    }
+
+    .charts-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
+        margin-bottom: 24px;
+    }
+
+    .chart-card {
+        background: white;
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .chart-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .chart-header h5 {
+        font-size: 16px;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0;
+    }
+
+    .chart-header i {
+        color: #6366f1;
+        font-size: 18px;
+    }
+
+    .chart-container {
+        position: relative;
+        height: 250px;
+    }
+
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+        margin-bottom: 24px;
+    }
+
+    .info-card {
+        background: white;
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .info-card-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 16px;
+    }
+
+    .info-card-header h5 {
+        font-size: 14px;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0;
+    }
+
+    .info-card-header i {
+        color: #6366f1;
+    }
+
+    .info-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .info-list li {
+        padding: 10px 0;
+        border-bottom: 1px solid #f1f5f9;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 14px;
+    }
+
+    .info-list li:last-child {
+        border-bottom: none;
+    }
+
+    .info-list .label {
+        color: #64748b;
+    }
+
+    .info-list .value {
+        font-weight: 600;
+        color: #1e293b;
+    }
+
+    .back-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 20px;
+        background: #f1f5f9;
+        color: #475569;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 14px;
+        transition: all 0.2s;
+    }
+
+    .back-btn:hover {
+        background: #e2e8f0;
+        color: #1e293b;
+    }
+
+    @@media (max-width: 1024px) {
+        .charts-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .info-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @@media (max-width: 768px) {
+        .profile-container {
+            padding: 16px;
+        }
+        
+        .profile-header {
+            flex-direction: column;
+            text-align: center;
+        }
+        
+        .info-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .score-value {
+            font-size: 48px;
+        }
+    }
+</style>
+
+<div class="profile-container">
+    <!-- Back Button -->
+    <div style="margin-bottom: 24px;">
+        <a href="javascript:history.back()" class="back-btn">
+            <i class="bi bi-arrow-left"></i> Retour
+        </a>
+    </div>
+
+    <!-- Profile Header -->
+    <div class="profile-header">
+        <div class="profile-avatar" style="background: @color;">
+            @initial
+        </div>
+        <div class="profile-info">
+            <h2>@Model.NomUtilisateur</h2>
+            <p><i class="bi bi-envelope" style="color: #6366f1; margin-right: 8px;"></i>@Model.Email</p>
+            <div class="profile-meta">
+                <div class="meta-item">
+                    <i class="bi bi-calendar3"></i>
+                    Inscrit le @Model.DateCreation.ToString("dd MMMM yyyy")
+                </div>
+                <div class="meta-item">
+                    <i class="bi bi-person-badge"></i>
+                    ID: @Model.Id
+                </div>
+                <div class="meta-item">
+                    <i class="bi bi-check-circle"></i>
+                    @(Model.IsActive ? "Actif" : "Inactif")
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Score Section -->
+    <div class="score-section">
+        <div class="score-title">Score de correspondance</div>
+        <div class="score-value @scoreClass">@score%</div>
+        <div class="score-label">Excellente correspondance avec le poste</div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="charts-grid">
+        <div class="chart-card">
+            <div class="chart-header">
+                <i class="bi bi-pie-chart"></i>
+                <h5>Répartition des compétences</h5>
+            </div>
+            <div class="chart-container">
+                <canvas id="skillsChart"></canvas>
+            </div>
+        </div>
+        <div class="chart-card">
+            <div class="chart-header">
+                <i class="bi bi-bar-chart"></i>
+                <h5>Expérience par domaine</h5>
+            </div>
+            <div class="chart-container">
+                <canvas id="experienceChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Info Grid -->
+    <div class="info-grid">
+        <div class="info-card">
+            <div class="info-card-header">
+                <i class="bi bi-mortarboard"></i>
+                <h5>Formation</h5>
+            </div>
+            <ul class="info-list">
+                <li>
+                    <span class="label">Niveau</span>
+                    <span class="value">Bac+5 (Master)</span>
+                </li>
+                <li>
+                    <span class="label">Domaine</span>
+                    <span class="value">Informatique</span>
+                </li>
+                <li>
+                    <span class="label">Année</span>
+                    <span class="value">2020</span>
+                </li>
+            </ul>
+        </div>
+        <div class="info-card">
+            <div class="info-card-header">
+                <i class="bi bi-briefcase"></i>
+                <h5>Expérience</h5>
+            </div>
+            <ul class="info-list">
+                <li>
+                    <span class="label">Années</span>
+                    <span class="value">5 ans</span>
+                </li>
+                <li>
+                    <span class="label">Poste actuel</span>
+                    <span class="value">Développeur Senior</span>
+                </li>
+                <li>
+                    <span class="label">Entreprise</span>
+                    <span class="value">Tech Corp</span>
+                </li>
+            </ul>
+        </div>
+        <div class="info-card">
+            <div class="info-card-header">
+                <i class="bi bi-globe"></i>
+                <h5>Langues</h5>
+            </div>
+            <ul class="info-list">
+                <li>
+                    <span class="label">Français</span>
+                    <span class="value">Courant</span>
+                </li>
+                <li>
+                    <span class="label">Anglais</span>
+                    <span class="value">Bilingue</span>
+                </li>
+                <li>
+                    <span class="label">Espagnol</span>
+                    <span class="value">Intermédiaire</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Skills Doughnut Chart
+        const skillsCtx = document.getElementById('skillsChart').getContext('2d');
+        new Chart(skillsCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['C#', 'JavaScript', 'SQL', 'Python', 'Autres'],
+                datasets: [{
+                    data: [30, 25, 20, 15, 10],
+                    backgroundColor: [
+                        '#6366f1',
+                        '#8b5cf6',
+                        '#10b981',
+                        '#f59e0b',
+                        '#94a3b8'
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 15,
+                            font: {
+                                size: 12
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Experience Bar Chart
+        const expCtx = document.getElementById('experienceChart').getContext('2d');
+        new Chart(expCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Frontend', 'Backend', 'Database', 'DevOps', 'Mobile'],
+                datasets: [{
+                    label: 'Années d\'expérience',
+                    data: [4, 5, 3, 2, 1],
+                    backgroundColor: [
+                        '#6366f1',
+                        '#8b5cf6',
+                        '#10b981',
+                        '#f59e0b',
+                        '#ec4899'
+                    ],
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+}

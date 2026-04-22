@@ -46,10 +46,13 @@
                                 </div>
 
                                 <div class="col-12">
-                                    <div class="form-group">
-                                        <input type="password" name="password" class="form-control"
-                                               required placeholder="Mot de passe">
-                                       
+                                    <div class="form-group" style="position:relative;">
+                                        <input type="password" name="password" id="loginPwd" class="form-control"
+                                               required placeholder="Mot de passe" style="padding-right:2.75rem;" autocomplete="current-password">
+                                        <button type="button" onclick="toggleCandLoginPwd()" aria-label="Afficher le mot de passe"
+                                                style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:#9ca3af;cursor:pointer;font-size:1.1rem;">
+                                            <i id="candLoginPwdIcon" class="bx bx-show"></i>
+                                        </button>
                                     </div>
                                 </div>
 
@@ -87,24 +90,18 @@
 
 @section Scripts {
     <script>
-        (function () {
-            var form = document.querySelector('form[asp-action="Login"], form[action*="Login"]');
-            if (!form) return;
-            var pwd = form.querySelector('input[name="password"]');
-            var err = document.getElementById('pwdInlineError');
-            if (!pwd || !err) return;
-
-            form.addEventListener('submit', function (e) {
-                var v = (pwd.value || '').trim();
-                if (!v) {
-                    e.preventDefault();
-                    err.style.display = 'block';
-                    pwd.focus();
-                } else {
-                    err.style.display = 'none';
-                }
-            });
-        })();
+        function toggleCandLoginPwd() {
+            var input = document.getElementById('loginPwd');
+            var icon = document.getElementById('candLoginPwdIcon');
+            if (!input || !icon) return;
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('bx-show'); icon.classList.add('bx-hide');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('bx-hide'); icon.classList.add('bx-show');
+            }
+        }
     </script>
 }
 

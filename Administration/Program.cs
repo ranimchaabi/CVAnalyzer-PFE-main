@@ -22,6 +22,9 @@ builder.Services.AddSession(options =>
 
 builder.Services.AddHttpContextAccessor();
 
+builder.Services.Configure<Administration.Options.CandidatMediaOptions>(
+    builder.Configuration.GetSection(Administration.Options.CandidatMediaOptions.SectionName));
+
 var app = builder.Build();
 
 // ─── Pipeline ─────────────────────────────────────────────────────────────────

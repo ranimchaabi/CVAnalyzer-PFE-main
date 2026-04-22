@@ -257,6 +257,26 @@
       "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.slim.min.map"
     },
     {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\uploads\\profiles\\1001_ebf7e077-de6b-4f68-982b-fad3c703e69b.png",
+      "PackagePath": "staticwebassets\\uploads\\profiles\\1001_ebf7e077-de6b-4f68-982b-fad3c703e69b.png"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\uploads\\profiles\\2_deff241b-cc7a-4ba3-80bd-5d236807b90e.png",
+      "PackagePath": "staticwebassets\\uploads\\profiles\\2_deff241b-cc7a-4ba3-80bd-5d236807b90e.png"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\uploads\\profiles\\2_e0495790-f406-43ef-af0f-dcfd3d274fd5.png",
+      "PackagePath": "staticwebassets\\uploads\\profiles\\2_e0495790-f406-43ef-af0f-dcfd3d274fd5.png"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\uploads\\profiles\\3_f8e5321b-ce7f-467e-9ae7-b0c7a3342d25.png",
+      "PackagePath": "staticwebassets\\uploads\\profiles\\3_f8e5321b-ce7f-467e-9ae7-b0c7a3342d25.png"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\uploads\\profiles\\8_d2cd21ad-0539-49ac-80d9-4f12311ac347.png",
+      "PackagePath": "staticwebassets\\uploads\\profiles\\8_d2cd21ad-0539-49ac-80d9-4f12311ac347.png"
+    },
+    {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.Administration.Microsoft.AspNetCore.StaticWebAssets.props",
       "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
     },

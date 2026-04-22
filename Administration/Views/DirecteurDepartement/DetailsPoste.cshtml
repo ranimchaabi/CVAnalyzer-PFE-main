@@ -1,119 +1,1016 @@
 @model Administration.Models.OffreEmploi
 @{
-    ViewData["Title"] = "Détails du poste - " + Model.Titre;
+    ViewData["Title"] = "Détail du poste - " + Model.Titre;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container-fluid px-4 py-3">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h5 class="mb-0 fw-semibold">Détails du poste</h5>
-        <a asp-action="Postes" class="btn btn-outline-secondary btn-sm">
-            ← Retour à la liste
+<style>
+    .detail-container {
+        background: #f8fafc;
+        min-height: calc(100vh - 100px);
+        padding: 32px;
+    }
+
+    .detail-breadcrumb {
+        margin-bottom: 24px;
+    }
+
+    .detail-breadcrumb a {
+        color: #64748b;
+        text-decoration: none;
+        font-size: 14px;
+    }
+
+    .detail-breadcrumb a:hover {
+        color: #f59e0b;
+    }
+
+    .detail-breadcrumb .separator {
+        color: #cbd5e1;
+        margin: 0 8px;
+    }
+
+    .detail-breadcrumb .current {
+        color: #1e293b;
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+    .job-header-card {
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        margin-bottom: 24px;
+    }
+
+    .job-header-banner {
+        height: 120px;
+        background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 50%, #fcd34d 100%);
+        position: relative;
+    }
+
+    .job-header-content {
+        padding: 0 32px 32px;
+        position: relative;
+        margin-top: -50px;
+    }
+
+    .job-icon-large {
+        width: 100px;
+        height: 100px;
+        border-radius: 16px;
+        background: white;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 48px;
+        color: #f59e0b;
+        border: 4px solid white;
+        margin-bottom: 20px;
+    }
+
+    .job-title-section {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+
+    .job-title {
+        font-size: 28px;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0;
+        line-height: 1.2;
+    }
+
+    .job-subtitle {
+        color: #64748b;
+        font-size: 15px;
+        margin-top: 8px;
+    }
+
+    .job-meta-badges {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 12px;
+    }
+
+    .meta-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 500;
+    }
+
+    .meta-badge.badge-dept {
+        background: #fef3c7;
+        color: #92400e;
+    }
+
+    .meta-badge.badge-type {
+        background: #eff6ff;
+        color: #1d4ed8;
+    }
+
+    .meta-badge.badge-status-active {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .meta-badge.badge-status-inactive {
+        background: #f1f5f9;
+        color: #64748b;
+    }
+
+    .meta-badge.badge-date {
+        background: #f3e8ff;
+        color: #6b21a8;
+    }
+
+    .job-actions-top {
+        display: flex;
+        gap: 8px;
+    }
+
+    .btn-action {
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        text-decoration: none;
+        border: none;
+    }
+
+    .btn-action.btn-back {
+        background: #f1f5f9;
+        color: #475569;
+        border: 1px solid #e2e8f0;
+    }
+
+    .btn-action.btn-back:hover {
+        background: #e2e8f0;
+    }
+
+    .stats-row {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+
+    .stat-card {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .stat-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        flex-shrink: 0;
+    }
+
+    .stat-icon.icon-orange {
+        background: #fef3c7;
+        color: #f59e0b;
+    }
+
+    .stat-icon.icon-blue {
+        background: #dbeafe;
+        color: #2563eb;
+    }
+
+    .stat-icon.icon-green {
+        background: #dcfce7;
+        color: #16a34a;
+    }
+
+    .stat-icon.icon-purple {
+        background: #f3e8ff;
+        color: #7c3aed;
+    }
+
+    .stat-info {
+        flex: 1;
+    }
+
+    .stat-value {
+        font-size: 24px;
+        font-weight: 700;
+        color: #1e293b;
+        line-height: 1;
+    }
+
+    .stat-label {
+        font-size: 13px;
+        color: #64748b;
+        margin-top: 4px;
+    }
+
+    .detail-content {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 24px;
+        margin-bottom: 32px;
+    }
+
+    .detail-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        overflow: hidden;
+    }
+
+    .detail-card-header {
+        padding: 20px 24px;
+        border-bottom: 1px solid #e2e8f0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .detail-card-header h5 {
+        font-size: 16px;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0;
+    }
+
+    .detail-card-header i {
+        color: #f59e0b;
+        font-size: 18px;
+    }
+
+    .detail-card-body {
+        padding: 24px;
+    }
+
+    .info-item {
+        margin-bottom: 20px;
+    }
+
+    .info-label {
+        font-size: 12px;
+        font-weight: 600;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 6px;
+    }
+
+    .info-value {
+        font-size: 15px;
+        color: #1e293b;
+        font-weight: 500;
+    }
+
+    .description-text {
+        font-size: 15px;
+        color: #475569;
+        line-height: 1.8;
+    }
+
+    .requirements-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        margin-bottom: 32px;
+        overflow: hidden;
+    }
+
+    .requirements-header {
+        padding: 20px 24px;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .requirements-header h5 {
+        font-size: 16px;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .requirements-header h5 i {
+        color: #f59e0b;
+    }
+
+    .requirements-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 1px;
+        background: #e2e8f0;
+    }
+
+    .req-item {
+        padding: 20px 24px;
+        background: white;
+    }
+
+    .req-label {
+        font-size: 12px;
+        font-weight: 600;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .req-label i {
+        color: #f59e0b;
+        font-size: 14px;
+    }
+
+    .req-value {
+        font-size: 15px;
+        color: #1e293b;
+        font-weight: 600;
+    }
+
+    .candidates-section {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        overflow: hidden;
+    }
+
+    .candidates-header {
+        padding: 20px 24px;
+        border-bottom: 1px solid #e2e8f0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .candidates-header-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .candidates-header h5 {
+        font-size: 16px;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0;
+    }
+
+    .candidates-count {
+        background: #f59e0b;
+        color: white;
+        font-size: 12px;
+        font-weight: 700;
+        padding: 2px 10px;
+        border-radius: 20px;
+    }
+
+    .candidates-search {
+        position: relative;
+    }
+
+    .candidates-search input {
+        padding: 8px 14px 8px 36px;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 13px;
+        background: #f8fafc;
+        width: 250px;
+    }
+
+    .candidates-search input:focus {
+        outline: none;
+        border-color: #f59e0b;
+        background: white;
+    }
+
+    .candidates-search i {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #94a3b8;
+        font-size: 14px;
+    }
+
+    .candidates-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .candidates-table thead {
+        background: #f8fafc;
+    }
+
+    .candidates-table th {
+        padding: 14px 20px;
+        text-align: left;
+        font-size: 12px;
+        font-weight: 600;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .candidates-table td {
+        padding: 16px 20px;
+        border-bottom: 1px solid #f1f5f9;
+        font-size: 14px;
+        color: #475569;
+        vertical-align: middle;
+    }
+
+    .candidates-table tbody tr:hover {
+        background: #f8fafc;
+    }
+
+    .candidates-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    .candidate-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .candidate-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 14px;
+        color: white;
+        flex-shrink: 0;
+    }
+
+    .candidate-name {
+        font-weight: 600;
+        color: #1e293b;
+    }
+
+    .candidate-email {
+        font-size: 12px;
+        color: #94a3b8;
+    }
+
+    .score-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 700;
+        background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+        color: white;
+    }
+
+    .score-badge.high {
+        background: linear-gradient(135deg, #10b981 0%, #14b8a6 100%);
+    }
+
+    .score-badge.medium {
+        background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+    }
+
+    .score-badge.low {
+        background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
+    }
+
+    .status-badge-candidate {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .status-pending {
+        background: #fef3c7;
+        color: #92400e;
+    }
+
+    .status-accepted {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .status-rejected {
+        background: #fee2e2;
+        color: #dc2626;
+    }
+
+    .candidate-actions {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+    }
+
+    .cand-btn {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s;
+        text-decoration: none;
+        font-size: 14px;
+    }
+
+    .cand-btn.btn-view {
+        background: #eff6ff;
+        color: #3b82f6;
+    }
+
+    .cand-btn.btn-accept {
+        background: #dcfce7;
+        color: #16a34a;
+    }
+
+    .cand-btn.btn-accept:hover {
+        background: #16a34a;
+        color: white;
+    }
+
+    .cand-btn.btn-reject {
+        background: #fee2e2;
+        color: #ef4444;
+    }
+
+    .cand-btn.btn-reject:hover {
+        background: #ef4444;
+        color: white;
+    }
+
+    .cand-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .no-candidates {
+        text-align: center;
+        padding: 60px 20px;
+    }
+
+    .no-candidates i {
+        font-size: 48px;
+        color: #cbd5e1;
+        margin-bottom: 16px;
+    }
+
+    .no-candidates h6 {
+        color: #475569;
+        font-weight: 600;
+        margin-bottom: 4px;
+    }
+
+    .no-candidates p {
+        color: #94a3b8;
+        font-size: 14px;
+    }
+
+    .candidates-footer {
+        padding: 16px 24px;
+        border-top: 1px solid #e2e8f0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .candidates-footer-info {
+        font-size: 13px;
+        color: #64748b;
+    }
+
+    @@media (max-width: 1024px) {
+        .stats-row {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .detail-content {
+            grid-template-columns: 1fr;
+        }
+
+        .requirements-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+
+    @@media (max-width: 768px) {
+        .detail-container {
+            padding: 16px;
+        }
+
+        .stats-row {
+            grid-template-columns: 1fr;
+        }
+
+        .requirements-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .job-title {
+            font-size: 22px;
+        }
+
+        .job-title-section {
+            flex-direction: column;
+        }
+
+        .candidates-search input {
+            width: 100%;
+        }
+
+        .candidates-header {
+            flex-direction: column;
+            gap: 12px;
+        }
+    }
+</style>
+
+<div class="detail-container">
+    <div class="detail-breadcrumb">
+        <a asp-action="Dashboard">
+            <i class="bi bi-house-door"></i> Tableau de bord
         </a>
+        <span class="separator">/</span>
+        <a asp-action="Postes">Postes</a>
+        <span class="separator">/</span>
+        <span class="current">@Model.Titre</span>
     </div>
 
-    <!-- Informations du poste -->
-    <div class="card shadow-sm mb-4">
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-6">
-                    <dl class="row mb-0">
-                        <dt class="col-sm-4">Titre</dt>
-                        <dd class="col-sm-8">@Model.Titre</dd>
-
-                        <dt class="col-sm-4">Département</dt>
-                        <dd class="col-sm-8">@Model.Departement</dd>
-
-                        <dt class="col-sm-4">Type</dt>
-                        <dd class="col-sm-8">@Model.Type</dd>
-
-                        <dt class="col-sm-4">Expérience requise</dt>
-                        <dd class="col-sm-8">@Model.Experience an(s)</dd>
-                    </dl>
+    <div class="job-header-card">
+        <div class="job-header-banner"></div>
+        <div class="job-header-content">
+            <div class="job-title-section">
+                <div>
+                    <div class="job-icon-large">
+                        <i class="bi bi-briefcase"></i>
+                    </div>
+                    <h1 class="job-title">@Model.Titre</h1>
+                    <div class="job-subtitle">@Model.Departement</div>
+                    <div class="job-meta-badges">
+                        <span class="meta-badge badge-type">
+                            <i class="bi bi-tag"></i> @Model.Type
+                        </span>
+                        <span class="meta-badge badge-dept">
+                            <i class="bi bi-building"></i> @Model.Departement
+                        </span>
+                        <span class="meta-badge @(Model.Statut == "ACTIF" ? "badge-status-active" : "badge-status-inactive")">
+                            <i class="bi bi-circle-fill" style="font-size: 6px;"></i> @Model.Statut
+                        </span>
+                        <span class="meta-badge badge-date">
+                            <i class="bi bi-calendar3"></i> Créé le @Model.DateCreation.ToString("dd MMM yyyy")
+                        </span>
+                    </div>
                 </div>
-                <div class="col-md-6">
-                    <dl class="row mb-0">
-                        <dt class="col-sm-4">Niveau d'éducation</dt>
-                        <dd class="col-sm-8">@Model.NiveauEducation</dd>
-
-                        <dt class="col-sm-4">Statut</dt>
-                        <dd class="col-sm-8">
-                            <span class="badge @(Model.Statut == "ACTIF" ? "bg-success" : "bg-secondary")">
-                                @Model.Statut
-                            </span>
-                        </dd>
-
-                        <dt class="col-sm-4">Date de création</dt>
-                        <dd class="col-sm-8">@Model.DateCreation.ToString("dd/MM/yyyy")</dd>
-                    </dl>
+                <div class="job-actions-top">
+                    <a asp-action="Postes" class="btn-action btn-back">
+                        <i class="bi bi-arrow-left"></i> Retour
+                    </a>
                 </div>
             </div>
-            @if (!string.IsNullOrWhiteSpace(Model.Description))
-            {
-                <div class="mt-3">
-                    <strong>Description :</strong>
-                    <p class="mt-1">@Model.Description</p>
-                </div>
-            }
         </div>
     </div>
 
-    <!-- Liste des candidats (CV) -->
-    <div class="card shadow-sm">
-        <div class="card-header bg-white fw-semibold">
-            <i class="bi bi-people"></i> Candidats ayant postulé
+    <div class="stats-row">
+        <div class="stat-card">
+            <div class="stat-icon icon-orange">
+                <i class="bi bi-people"></i>
+            </div>
+            <div class="stat-info">
+                <div class="stat-value">@(Model.Cvs?.Count() ?? 0)</div>
+                <div class="stat-label">Candidats totaux</div>
+            </div>
         </div>
-        <div class="card-body p-0">
-            @if (Model.Cvs == null || !Model.Cvs.Any())
-            {
-                <div class="text-center py-4 text-muted">
-                    Aucun CV déposé pour ce poste.
-                </div>
-            }
-            else
-            {
-                <div class="table-responsive">
-                    <table class="table table-hover mb-0 align-middle">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Nom complet</th>
-                                <th>Email</th>
-                                <th>Score global</th>
-                                <th class="text-end">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var cv in Model.Cvs)
-                            {
-                                var match = cv.Matches.FirstOrDefault();
-                                var score = match?.GlobalScore.ToString("F2") ?? "Non évalué";
-                                <tr>
-                                    <td>
-                                        @(cv.DonneesCv?.NomCandidat ?? "CV sans nom")
-                                    </td>
-                                    <td>@(cv.DonneesCv?.Email ?? "—")</td>
-                                    <td>
-                                        @if (match != null)
-                                        {
-                                            <span class="badge bg-primary">@score%</span>
-                                        }
-                                        else
-                                        {
-                                            <span class="badge bg-secondary">@score</span>
-                                        }
-                                    </td>
-                                    <td class="text-end">
-                                        <a asp-action="CvResult" asp-route-offreId="@Model.Id" asp-route-cvId="@cv.Id"
-                                           class="btn btn-sm btn-outline-info">
-                                            Voir analyse
-                                        </a>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            }
+        <div class="stat-card">
+            <div class="stat-icon icon-green">
+                <i class="bi bi-check-circle"></i>
+            </div>
+            <div class="stat-info">
+                <div class="stat-value" id="acceptedCount">0</div>
+                <div class="stat-label">Candidatures acceptées</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon icon-purple">
+                <i class="bi bi-x-circle"></i>
+            </div>
+            <div class="stat-info">
+                <div class="stat-value" id="rejectedCount">0</div>
+                <div class="stat-label">Candidatures refusées</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon icon-blue">
+                <i class="bi bi-briefcase"></i>
+            </div>
+            <div class="stat-info">
+                <div class="stat-value">@Model.Experience</div>
+                <div class="stat-label">Années d'expérience</div>
+            </div>
         </div>
     </div>
+
+    <div class="detail-content">
+        <div class="detail-card">
+            <div class="detail-card-header">
+                <i class="bi bi-file-text"></i>
+                <h5>Description du poste</h5>
+            </div>
+            <div class="detail-card-body">
+                <p class="description-text">
+                    @(string.IsNullOrEmpty(Model.Description) ? "Aucune description fournie." : Model.Description)
+                </p>
+            </div>
+        </div>
+
+        <div class="detail-card">
+            <div class="detail-card-header">
+                <i class="bi bi-info-circle"></i>
+                <h5>Informations</h5>
+            </div>
+            <div class="detail-card-body">
+                <div class="info-item">
+                    <div class="info-label">Date de création</div>
+                    <div class="info-value">@Model.DateCreation.ToString("dd MMMM yyyy")</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Type de contrat</div>
+                    <div class="info-value">@Model.Type</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Niveau d'éducation</div>
+                    <div class="info-value">@Model.NiveauEducation</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Statut</div>
+                    <div class="info-value">
+                        <span class="status-badge-candidate @(Model.Statut == "ACTIF" ? "status-accepted" : "status-rejected")">
+                            @Model.Statut
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="requirements-card">
+        <div class="requirements-header">
+            <h5><i class="bi bi-clipboard-check"></i> Prérequis et critères</h5>
+        </div>
+        <div class="requirements-grid">
+            <div class="req-item">
+                <div class="req-label">
+                    <i class="bi bi-clock"></i> Expérience requise
+                </div>
+                <div class="req-value">@Model.Experience an(s)</div>
+            </div>
+            <div class="req-item">
+                <div class="req-label">
+                    <i class="bi bi-mortarboard"></i> Niveau d'éducation
+                </div>
+                <div class="req-value">@Model.NiveauEducation</div>
+            </div>
+            <div class="req-item">
+                <div class="req-label">
+                    <i class="bi bi-geo-alt"></i> Département
+                </div>
+                <div class="req-value">@Model.Departement</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="candidates-section">
+        <div class="candidates-header">
+            <div class="candidates-header-left">
+                <i class="bi bi-people" style="color: #f59e0b; font-size: 18px;"></i>
+                <h5>Candidats ayant postulé</h5>
+                <span class="candidates-count">@(Model.Cvs?.Count() ?? 0)</span>
+            </div>
+            <div class="candidates-search">
+                <i class="bi bi-search"></i>
+                <input type="text" id="candidateSearch" placeholder="Rechercher un candidat..." onkeyup="searchCandidates()">
+            </div>
+        </div>
+
+        @if (Model.Cvs != null && Model.Cvs.Any())
+        {
+            <table class="candidates-table" id="candidatesTable">
+                <thead>
+                    <tr>
+                        <th style="width: 25%;">Candidat</th>
+                        <th>Email</th>
+                        <th style="width: 100px;">Score</th>
+                        <th style="width: 120px;">Statut</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var cv in Model.Cvs)
+                    {
+                        var match = cv.Matches.FirstOrDefault();
+                        var score = match?.GlobalScore ?? 0;
+                        var scoreClass = score >= 80 ? "high" : (score >= 70 ? "medium" : "low");
+                        
+                        var avatarColors = new[] { "#f59e0b", "#fbbf24", "#10b981", "#3b82f6", "#ef4444", "#8b5cf6", "#14b8a6", "#ec4899" };
+                        var colorIndex = (cv.Id * 7) % avatarColors.Length;
+                        var color = avatarColors[colorIndex];
+                        var initial = cv.DonneesCv?.NomCandidat?.Length > 0 ? cv.DonneesCv.NomCandidat[0].ToString().ToUpper() : "?";
+                        var candidateName = cv.DonneesCv?.NomCandidat ?? "Candidat sans nom";
+                        var candidateEmail = cv.DonneesCv?.Email ?? "—";
+                        
+                        <tr data-cv-id="@cv.Id">
+                            <td>
+                                <div class="candidate-info">
+                                    <div class="candidate-avatar" style="background: @color;">@initial</div>
+                                    <div>
+                                        <div class="candidate-name">@candidateName</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>@candidateEmail</td>
+                            <td>
+                                <span class="score-badge @scoreClass">
+                                    <i class="bi bi-star-fill" style="font-size: 10px;"></i> @score.ToString("F0")%
+                                </span>
+                            </td>
+                            <td>
+                                <span class="status-badge-candidate status-pending" id="status-@cv.Id">
+                                    <i class="bi bi-hourglass"></i> En attente
+                                </span>
+                            </td>
+                            <td>
+                                <div class="candidate-actions">
+                                    <a asp-action="CvResult" asp-route-offreId="@Model.Id" asp-route-cvId="@cv.Id" 
+                                       class="cand-btn btn-view" title="Voir l'analyse">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <button type="button" class="cand-btn btn-accept" title="Accepter la candidature"
+                                            onclick="updateCandidateStatus(@cv.Id, 'accepted')">
+                                        <i class="bi bi-check-lg"></i>
+                                    </button>
+                                    <button type="button" class="cand-btn btn-reject" title="Refuser la candidature"
+                                            onclick="updateCandidateStatus(@cv.Id, 'rejected')">
+                                        <i class="bi bi-x-lg"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <div class="candidates-footer">
+                <div class="candidates-footer-info">
+                    Affichage de <strong>1 à @(Model.Cvs?.Count() ?? 0)</strong> sur <strong>@(Model.Cvs?.Count() ?? 0)</strong> candidats
+                </div>
+                <nav>
+                    <ul class="pagination mb-0" style="gap: 4px;">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" style="border-radius: 6px; color: #64748b;">Précédent</a>
+                        </li>
+                        <li class="page-item active">
+                            <a class="page-link" href="#" style="background: #f59e0b; border-color: #f59e0b; border-radius: 6px; color: white;">1</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#" style="border-radius: 6px; color: #64748b;">Suivant</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        }
+        else
+        {
+            <div class="no-candidates">
+                <i class="bi bi-inbox"></i>
+                <h6>Aucun candidat</h6>
+                <p>Aucun CV n'a été déposé pour ce poste.</p>
+            </div>
+        }
+    </div>
 </div>
+
+@section Scripts {
+    <script>
+        // Store candidate statuses in localStorage
+        const storageKey = 'candidate_statuses_@Model.Id';
+        let candidateStatuses = JSON.parse(localStorage.getItem(storageKey) || '{}');
+
+        // Initialize statuses on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateAllStatuses();
+            updateStats();
+        });
+
+        function updateCandidateStatus(cvId, status) {
+            candidateStatuses[cvId] = status;
+            localStorage.setItem(storageKey, JSON.stringify(candidateStatuses));
+            
+            const statusElement = document.getElementById('status-' + cvId);
+            if (statusElement) {
+                statusElement.className = 'status-badge-candidate status-' + status;
+                if (status === 'accepted') {
+                    statusElement.innerHTML = '<i class="bi bi-check-circle"></i> Accepté';
+                } else if (status === 'rejected') {
+                    statusElement.innerHTML = '<i class="bi bi-x-circle"></i> Refusé';
+                } else {
+                    statusElement.innerHTML = '<i class="bi bi-hourglass"></i> En attente';
+                }
+            }
+            
+            updateStats();
+        }
+
+        function updateAllStatuses() {
+            for (const [cvId, status] of Object.entries(candidateStatuses)) {
+                const statusElement = document.getElementById('status-' + cvId);
+                if (statusElement) {
+                    statusElement.className = 'status-badge-candidate status-' + status;
+                    if (status === 'accepted') {
+                        statusElement.innerHTML = '<i class="bi bi-check-circle"></i> Accepté';
+                    } else if (status === 'rejected') {
+                        statusElement.innerHTML = '<i class="bi bi-x-circle"></i> Refusé';
+                    }
+                }
+            }
+        }
+
+        function updateStats() {
+            let accepted = 0;
+            let rejected = 0;
+            
+            for (const status of Object.values(candidateStatuses)) {
+                if (status === 'accepted') accepted++;
+                if (status === 'rejected') rejected++;
+            }
+            
+            const acceptedElement = document.getElementById('acceptedCount');
+            const rejectedElement = document.getElementById('rejectedCount');
+            
+            if (acceptedElement) acceptedElement.textContent = accepted;
+            if (rejectedElement) rejectedElement.textContent = rejected;
+        }
+
+        function searchCandidates() {
+            const input = document.getElementById('candidateSearch');
+            const filter = input.value.toLowerCase();
+            const table = document.getElementById('candidatesTable');
+            if (!table) return;
+            
+            const tr = table.getElementsByTagName('tr');
+            for (let i = 1; i < tr.length; i++) {
+                const tdName = tr[i].getElementsByTagName('td')[0];
+                const tdEmail = tr[i].getElementsByTagName('td')[1];
+                if (tdName || tdEmail) {
+                    const nameValue = (tdName?.textContent || tdName?.innerText || '').toLowerCase();
+                    const emailValue = (tdEmail?.textContent || tdEmail?.innerText || '').toLowerCase();
+                    
+                    if (nameValue.indexOf(filter) > -1 || emailValue.indexOf(filter) > -1) {
+                        tr[i].style.display = '';
+                    } else {
+                        tr[i].style.display = 'none';
+                    }
+                }
+            }
+        }
+    </script>
+}

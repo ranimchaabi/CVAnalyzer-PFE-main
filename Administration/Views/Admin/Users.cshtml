@@ -3,108 +3,480 @@
     ViewData["Title"] = "Gestion des utilisateurs";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var search = ViewBag.Search as string ?? "";
+    var roleFilter = ViewBag.RoleFilter as string ?? "";
+    var departementFilter = ViewBag.DepartementFilter as string ?? "";
+    var departementsList = ViewBag.DepartementsList as List<string> ?? new List<string>();
+    var candidatPublicBaseUrl = ViewBag.CandidatPublicBaseUrl as string ?? "";
+    
+    // Filter users based on search
+    var filteredUsers = Model;
+    if (!string.IsNullOrWhiteSpace(search))
+    {
+        filteredUsers = filteredUsers.Where(u => 
+            u.NomUtilisateur.Contains(search, StringComparison.OrdinalIgnoreCase) ||
+            u.Email.Contains(search, StringComparison.OrdinalIgnoreCase) ||
+            u.Role.Contains(search, StringComparison.OrdinalIgnoreCase)
+        ).ToList();
+    }
+    
+    // Filter by role
+    if (!string.IsNullOrWhiteSpace(roleFilter))
+    {
+        filteredUsers = filteredUsers.Where(u => u.Role == roleFilter).ToList();
+    }
+    
+    // Filter by department (for Directors)
+    if (!string.IsNullOrWhiteSpace(departementFilter) && roleFilter == "Directeur")
+    {
+        filteredUsers = filteredUsers.Where(u => 
+            u.Role == "Directeur" && 
+            u.Departements != null && 
+            u.Departements.Contains(departementFilter)
+        ).ToList();
+    }
+    
+    // Group filtered users by role
+    var admins = filteredUsers.Where(u => u.Role == "Admin").ToList();
+    var rhs = filteredUsers.Where(u => u.Role == "RH").ToList();
+    var directeurs = filteredUsers.Where(u => u.Role == "Directeur").ToList();
+    var candidats = filteredUsers.Where(u => u.Role == "Candidat").ToList();
+    
+    string? GetProfileImageUrl(Administration.Models.Utilisateur user) =>
+        ProfileImageUrlHelper.ResolveDisplayUrl(user.PhotoUrl, user.Role, candidatPublicBaseUrl);
 }
 
-<div class="container-fluid px-4 py-3">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h5 class="mb-0 fw-semibold">Utilisateurs</h5>
-        <a asp-action="CreateUser" class="btn btn-primary btn-sm">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-1">
-                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-            </svg>
-            Nouvel utilisateur
+<style>
+    .users-container {
+        padding: 24px;
+        background: #f8fafc;
+        min-height: calc(100vh - 60px);
+    }
+
+    .section-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        margin-bottom: 24px;
+        overflow: hidden;
+    }
+
+    .section-header {
+        padding: 20px 24px;
+        border-bottom: 1px solid #f1f5f9;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .section-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .section-title i {
+        font-size: 20px;
+    }
+
+    .section-title.admin i { color: #ef4444; }
+    .section-title.rh i { color: #10b981; }
+    .section-title.directeur i { color: #f59e0b; }
+    .section-title.candidat i { color: #6366f1; }
+
+    .user-count {
+        background: #f1f5f9;
+        color: #64748b;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .table-modern {
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .table-modern thead th {
+        background: #f8fafc;
+        color: #64748b;
+        font-weight: 600;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        padding: 16px 24px;
+        border: none;
+    }
+
+    .table-modern tbody td {
+        padding: 16px 24px;
+        vertical-align: middle;
+        border-color: #f1f5f9;
+        font-size: 14px;
+    }
+
+    .table-modern tbody tr:hover {
+        background: #f8fafc;
+    }
+
+    .user-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 14px;
+        overflow: hidden;
+        flex-shrink: 0;
+    }
+
+    .user-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .user-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .user-name {
+        font-weight: 600;
+        color: #1e293b;
+    }
+
+    .user-email {
+        color: #64748b;
+        font-size: 13px;
+    }
+
+    .role-badge {
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .role-badge.admin {
+        background: #fef2f2;
+        color: #dc2626;
+    }
+
+    .role-badge.rh {
+        background: #f0fdf4;
+        color: #16a34a;
+    }
+
+    .role-badge.directeur {
+        background: #fffbeb;
+        color: #d97706;
+    }
+
+    .role-badge.candidat {
+        background: #eff6ff;
+        color: #2563eb;
+    }
+
+    .status-badge {
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .status-badge.active {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .status-badge.inactive {
+        background: #fee2e2;
+        color: #dc2626;
+    }
+
+    .btn-action-sm {
+        width: 32px;
+        height: 32px;
+        border-radius: 6px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-size: 14px;
+    }
+
+    .btn-view { background: #eff6ff; color: #3b82f6; }
+    .btn-edit { background: #f0fdf4; color: #22c55e; }
+    .btn-toggle-active { background: #fef3c7; color: #f59e0b; }
+    .btn-toggle-inactive { background: #dcfce7; color: #16a34a; }
+    .btn-delete { background: #fef2f2; color: #ef4444; }
+
+    .btn-action-sm:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .empty-section {
+        text-align: center;
+        padding: 40px;
+        color: #94a3b8;
+    }
+
+    .empty-section i {
+        font-size: 48px;
+        margin-bottom: 12px;
+        display: block;
+    }
+
+    /* Live Search Styles */
+    .search-container {
+        position: relative;
+        flex: 1;
+    }
+
+    .search-input {
+        width: 100%;
+        padding: 14px 20px 14px 48px;
+        font-size: 15px;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        transition: all 0.2s;
+        background: white;
+    }
+
+    .search-input:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+    }
+
+    .search-icon {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #94a3b8;
+        font-size: 18px;
+    }
+
+    .search-clear {
+        position: absolute;
+        right: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: #94a3b8;
+        cursor: pointer;
+        font-size: 16px;
+        padding: 4px;
+        display: none;
+    }
+
+    .search-clear:hover {
+        color: #64748b;
+    }
+
+    .search-clear.visible {
+        display: block;
+    }
+
+    .search-stats {
+        font-size: 13px;
+        color: #64748b;
+        margin-top: 8px;
+    }
+
+    .no-results {
+        text-align: center;
+        padding: 48px 24px;
+        color: #94a3b8;
+    }
+
+    .no-results i {
+        font-size: 48px;
+        margin-bottom: 16px;
+        display: block;
+    }
+
+    .hidden-section {
+        display: none !important;
+    }
+
+    .hidden-row {
+        display: none !important;
+    }
+
+    .dept-badge {
+        background: #e0f2fe;
+        color: #0369a1;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+    }
+
+    .highlight {
+        background: #fef3c7;
+        padding: 2px 4px;
+        border-radius: 4px;
+        font-weight: 600;
+    }
+</style>
+
+<div class="users-container">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h4 class="fw-bold mb-1">Gestion des utilisateurs</h4>
+            <p class="text-muted mb-0">Gérez tous les utilisateurs de la plateforme par rôle</p>
+        </div>
+        <a asp-action="CreateUser" class="btn btn-primary">
+            <i class="bi bi-plus-lg me-2"></i>Nouvel utilisateur
         </a>
     </div>
 
-    <!-- Barre de recherche -->
-    <div class="card shadow-sm mb-3">
-        <div class="card-body py-2">
-            <form method="get" class="d-flex gap-2">
-                <input type="text" name="search" value="@search" class="form-control form-control-sm" placeholder="Rechercher par nom, email ou rôle...">
-                <button type="submit" class="btn btn-sm btn-outline-primary">Rechercher</button>
-                @if (!string.IsNullOrEmpty(search))
-                {
-                    <a asp-action="Users" class="btn btn-sm btn-outline-secondary">Réinitialiser</a>
-                }
-            </form>
+    <!-- Barre de recherche et filtres -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body py-3">
+            <div class="row g-3">
+                <!-- Search Input -->
+                <div class="col-md-5">
+                    <div class="search-container">
+                        <i class="bi bi-search search-icon"></i>
+                        <input type="text" id="liveSearch" class="search-input" placeholder="Rechercher par nom ou email..." autocomplete="off" value="@search">
+                        <button type="button" id="clearSearch" class="search-clear">
+                            <i class="bi bi-x-circle-fill"></i>
+                        </button>
+                    </div>
+                </div>
+                <!-- Role Filter -->
+                <div class="col-md-3">
+                    <select id="roleFilter" class="form-select" style="padding: 14px 16px; font-size: 15px; border: 2px solid #e2e8f0; border-radius: 12px;">
+                        <option value="">Tous les rôles</option>
+                        <option value="Admin" selected='@(roleFilter == "Admin" ? "selected" : null)'>Administrateur</option>
+                        <option value="RH" selected='@(roleFilter == "RH" ? "selected" : null)'>Ressources Humaines</option>
+                        <option value="Directeur" selected='@(roleFilter == "Directeur" ? "selected" : null)'>Directeur</option>
+                        <option value="Candidat" selected='@(roleFilter == "Candidat" ? "selected" : null)'>Candidat</option>
+                    </select>
+                </div>
+                <!-- Department Filter (visible only when Director role selected) -->
+                <div class="col-md-3" id="departementFilterContainer" style='@((roleFilter == "Directeur") ? "" : "display:none;")'>
+                    <select id="departementFilter" class="form-select" style="padding: 14px 16px; font-size: 15px; border: 2px solid #e2e8f0; border-radius: 12px;">
+                        <option value="">Tous les départements</option>
+                        @foreach (var dept in departementsList)
+                        {
+                            <option value="@dept" selected='@(departementFilter == dept ? "selected" : null)'>@dept</option>
+                        }
+                    </select>
+                </div>
+                <!-- Reset Button -->
+                
+            </div>
+            <div class="search-stats" id="searchStats"></div>
         </div>
     </div>
 
-    <div class="card shadow-sm">
-        <div class="card-body p-0">
-            @if (!Model.Any())
-            {
-                <div class="text-center py-5 text-muted">Aucun utilisateur trouvé.</div>
-            }
-            else
-            {
+    @if (!Model.Any())
+    {
+        <div class="section-card">
+            <div class="empty-section">
+                <i class="bi bi-people"></i>
+                <h6>Aucun utilisateur trouvé</h6>
+                <p>Aucun utilisateur ne correspond à votre recherche.</p>
+            </div>
+        </div>
+    }
+    else
+    {
+        <!-- Section Administrateurs -->
+        @if (admins.Any())
+        {
+            <div class="section-card" data-role="admin">
+                <div class="section-header">
+                    <h5 class="section-title admin">
+                        <i class="bi bi-shield-fill"></i>Administrateurs
+                    </h5>
+                    <span class="user-count" id="count-admin">@admins.Count utilisateur(s)</span>
+                </div>
                 <div class="table-responsive">
-                    <table class="table table-hover mb-0 align-middle">
-                        <thead class="table-light">
+                    <table class="table-modern">
+                        <thead>
                             <tr>
-                                <th>Nom d'utilisateur</th>
+                                <th>Utilisateur</th>
                                 <th>Email</th>
-                                <th>Rôle</th>
-                                <th>Actif</th>
-                                <th>Date création</th>
+                                <th>Statut</th>
+                                <th>Date de création</th>
                                 <th class="text-end">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var u in Model)
+                            @foreach (var u in admins)
                             {
-                                <tr>
-                                    <td>@u.NomUtilisateur</td>
-                                    <td>@u.Email</td>
-                                    <td>@u.Role</td>
+                                var photoUrl = GetProfileImageUrl(u);
+                                <tr class="user-row" data-name="@u.NomUtilisateur.ToLower()" data-email="@u.Email.ToLower()" data-role="admin" data-departements="@(u.Departements?.ToLower() ?? "")">
+                                    <td>
+                                        <div class="user-info">
+                                            <div class="user-avatar">
+                                                @if (!string.IsNullOrEmpty(photoUrl))
+                                                {
+                                                    <img src="@photoUrl" alt="@u.NomUtilisateur" />
+                                                }
+                                                else
+                                                {
+                                                    @u.NomUtilisateur.Substring(0,1).ToUpper()
+                                                }
+                                            </div>
+                                            <div>
+                                                <div class="user-name">@u.NomUtilisateur</div>
+                                                <span class="role-badge admin">@u.Role</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="user-email">@u.Email</td>
                                     <td>
                                         @if (u.IsActive)
                                         {
-                                            <span class="badge bg-success">Actif</span>
+                                            <span class="status-badge active"><i class="bi bi-check-circle-fill me-1"></i>Actif</span>
                                         }
                                         else
                                         {
-                                            <span class="badge bg-danger">Inactif</span>
+                                            <span class="status-badge inactive"><i class="bi bi-x-circle-fill me-1"></i>Inactif</span>
                                         }
                                     </td>
                                     <td>@u.DateCreation.ToString("dd/MM/yyyy")</td>
                                     <td class="text-end">
-                                        <a asp-action="UserDetails" asp-route-id="@u.Id" class="btn btn-sm btn-outline-info" title="Détails">
-                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-                                            </svg>
+                                        <a asp-action="UserDetails" asp-route-id="@u.Id" class="btn-action-sm btn-view" title="Détails">
+                                            <i class="bi bi-eye"></i>
                                         </a>
-                                        <a asp-action="EditUser" asp-route-id="@u.Id" class="btn btn-sm btn-outline-primary" title="Modifier">
-                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-                                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-                                            </svg>
-                                        </a>
+                                        
                                         <form asp-action="ToggleActive" asp-route-id="@u.Id" method="post" class="d-inline">
                                             @Html.AntiForgeryToken()
-                                            <button type="submit" class="btn btn-sm @(u.IsActive ? "btn-outline-warning" : "btn-outline-success")" title="@(u.IsActive ? "Désactiver" : "Activer")">
-                                                @if (u.IsActive)
-                                                {
-                                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
-                                                    </svg>
-                                                }
-                                                else
-                                                {
-                                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                        <circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/>
-                                                    </svg>
-                                                }
+                                            <button type="submit" class="btn-action-sm @(u.IsActive ? "btn-toggle-active" : "btn-toggle-inactive")" title="@(u.IsActive ? "Désactiver" : "Activer")">
+                                                <i class="bi @(u.IsActive ? "bi-pause-circle" : "bi-play-circle")"></i>
                                             </button>
                                         </form>
                                         <form asp-action="DeleteUser" asp-route-id="@u.Id" method="post" class="d-inline"
-                                              onsubmit="return confirm('Supprimer définitivement cet utilisateur ?')">
+                                              onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')">
                                             @Html.AntiForgeryToken()
-                                            <button type="submit" class="btn btn-sm btn-outline-danger" title="Supprimer">
-                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                    <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/>
-                                                    <path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/>
-                                                </svg>
+                                            <button type="submit" class="btn-action-sm btn-delete" title="Supprimer">
+                                                <i class="bi bi-trash"></i>
                                             </button>
                                         </form>
                                     </td>
@@ -113,7 +485,426 @@
                         </tbody>
                     </table>
                 </div>
-            }
-        </div>
+            </div>
+        }
+
+        <!-- Section RH -->
+        @if (rhs.Any())
+        {
+            <div class="section-card" data-role="rh">
+                <div class="section-header">
+                    <h5 class="section-title rh">
+                        <i class="bi bi-person-badge-fill"></i>Ressources Humaines
+                    </h5>
+                    <span class="user-count" id="count-rh">@rhs.Count utilisateur(s)</span>
+                </div>
+                <div class="table-responsive">
+                    <table class="table-modern">
+                        <thead>
+                            <tr>
+                                <th>Utilisateur</th>
+                                <th>Email</th>
+                                <th>Statut</th>
+                                <th>Date de création</th>
+                                <th class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var u in rhs)
+                            {
+                                var photoUrl = GetProfileImageUrl(u);
+                                <tr class="user-row" data-name="@u.NomUtilisateur.ToLower()" data-email="@u.Email.ToLower()" data-role="rh" data-departements="@(u.Departements?.ToLower() ?? "")">
+                                    <td>
+                                        <div class="user-info">
+                                            <div class="user-avatar">
+                                                @if (!string.IsNullOrEmpty(photoUrl))
+                                                {
+                                                    <img src="@photoUrl" alt="@u.NomUtilisateur" />
+                                                }
+                                                else
+                                                {
+                                                    @u.NomUtilisateur.Substring(0,1).ToUpper()
+                                                }
+                                            </div>
+                                            <div>
+                                                <div class="user-name">@u.NomUtilisateur</div>
+                                                <span class="role-badge rh">@u.Role</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="user-email">@u.Email</td>
+                                    <td>
+                                        @if (u.IsActive)
+                                        {
+                                            <span class="status-badge active"><i class="bi bi-check-circle-fill me-1"></i>Actif</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="status-badge inactive"><i class="bi bi-x-circle-fill me-1"></i>Inactif</span>
+                                        }
+                                    </td>
+                                    <td>@u.DateCreation.ToString("dd/MM/yyyy")</td>
+                                    <td class="text-end">
+                                        <a asp-action="UserDetails" asp-route-id="@u.Id" class="btn-action-sm btn-view" title="Détails">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        
+                                        <form asp-action="ToggleActive" asp-route-id="@u.Id" method="post" class="d-inline">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn-action-sm @(u.IsActive ? "btn-toggle-active" : "btn-toggle-inactive")" title="@(u.IsActive ? "Désactiver" : "Activer")">
+                                                <i class="bi @(u.IsActive ? "bi-pause-circle" : "bi-play-circle")"></i>
+                                            </button>
+                                        </form>
+                                        <form asp-action="DeleteUser" asp-route-id="@u.Id" method="post" class="d-inline"
+                                              onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn-action-sm btn-delete" title="Supprimer">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+
+        <!-- Section Directeurs -->
+        @if (directeurs.Any())
+        {
+            <div class="section-card" data-role="directeur">
+                <div class="section-header">
+                    <h5 class="section-title directeur">
+                        <i class="bi bi-briefcase-fill"></i>Directeurs
+                    </h5>
+                    <span class="user-count" id="count-directeur">@directeurs.Count utilisateur(s)</span>
+                </div>
+                <div class="table-responsive">
+                    <table class="table-modern">
+                        <thead>
+                            <tr>
+                                <th>Utilisateur</th>
+                                <th>Email</th>
+                                <th>Département</th>
+                                <th>Statut</th>
+                                <th>Date de création</th>
+                                <th class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var u in directeurs)
+                            {
+                                var photoUrl = GetProfileImageUrl(u);
+                                <tr class="user-row" data-name="@u.NomUtilisateur.ToLower()" data-email="@u.Email.ToLower()" data-role="directeur" data-departements="@(u.Departements?.ToLower() ?? "")">
+                                    <td>
+                                        <div class="user-info">
+                                            <div class="user-avatar">
+                                                @if (!string.IsNullOrEmpty(photoUrl))
+                                                {
+                                                    <img src="@photoUrl" alt="@u.NomUtilisateur" />
+                                                }
+                                                else
+                                                {
+                                                    @u.NomUtilisateur.Substring(0,1).ToUpper()
+                                                }
+                                            </div>
+                                            <div>
+                                                <div class="user-name">@u.NomUtilisateur</div>
+                                                <span class="role-badge directeur">@u.Role</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="user-email">@u.Email</td>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(u.Departements))
+                                        {
+                                            <span class="dept-badge">
+                                                <i class="bi bi-building me-1"></i>@u.Departements
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">-</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (u.IsActive)
+                                        {
+                                            <span class="status-badge active"><i class="bi bi-check-circle-fill me-1"></i>Actif</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="status-badge inactive"><i class="bi bi-x-circle-fill me-1"></i>Inactif</span>
+                                        }
+                                    </td>
+                                    <td>@u.DateCreation.ToString("dd/MM/yyyy")</td>
+                                    <td class="text-end">
+                                        <a asp-action="UserDetails" asp-route-id="@u.Id" class="btn-action-sm btn-view" title="Détails">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                       
+                                        <form asp-action="ToggleActive" asp-route-id="@u.Id" method="post" class="d-inline">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn-action-sm @(u.IsActive ? "btn-toggle-active" : "btn-toggle-inactive")" title="@(u.IsActive ? "Désactiver" : "Activer")">
+                                                <i class="bi @(u.IsActive ? "bi-pause-circle" : "bi-play-circle")"></i>
+                                            </button>
+                                        </form>
+                                        <form asp-action="DeleteUser" asp-route-id="@u.Id" method="post" class="d-inline"
+                                              onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn-action-sm btn-delete" title="Supprimer">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+
+        <!-- Section Candidats -->
+        @if (candidats.Any())
+        {
+            <div class="section-card" data-role="candidat">
+                <div class="section-header">
+                    <h5 class="section-title candidat">
+                        <i class="bi bi-person-fill"></i>Candidats
+                    </h5>
+                    <span class="user-count" id="count-candidat">@candidats.Count utilisateur(s)</span>
+                </div>
+                <div class="table-responsive">
+                    <table class="table-modern">
+                        <thead>
+                            <tr>
+                                <th>Utilisateur</th>
+                                <th>Email</th>
+                                <th>Statut</th>
+                                <th>Date de création</th>
+                                <th class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var u in candidats)
+                            {
+                                var photoUrl = GetProfileImageUrl(u);
+                                <tr class="user-row" data-name="@u.NomUtilisateur.ToLower()" data-email="@u.Email.ToLower()" data-role="candidat" data-departements="@(u.Departements?.ToLower() ?? "")">
+                                    <td>
+                                        <div class="user-info">
+                                            <div>
+                                                <div class="user-name">@u.NomUtilisateur</div>
+                                                <span class="role-badge candidat">@u.Role</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    
+                                    <td class="user-email">@u.Email</td>
+                                    <td>
+                                        @if (u.IsActive)
+                                        {
+                                            <span class="status-badge active"><i class="bi bi-check-circle-fill me-1"></i>Actif</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="status-badge inactive"><i class="bi bi-x-circle-fill me-1"></i>Inactif</span>
+                                        }
+                                    </td>
+                                    <td>@u.DateCreation.ToString("dd/MM/yyyy")</td>
+                                    <td class="text-end">
+                                        <a asp-action="UserDetails" asp-route-id="@u.Id" class="btn-action-sm btn-view" title="Détails">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        
+                                        <form asp-action="ToggleActive" asp-route-id="@u.Id" method="post" class="d-inline">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn-action-sm @(u.IsActive ? "btn-toggle-active" : "btn-toggle-inactive")" title="@(u.IsActive ? "Désactiver" : "Activer")">
+                                                <i class="bi @(u.IsActive ? "bi-pause-circle" : "bi-play-circle")"></i>
+                                            </button>
+                                        </form>
+                                        <form asp-action="DeleteUser" asp-route-id="@u.Id" method="post" class="d-inline"
+                                              onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn-action-sm btn-delete" title="Supprimer">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+    }
+
+    <!-- No Results Message -->
+    <div id="noResults" class="no-results hidden-section">
+        <i class="bi bi-search"></i>
+        <h6>Aucun utilisateur trouvé</h6>
+        <p>Aucun utilisateur ne correspond à votre recherche.</p>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        // Live Search and Filter Functionality
+        const searchInput = document.getElementById('liveSearch');
+        const clearButton = document.getElementById('clearSearch');
+        const searchStats = document.getElementById('searchStats');
+        const noResults = document.getElementById('noResults');
+        const userRows = document.querySelectorAll('.user-row');
+        const sectionCards = document.querySelectorAll('.section-card');
+        const roleFilter = document.getElementById('roleFilter');
+        const departementFilter = document.getElementById('departementFilter');
+        const departementFilterContainer = document.getElementById('departementFilterContainer');
+        
+
+        let totalUsers = userRows.length;
+
+        // Show/hide department filter based on role selection
+        roleFilter.addEventListener('change', function() {
+            if (this.value === 'Directeur') {
+                departementFilterContainer.style.display = 'block';
+            } else {
+                departementFilterContainer.style.display = 'none';
+                if (departementFilter) departementFilter.value = '';
+            }
+            performSearch();
+        });
+
+        // Department filter change
+        if (departementFilter) {
+            departementFilter.addEventListener('change', performSearch);
+        }
+
+        // Search function
+        function performSearch() {
+            const query = searchInput.value.toLowerCase().trim();
+            const selectedRole = roleFilter.value;
+            const selectedDepartement = departementFilter ? departementFilter.value : '';
+            let visibleCount = 0;
+
+            // Show/hide clear button
+            clearButton.classList.toggle('visible', query.length > 0);
+
+            // Filter rows
+            userRows.forEach(row => {
+                const name = row.getAttribute('data-name');
+                const email = row.getAttribute('data-email');
+                const role = row.getAttribute('data-role');
+                const departements = row.getAttribute('data-departements') || '';
+                const nameElement = row.querySelector('.user-name');
+                const emailElement = row.querySelector('.user-email');
+
+                let matchesSearch = !query || name.includes(query) || email.includes(query);
+                let matchesRole = !selectedRole || role.toLowerCase() === selectedRole.toLowerCase();
+                let matchesDepartement = !selectedDepartement || (role.toLowerCase() === 'directeur' && departements.includes(selectedDepartement.toLowerCase()));
+
+                if (matchesSearch && matchesRole && matchesDepartement) {
+                    row.classList.remove('hidden-row');
+                    visibleCount++;
+                    
+                    // Highlight matching text
+                    if (query && nameElement) {
+                        nameElement.innerHTML = highlightText(nameElement.textContent, query);
+                    } else if (nameElement) {
+                        nameElement.textContent = nameElement.textContent;
+                    }
+                    if (query && emailElement) {
+                        emailElement.innerHTML = highlightText(emailElement.textContent, query);
+                    } else if (emailElement) {
+                        emailElement.textContent = emailElement.textContent;
+                    }
+                } else {
+                    row.classList.add('hidden-row');
+                    restoreOriginalText(row);
+                }
+            });
+
+            // Update section visibility and counts
+            sectionCards.forEach(card => {
+                const visibleRows = card.querySelectorAll('.user-row:not(.hidden-row)');
+                const cardRole = card.getAttribute('data-role');
+                const countElement = document.getElementById('count-' + cardRole);
+                
+                if (visibleRows.length === 0) {
+                    card.classList.add('hidden-section');
+                } else {
+                    card.classList.remove('hidden-section');
+                    if (countElement) {
+                        countElement.textContent = visibleRows.length + ' utilisateur' + (visibleRows.length > 1 ? 's' : '');
+                    }
+                }
+            });
+
+            // Update stats
+            if (query || selectedRole || selectedDepartement) {
+                searchStats.textContent = visibleCount + ' résultat' + (visibleCount > 1 ? 's' : '') + ' sur ' + totalUsers;
+            } else {
+                searchStats.textContent = '';
+            }
+
+            // Show no results message
+            if (visibleCount === 0) {
+                noResults.classList.remove('hidden-section');
+            } else {
+                noResults.classList.add('hidden-section');
+            }
+        }
+
+        // Highlight matching text
+        function highlightText(text, query) {
+            if (!query) return text;
+            const regex = new RegExp('(' + escapeRegex(query) + ')', 'gi');
+            return text.replace(regex, '<span class="highlight">$1</span>');
+        }
+
+        // Escape special regex characters
+        function escapeRegex(string) {
+            return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        }
+
+        // Restore original text (remove highlights)
+        function restoreOriginalText(row) {
+            const nameElement = row.querySelector('.user-name');
+            const emailElement = row.querySelector('.user-email');
+            
+            if (nameElement) {
+                nameElement.textContent = nameElement.textContent;
+            }
+            if (emailElement) {
+                emailElement.textContent = emailElement.textContent;
+            }
+        }
+
+        // Update original counts
+        function updateCounts() {
+            sectionCards.forEach(card => {
+                const role = card.getAttribute('data-role');
+                const countElement = document.getElementById('count-' + role);
+                const allRows = card.querySelectorAll('.user-row');
+                
+                if (countElement) {
+                    countElement.textContent = allRows.length + ' utilisateur' + (allRows.length > 1 ? 's' : '');
+                }
+            });
+        }
+
+        // Event listeners
+        searchInput.addEventListener('input', performSearch);
+
+        clearButton.addEventListener('click', () => {
+            searchInput.value = '';
+            performSearch();
+            searchInput.focus();
+        });
+
+        // Initialize
+        searchInput.focus();
+    </script>
+}

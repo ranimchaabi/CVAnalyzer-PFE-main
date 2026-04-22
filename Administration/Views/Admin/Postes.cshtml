@@ -2,104 +2,481 @@
 @{
     ViewData["Title"] = "Liste des postes";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var search = ViewBag.Search as string ?? "";
-    var departementFilter = ViewBag.DepartementFilter as string ?? "";
-    var departements = ViewBag.Departements as List<string> ?? new List<string>();
 }
 
-<div class="container-fluid px-4 py-3">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h5 class="mb-0 fw-semibold">Postes disponibles</h5>
+<style>
+    .jobs-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 2rem;
+        border-radius: 12px;
+        margin-bottom: 2rem;
+    }
+
+    .jobs-header h4 {
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+
+    .stats-card {
+        background: white;
+        border-radius: 10px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        margin-bottom: 2rem;
+    }
+
+    .stat-item {
+        text-align: center;
+        padding: 1rem;
+    }
+
+    .stat-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #667eea;
+    }
+
+    .stat-label {
+        color: #64748b;
+        font-size: 0.875rem;
+    }
+
+    .table-container {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        overflow: hidden;
+    }
+
+    .table-header {
+        padding: 1.5rem;
+        border-bottom: 1px solid #e2e8f0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .search-box {
+        position: relative;
+        max-width: 300px;
+    }
+
+    .search-box input {
+        padding-left: 2.5rem;
+        border-radius: 8px;
+        border: 1px solid #e2e8f0;
+        background: #f8fafc;
+    }
+
+    .search-box i {
+        position: absolute;
+        left: 0.75rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #94a3b8;
+    }
+
+    .modern-table {
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .modern-table thead th {
+        background: #f8fafc;
+        color: #64748b;
+        font-weight: 600;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        padding: 1rem;
+        border: none;
+    }
+
+    .modern-table tbody td {
+        padding: 1rem;
+        vertical-align: middle;
+        border-color: #f1f5f9;
+        font-size: 0.875rem;
+    }
+
+    .modern-table tbody tr {
+        transition: all 0.2s;
+    }
+
+    .modern-table tbody tr:hover {
+        background: #f8fafc;
+    }
+
+    .job-title-cell {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .job-icon {
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 700;
+        flex-shrink: 0;
+    }
+
+    .job-info h6 {
+        margin: 0;
+        font-weight: 600;
+        color: #1e293b;
+        font-size: 0.875rem;
+    }
+
+    .job-info small {
+        color: #64748b;
+        font-size: 0.75rem;
+    }
+
+    .company-cell {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .company-logo {
+        width: 32px;
+        height: 32px;
+        background: #e0e7ff;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: #667eea;
+    }
+
+    .badge-custom {
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+
+    .badge-active {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .badge-inactive {
+        background: #f1f5f9;
+        color: #64748b;
+    }
+
+    .badge-fulltime {
+        background: #dbeafe;
+        color: #1e40af;
+    }
+
+    .badge-parttime {
+        background: #fef3c7;
+        color: #92400e;
+    }
+
+    .date-badge {
+        background: #ede9fe;
+        color: #6d28d9;
+        padding: 0.25rem 0.75rem;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        font-weight: 500;
+    }
+
+    .action-btns {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .action-btn {
+        width: 32px;
+        height: 32px;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .action-btn.view {
+        background: #eff6ff;
+        color: #3b82f6;
+    }
+
+    .action-btn.edit {
+        background: #f0fdf4;
+        color: #22c55e;
+    }
+
+    .action-btn.delete {
+        background: #fef2f2;
+        color: #ef4444;
+    }
+
+    .action-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .pagination-container {
+        padding: 1.5rem;
+        border-top: 1px solid #e2e8f0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .pagination-info {
+        color: #64748b;
+        font-size: 0.875rem;
+    }
+
+    .pagination-custom {
+        display: flex;
+        gap: 0.25rem;
+    }
+
+    .page-btn {
+        padding: 0.5rem 0.75rem;
+        border: 1px solid #e2e8f0;
+        background: white;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-size: 0.875rem;
+    }
+
+    .page-btn:hover {
+        background: #f8fafc;
+    }
+
+    .page-btn.active {
+        background: #667eea;
+        color: white;
+        border-color: #667eea;
+    }
+
+    .btn-primary-custom {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s;
+    }
+
+    .btn-primary-custom:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        color: white;
+    }
+
+    .checkbox-custom {
+        width: 18px;
+        height: 18px;
+        border: 2px solid #cbd5e1;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .checkbox-custom:checked {
+        background: #667eea;
+        border-color: #667eea;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+    }
+
+    .empty-state svg {
+        color: #cbd5e1;
+        margin-bottom: 1rem;
+    }
+
+    .empty-state h5 {
+        color: #64748b;
+        margin-bottom: 1rem;
+    }
+
+</style>
+
+<div class="container-fluid px-4 py-4">
+    <!-- Header -->
+    <div class="jobs-header">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h4><i class="bi bi-briefcase me-2"></i>Gestion des Postes</h4>
+                <p class="mb-0 opacity-75">Gérez toutes les offres d'emploi de votre organisation</p>
+            </div>
+            
+        </div>
     </div>
 
-    <!-- Filtres -->
-    <div class="card shadow-sm mb-3">
-        <div class="card-body py-2">
-            <form method="get" class="row g-2 align-items-end">
-                <div class="col-md-4">
-                    <label class="form-label small mb-0">Recherche (titre / département)</label>
-                    <input type="text" name="search" value="@search" class="form-control form-control-sm" placeholder="Ex: Développeur, RH...">
+
+
+    <!-- Table Container -->
+    <div class="table-container">
+        <div class="table-header">
+            <h5 class="mb-0 fw-semibold">Tous les Postes (Consultation uniquement)</h5>
+            <div class="d-flex gap-2 flex-wrap">
+                <div class="search-box">
+                    <i class="bi bi-search"></i>
+                    <input type="text" class="form-control" placeholder="Rechercher un poste..." id="searchInput" onkeyup="searchJobs()">
                 </div>
-                <div class="col-md-4">
-                    <label class="form-label small mb-0">Filtrer par département</label>
-                    <select name="departement" class="form-select form-select-sm">
-                        <option value="">-- Tous --</option>
-                        @foreach (var d in departements)
+            </div>
+        </div>
+
+        @if (!Model.Any())
+        {
+            <div class="empty-state">
+                <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                </svg>
+                <h5>Aucun poste trouvé</h5>
+                <p class="text-muted mb-3">Commencez par créer votre premier poste</p>
+                <a asp-action="CreatePoste" class="btn btn-primary-custom">
+                    <i class="bi bi-plus-lg me-2"></i>Créer un poste
+                </a>
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="modern-table">
+                    <thead>
+                        <tr>
+                            <th>Titre du Poste</th>
+                            <th>Département</th>
+                            <th>Type</th>
+                            <th>Expérience</th>
+                            <th>Niveau</th>
+                            <th>Statut</th>
+                            <th>Date Création</th>
+                            <th style="width: 120px;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var o in Model)
                         {
-                            <option value="@d" selected="@(departementFilter == d)">@d</option>
-                        }
-                    </select>
-                </div>
-                <div class="col-md-4">
-                    <button type="submit" class="btn btn-sm btn-outline-primary">Appliquer</button>
-                    @if (!string.IsNullOrEmpty(search) || !string.IsNullOrEmpty(departementFilter))
-                    {
-                        <a asp-action="Postes" class="btn btn-sm btn-outline-secondary ms-2">Réinitialiser</a>
-                    }
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <div class="card shadow-sm">
-        <div class="card-body p-0">
-            @if (!Model.Any())
-            {
-                <div class="text-center py-5 text-muted">
-                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="mb-3 opacity-50">
-                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
-                    </svg>
-                    <p>Aucun poste trouvé.</p>
-                </div>
-            }
-            else
-            {
-                <div class="table-responsive">
-                    <table class="table table-hover mb-0 align-middle">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Titre</th>
-                                <th>Département</th>
-                                <th>Type</th>
-                                <th>Expérience</th>
-                                <th>Niveau Éducation</th>
-                                <th>Statut</th>
-                                <th>Date création</th>
-                                <th class="text-end">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var o in Model)
-                            {
-                                <tr>
-                                    <td>
-                                        <a asp-action="DetailsPoste" asp-route-id="@o.Id" class="text-decoration-none fw-semibold">
-                                            @o.Titre
-                                        </a>
-                                    </td>
-                                    <td>@o.Departement</td>
-                                    <td>@o.Type</td>
-                                    <td>@o.Experience an(s)</td>
-                                    <td>@o.NiveauEducation</td>
-                                    <td>
-                                        <span class="badge @(o.Statut == "ACTIF" ? "bg-success" : "bg-secondary")">
-                                            @o.Statut
+                            <tr class="job-row">
+                                <td>
+                                    <div class="job-title-cell">
+                                        <div class="job-icon">@o.Titre.Substring(0,1).ToUpper()</div>
+                                        <div class="job-info">
+                                            <h6>@o.Titre</h6>
+                                            <small>@o.Departement</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-light text-dark border">@o.Departement</span>
+                                </td>
+                                <td>
+                                    @if (o.Type == "Temps plein")
+                                    {
+                                        <span class="badge-custom badge-fulltime">
+                                            <i class="bi bi-clock-fill me-1"></i>@o.Type
                                         </span>
-                                    </td>
-                                    <td>@o.DateCreation.ToString("dd/MM/yyyy")</td>
-                                    <td class="text-end">
-                                        <a asp-action="ResultatsCV" asp-route-offreId="@o.Id" class="btn btn-sm btn-outline-info" title="Tous les CV">
-                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-                                            </svg>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge-custom badge-parttime">
+                                            <i class="bi bi-clock me-1"></i>@o.Type
+                                        </span>
+                                    }
+                                </td>
+                                <td>@o.Experience an(s)</td>
+                                <td>@o.NiveauEducation</td>
+                                <td>
+                                    @if (o.Statut == "ACTIF")
+                                    {
+                                        <span class="badge-custom badge-active">
+                                            <i class="bi bi-check-circle-fill me-1"></i>Actif
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge-custom badge-inactive">
+                                            <i class="bi bi-x-circle-fill me-1"></i>Inactif
+                                        </span>
+                                    }
+                                </td>
+                                <td>
+                                    <span class="date-badge">
+                                        <i class="bi bi-calendar me-1"></i>@o.DateCreation.ToString("dd MMM yyyy")
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="action-btns">
+                                        <a asp-controller="Admin" asp-action="DetailPoste" asp-route-id="@o.Id"
+                                           class="action-btn view" title="Voir les détails">
+                                            <i class="bi bi-eye"></i>
                                         </a>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pagination-container">
+                <div class="pagination-info">
+                    Affichage de 1 à @Model.Count sur @Model.Count entrées
                 </div>
-            }
-        </div>
+                <div class="pagination-custom">
+                    <button class="page-btn"><i class="bi bi-chevron-left"></i></button>
+                    <button class="page-btn active">1</button>
+                    <button class="page-btn">2</button>
+                    <button class="page-btn">3</button>
+                    <button class="page-btn"><i class="bi bi-chevron-right"></i></button>
+                </div>
+            </div>
+        }
     </div>
 </div>
+
+<script>
+    // Search functionality
+    function searchJobs() {
+        const input = document.getElementById('searchInput');
+        const filter = input.value.toLowerCase();
+        const table = document.querySelector('.modern-table');
+        const tr = table.getElementsByTagName('tr');
+
+        for (let i = 1; i < tr.length; i++) {
+            const tdTitle = tr[i].getElementsByTagName('td')[0];
+            const tdDept = tr[i].getElementsByTagName('td')[1];
+            
+            if (tdTitle || tdDept) {
+                const titleValue = tdTitle.textContent || tdTitle.innerText;
+                const deptValue = tdDept.textContent || tdDept.innerText;
+                
+                if (titleValue.toLowerCase().indexOf(filter) > -1 || 
+                    deptValue.toLowerCase().indexOf(filter) > -1) {
+                    tr[i].style.display = '';
+                } else {
+                    tr[i].style.display = 'none';
+                }
+            }
+        }
+    }
+</script>
