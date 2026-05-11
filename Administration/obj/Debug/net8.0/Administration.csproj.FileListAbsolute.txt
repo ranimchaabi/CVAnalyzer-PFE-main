@@ -850,3 +850,4 @@ C:\Users\ranim\Desktop\CVAnalyzer-PFE-main\Administration\bin\Debug\net8.0\Admin
 C:\Users\ranim\Desktop\CVAnalyzer-PFE-main\Administration\bin\Debug\net8.0\Administration\bin2\Administration\bin2\build-verify\appsettings.json
 =======
 >>>>>>> 364b0a3c7128899c3df393e4339086a493d07ccc
+C:\Users\ranim\Desktop\CVAnalyzer-PFE-main\Administration\obj\Debug\net8.0\Administration.sourcelink.json

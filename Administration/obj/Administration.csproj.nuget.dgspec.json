@@ -1,7 +1,6 @@
 {
   "format": 1,
   "restore": {
-<<<<<<< HEAD
     "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\Administration.csproj": {}
   },
   "projects": {
@@ -13,19 +12,6 @@
         "projectPath": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\Administration.csproj",
         "packagesPath": "C:\\Users\\ranim\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\obj\\",
-=======
-    "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\Administration.csproj": {}
-  },
-  "projects": {
-    "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\Administration.csproj": {
-      "version": "1.0.0",
-      "restore": {
-        "projectUniqueName": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\Administration.csproj",
-        "projectName": "Administration",
-        "projectPath": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\Administration.csproj",
-        "packagesPath": "C:\\Users\\ranim\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\obj\\",
->>>>>>> 364b0a3c7128899c3df393e4339086a493d07ccc
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\ranim\\AppData\\Roaming\\NuGet\\NuGet.Config"

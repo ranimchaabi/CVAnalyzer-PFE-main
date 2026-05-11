@@ -1,14 +1,8 @@
 {
   "version": 2,
-<<<<<<< HEAD
   "dgSpecHash": "/oKLe/2Lza4=",
   "success": true,
   "projectFilePath": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\Administration.csproj",
-=======
-  "dgSpecHash": "5Z7VUxvZ3xM=",
-  "success": true,
-  "projectFilePath": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\Administration.csproj",
->>>>>>> 364b0a3c7128899c3df393e4339086a493d07ccc
   "expectedPackageFiles": [
     "C:\\Users\\ranim\\.nuget\\packages\\azure.core\\1.25.0\\azure.core.1.25.0.nupkg.sha512",
     "C:\\Users\\ranim\\.nuget\\packages\\azure.identity\\1.7.0\\azure.identity.1.7.0.nupkg.sha512",
@@ -92,6 +86,12 @@
     "C:\\Users\\ranim\\.nuget\\packages\\system.windows.extensions\\6.0.0\\system.windows.extensions.6.0.0.nupkg.sha512"
   ],
   "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Problem reading the cache file C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\obj\\project.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
+    },
     {
       "code": "NU1902",
       "level": "Warning",

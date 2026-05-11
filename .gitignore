@@ -1,0 +1,10 @@
+bin/
+obj/
+**/bin/
+**/obj/
+*.dll
+*.exe
+*.log
+*.txt
+desktop.ini
+appsettings*.json

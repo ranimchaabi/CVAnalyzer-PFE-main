@@ -4278,19 +4278,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-<<<<<<< HEAD
       "projectUniqueName": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\Administration.csproj",
       "projectName": "Administration",
       "projectPath": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\Administration.csproj",
       "packagesPath": "C:\\Users\\ranim\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\obj\\",
-=======
-      "projectUniqueName": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\Administration.csproj",
-      "projectName": "Administration",
-      "projectPath": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\Administration.csproj",
-      "packagesPath": "C:\\Users\\ranim\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\obj\\",
->>>>>>> 364b0a3c7128899c3df393e4339086a493d07ccc
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\ranim\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -4369,6 +4361,12 @@
     }
   },
   "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Problem reading the cache file C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\obj\\project.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
+    },
     {
       "code": "NU1902",
       "level": "Warning",
