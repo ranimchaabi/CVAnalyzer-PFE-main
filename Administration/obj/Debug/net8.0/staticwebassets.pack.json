@@ -1,0 +1,602 @@
+{
+  "Files": [
+    {
+<<<<<<< HEAD
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\Administration.bundle.scp.css",
+      "PackagePath": "staticwebassets\\Administration.bundle.scp.css"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\css\\site.css",
+      "PackagePath": "staticwebassets\\css\\site.css"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\favicon.ico",
+      "PackagePath": "staticwebassets\\favicon.ico"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\js\\site.js",
+      "PackagePath": "staticwebassets\\js\\site.js"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\LICENSE",
+      "PackagePath": "staticwebassets\\lib\\bootstrap"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css.map"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css.map"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css.map"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css.map"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css.map"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css.map"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.css"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.css.map"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.min.css"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css.map"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js.map"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js.map"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js.map"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js.map"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.js"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.js.map"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.min.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.min.js"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.min.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.min.js.map"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\jquery-validation-unobtrusive\\LICENSE.txt",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\LICENSE.txt"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\jquery-validation-unobtrusive\\dist\\jquery.validate.unobtrusive.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\dist\\jquery.validate.unobtrusive.js"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\jquery-validation-unobtrusive\\dist\\jquery.validate.unobtrusive.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\dist\\jquery.validate.unobtrusive.min.js"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\jquery-validation\\LICENSE.md",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\LICENSE.md"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\jquery-validation\\dist\\additional-methods.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\additional-methods.js"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\jquery-validation\\dist\\additional-methods.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\additional-methods.min.js"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\jquery.validate.js"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\jquery.validate.min.js"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\jquery\\LICENSE.txt",
+      "PackagePath": "staticwebassets\\lib\\jquery\\LICENSE.txt"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\jquery\\dist\\jquery.js",
+      "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.js"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\jquery\\dist\\jquery.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.js"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\jquery\\dist\\jquery.min.map",
+      "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.map"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\jquery\\dist\\jquery.slim.js",
+      "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.slim.js"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\jquery\\dist\\jquery.slim.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.slim.min.js"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\jquery\\dist\\jquery.slim.min.map",
+      "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.slim.min.map"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\uploads\\profiles\\1001_ebf7e077-de6b-4f68-982b-fad3c703e69b.png",
+      "PackagePath": "staticwebassets\\uploads\\profiles\\1001_ebf7e077-de6b-4f68-982b-fad3c703e69b.png"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\uploads\\profiles\\2_54c73932-630f-4709-9c90-2b924f95d429.png",
+      "PackagePath": "staticwebassets\\uploads\\profiles\\2_54c73932-630f-4709-9c90-2b924f95d429.png"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\uploads\\profiles\\2_84e744c7-5e42-48d2-bfae-0bb992496ba7.png",
+      "PackagePath": "staticwebassets\\uploads\\profiles\\2_84e744c7-5e42-48d2-bfae-0bb992496ba7.png"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\uploads\\profiles\\2_a699991d-45ef-425b-828e-af22fd1ec848.jpg",
+      "PackagePath": "staticwebassets\\uploads\\profiles\\2_a699991d-45ef-425b-828e-af22fd1ec848.jpg"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\uploads\\profiles\\2_b23fcac9-6fd2-4ea8-8083-c96af8ea0c86.png",
+      "PackagePath": "staticwebassets\\uploads\\profiles\\2_b23fcac9-6fd2-4ea8-8083-c96af8ea0c86.png"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\uploads\\profiles\\2_e0495790-f406-43ef-af0f-dcfd3d274fd5.png",
+      "PackagePath": "staticwebassets\\uploads\\profiles\\2_e0495790-f406-43ef-af0f-dcfd3d274fd5.png"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\uploads\\profiles\\3_f8e5321b-ce7f-467e-9ae7-b0c7a3342d25.png",
+      "PackagePath": "staticwebassets\\uploads\\profiles\\3_f8e5321b-ce7f-467e-9ae7-b0c7a3342d25.png"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\uploads\\profiles\\5_9dc6aa24-5082-49f1-be06-1a3e33ffa04c.png",
+      "PackagePath": "staticwebassets\\uploads\\profiles\\5_9dc6aa24-5082-49f1-be06-1a3e33ffa04c.png"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\uploads\\profiles\\67ad87e2-5c4b-4807-aad2-e14a0783fb82.jpg",
+      "PackagePath": "staticwebassets\\uploads\\profiles\\67ad87e2-5c4b-4807-aad2-e14a0783fb82.jpg"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\uploads\\profiles\\8_d2cd21ad-0539-49ac-80d9-4f12311ac347.png",
+      "PackagePath": "staticwebassets\\uploads\\profiles\\8_d2cd21ad-0539-49ac-80d9-4f12311ac347.png"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Desktop\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\uploads\\profiles\\9_281013b1-50c8-4bdb-8391-06611fada74c.png",
+      "PackagePath": "staticwebassets\\uploads\\profiles\\9_281013b1-50c8-4bdb-8391-06611fada74c.png"
+=======
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\Administration.bundle.scp.css",
+      "PackagePath": "staticwebassets\\Administration.bundle.scp.css"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\css\\site.css",
+      "PackagePath": "staticwebassets\\css\\site.css"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\favicon.ico",
+      "PackagePath": "staticwebassets\\favicon.ico"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\js\\site.js",
+      "PackagePath": "staticwebassets\\js\\site.js"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\LICENSE",
+      "PackagePath": "staticwebassets\\lib\\bootstrap"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css.map"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css.map"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css.map"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css.map"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css.map"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css.map"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.css"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.css.map"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.min.css"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css.map"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js.map"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js.map"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js.map"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js.map"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.js"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.js.map"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.min.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.min.js"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.min.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.min.js.map"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\jquery-validation-unobtrusive\\LICENSE.txt",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\LICENSE.txt"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\jquery-validation-unobtrusive\\dist\\jquery.validate.unobtrusive.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\dist\\jquery.validate.unobtrusive.js"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\jquery-validation-unobtrusive\\dist\\jquery.validate.unobtrusive.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\dist\\jquery.validate.unobtrusive.min.js"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\jquery-validation\\LICENSE.md",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\LICENSE.md"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\jquery-validation\\dist\\additional-methods.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\additional-methods.js"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\jquery-validation\\dist\\additional-methods.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\additional-methods.min.js"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\jquery.validate.js"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\jquery.validate.min.js"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\jquery\\LICENSE.txt",
+      "PackagePath": "staticwebassets\\lib\\jquery\\LICENSE.txt"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\jquery\\dist\\jquery.js",
+      "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.js"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\jquery\\dist\\jquery.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.js"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\jquery\\dist\\jquery.min.map",
+      "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.map"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\jquery\\dist\\jquery.slim.js",
+      "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.slim.js"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\jquery\\dist\\jquery.slim.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.slim.min.js"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\lib\\jquery\\dist\\jquery.slim.min.map",
+      "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.slim.min.map"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\uploads\\profiles\\1001_ebf7e077-de6b-4f68-982b-fad3c703e69b.png",
+      "PackagePath": "staticwebassets\\uploads\\profiles\\1001_ebf7e077-de6b-4f68-982b-fad3c703e69b.png"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\uploads\\profiles\\2_65616b44-62a4-416b-896f-0cddda0292b4.png",
+      "PackagePath": "staticwebassets\\uploads\\profiles\\2_65616b44-62a4-416b-896f-0cddda0292b4.png"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\uploads\\profiles\\2_e0495790-f406-43ef-af0f-dcfd3d274fd5.png",
+      "PackagePath": "staticwebassets\\uploads\\profiles\\2_e0495790-f406-43ef-af0f-dcfd3d274fd5.png"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\uploads\\profiles\\3_f8e5321b-ce7f-467e-9ae7-b0c7a3342d25.png",
+      "PackagePath": "staticwebassets\\uploads\\profiles\\3_f8e5321b-ce7f-467e-9ae7-b0c7a3342d25.png"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\uploads\\profiles\\8_d2cd21ad-0539-49ac-80d9-4f12311ac347.png",
+      "PackagePath": "staticwebassets\\uploads\\profiles\\8_d2cd21ad-0539-49ac-80d9-4f12311ac347.png"
+    },
+    {
+      "Id": "C:\\Users\\ranim\\Downloads\\CVAnalyzer-PFE-main\\Administration\\wwwroot\\uploads\\profiles\\9_4f5fa805-f542-412d-bcdc-72cc9d0bf46e.png",
+      "PackagePath": "staticwebassets\\uploads\\profiles\\9_4f5fa805-f542-412d-bcdc-72cc9d0bf46e.png"
+>>>>>>> 364b0a3c7128899c3df393e4339086a493d07ccc
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.Administration.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.Administration.props",
+      "PackagePath": "build\\Administration.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.Administration.props",
+      "PackagePath": "buildMultiTargeting\\Administration.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.Administration.props",
+      "PackagePath": "buildTransitive\\Administration.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

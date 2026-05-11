@@ -1,0 +1,296 @@
+﻿@model List<CvParsing.Models.OffreEmploi>
+
+@{
+    ViewData["Title"] = "Accueil";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Banner Area -->
+<div class="banner-slider-area">
+    <div class="banner-slider owl-carousel owl-theme">
+
+        <div class="banner-item item-bg1">
+            <div class="d-table">
+                <div class="d-table-cell">
+                    <div class="container">
+                        <div class="banner-item-content">
+                            <h1>Construisez votre carrière</h1>
+                            <p>
+                                Donnez un nouvel élan à votre parcours professionnel en rejoignant une entreprise qui valorise vos compétences et vos ambitions.
+                            </p>
+                            <div class="banner-btn">
+                                <a href="/Offre/Index" class="default-btn btn-bg-two border-radius-50">Trouver un emploi</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="banner-item item-bg2">
+            <div class="d-table">
+                <div class="d-table-cell">
+                    <div class="container">
+                        <div class="banner-item-content">
+                            <h1>Unis par la performance</h1>
+                            <p>
+                                Participez à une culture collaborative où l'engagement collectif et le partage d'expertise sont au cœur de la réussite.
+                            </p>
+                            <div class="banner-btn">
+                                <a href="/Offre/Index" class="default-btn btn-bg-two border-radius-50">Rejoindre nos offres</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="banner-item item-bg3">
+            <div class="d-table">
+                <div class="d-table-cell">
+                    <div class="container">
+                        <div class="banner-item-content">
+                            <h1>Un environnement stimulant</h1>
+                            <p>
+                                Intégrez un environnement structuré, dynamique et propice à l'apprentissage, favorisant votre évolution et votre performance.
+                            </p>
+                            <div class="banner-btn">
+                                <a href="/Offre/Index" class="default-btn btn-bg-two border-radius-50">Postuler maintenant</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    @{
+        var departements = (Model ?? new List<CvParsing.Models.OffreEmploi>())
+            .Select(o => (o.Departement).Trim())
+            .Where(d => !string.IsNullOrWhiteSpace(d))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .OrderBy(d => d)
+            .ToList();
+
+        var typesContrat = (Model ?? new List<CvParsing.Models.OffreEmploi>())
+            .Select(o => (o.Type).Trim())
+            .Where(t => !string.IsNullOrWhiteSpace(t))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .OrderBy(t => t)
+            .ToList();
+    }
+
+</div>
+<!-- Banner Area End -->
+
+<!-- Offers Search Bar -->
+<div class="offers-search">
+    <div class="container">
+        <form class="offers-search__bar" method="get" action="/Offre/Search" role="search" aria-label="Recherche offre d'emploi">
+
+            <div class="offers-search__field offers-search__field--text">
+                <i class="bx bx-search offers-search__icon" aria-hidden="true"></i>
+                <label class="visually-hidden" for="jobSearchQ">Recherche</label>
+                <input id="jobSearchQ"
+                       name="q"
+                       type="search"
+                       class="offers-search__input"
+                       placeholder="Chercher une offre d'emploi..."
+                       autocomplete="off"
+                       spellcheck="false" />
+            </div>
+
+            <div class="offers-search__field">
+                <i class="bx bx-map offers-search__icon" aria-hidden="true"></i>
+                <label class="visually-hidden" for="jobSearchDept">Département</label>
+                <select id="jobSearchDept" name="departement" class="offers-search__select">
+                    <option value="">Département</option>
+                    @foreach (var d in departements)
+                    {
+                        <option value="@d">@d</option>
+                    }
+                </select>
+            </div>
+
+            <div class="offers-search__field">
+                <i class="bx bx-briefcase offers-search__icon" aria-hidden="true"></i>
+                <label class="visually-hidden" for="jobSearchType">Type de contrat</label>
+                <select id="jobSearchType" name="typeContrat" class="offers-search__select">
+                    <option value="">Type de contrat</option>
+                    @foreach (var t in typesContrat)
+                    {
+                        <option value="@t">@t</option>
+                    }
+                </select>
+            </div>
+
+            <button type="submit" class="offers-search__btn">
+                <i class="bx bx-search" aria-hidden="true"></i>
+                <span>Rechercher</span>
+            </button>
+
+        </form>
+    </div>
+</div>
+<!-- Offers Search Bar End -->
+
+<!-- About Area -->
+<div class="about-area ptb-100">
+    <div class="container">
+        <div class="row align-items-center justify-content-center">
+            <div class="col-lg-6">
+                <div class="about-content mr-20">
+                    <div class="section-title">
+                        <span class="sp-color2">75 ans d'expérience</span>
+                        <h2>Pourquoi devenir Agent d'assurances chez ASTREE ?</h2>
+                        <p>
+                            Chez ASTREE, nous croyons que chaque agent d'assurances est un acteur essentiel qui contribue à protéger et à sécuriser les projets de vie de nos clients.
+                        </p>
+                        <p>Si vous êtes passionné par les relations humaines, désireux de relever des défis et que vous cherchez à vous épanouir dans une carrière dynamique, ASTREE est l'endroit où vous pouvez faire la différence.</p>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-6">
+                            <div class="about-content-card">
+                                <i class="fas fa-headset"></i>
+                                <h3>Un accompagnement permanent</h3>
+                                <p>Bénéficiez d'une assistance personnalisée et d'une présence continue pour garantir votre tranquillité</p>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 col-6">
+                            <div class="about-content-card">
+                                <i class="fas fa-graduation-cap"></i>
+                                <h3>Une formation sur mesure</h3>
+                                <p>Bénéficiez d'un soutien adapté et d'un réseau fiable pour garantir votre réussite.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="about-img">
+                    <img src="@Url.Content("~/images/about/about-img1.jpg")" alt="Équipe ASTREE">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- About Area End -->
+
+<!-- Services Area -->
+<section class="services-area pt-100 pb-70">
+    <div class="container">
+        <div class="section-title text-center">
+            <h2>Une diversité de départements à votre service</h2>
+            <p class="margin-auto">
+                Explorez une large gamme de métiers et de spécialités au sein de nos différents départements, offrant à chacun l'opportunité de trouver sa voie et de s'épanouir professionnellement.
+            </p>
+        </div>
+        <div class="row pt-45">
+            <div class="col-lg-3 col-sm-6">
+                <div class="services-card h-100">
+                    <i class="flaticon-consultant"></i>
+                    <h3><a href="#">Support et Gestion</a></h3>
+                    <p>Soutenez les activités de l'entreprise à travers la gestion des ressources humaines, des finances et des fonctions stratégiques.</p>
+                    <p>RH, Finance, Comptabilité, Audit, Juridique</p>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-sm-6">
+                <div class="services-card h-100">
+                    <i class="flaticon-consulting"></i>
+                    <h3><a href="#">Technique et Assurance</a></h3>
+                    <p>Intervenez au cœur du métier de l'assurance en analysant les risques, en gérant les contrats et en assurant le traitement des sinistres.</p>
+                    <p>Assurances entreprises, Auto & particuliers, Réassurance, Indemnisation</p>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-sm-6">
+                <div class="services-card h-100">
+                    <i class="flaticon-web-development"></i>
+                    <h3><a href="#">Systèmes d'Information et Digital</a></h3>
+                    <p>Contribuez à la transformation digitale en développant des solutions innovantes et en assurant la performance des systèmes informatiques.</p>
+                    <p>Développement, Infrastructure, Production IT</p>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-sm-6">
+                <div class="services-card h-100">
+                    <i class="flaticon-stats"></i>
+                    <h3><a href="#">Commercial et Développement</a></h3>
+                    <p>Participez à la croissance de l'entreprise en contribuant à la promotion des offres, au développement des produits et à la relation client.</p>
+                    <p>Marketing, Animation commerciale, Offres, Agences</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="service-shape">
+        <img src="@Url.Content("~/images/shape/service-shape1.png")" alt="Forme décorative">
+    </div>
+</section>
+<!-- Services Area End -->
+
+<!-- Brand Area -->
+<div class="brand-area ptb-100">
+    <div class="container">
+        <div class="section-title text-center mb-5">
+            <h2>Nos Partenaires</h2>
+        </div>
+        <div class="brand-slider owl-carousel owl-theme">
+            <div class="brand-item text-center">
+                <img src="@Url.Content("~/images/brand-logo/brand-logo1.png")" class="brand-logo-one" alt="PartnerRe">
+                <p class="brand-name">PartnerRe</p>
+            </div>
+            <div class="brand-item text-center">
+                <img src="@Url.Content("~/images/brand-logo/brand-logo2.png")" class="brand-logo-one" alt="OdysseyRe">
+                <p class="brand-name">OdysseyRe</p>
+            </div>
+            <div class="brand-item text-center">
+                <img src="@Url.Content("~/images/brand-logo/brand-logo3.png")" class="brand-logo-one" alt="Swiss Re">
+                <p class="brand-name">Swiss Re</p>
+            </div>
+            <div class="brand-item text-center">
+                <img src="@Url.Content("~/images/brand-logo/brand-logo4.png")" class="brand-logo-one" alt="MAPFRE">
+                <p class="brand-name">MAPFRE</p>
+            </div>
+            <div class="brand-item text-center">
+                <img src="@Url.Content("~/images/brand-logo/brand-logo5.png")" class="brand-logo-one" alt="AffricaRe">
+                <p class="brand-name">AffricaRe</p>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Brand Area End -->
+
+<!-- Blog Area -->
+<div class="blog-area pt-100 pb-70">
+    <div class="container">
+        <div class="section-title text-center">
+            <h2>Nos Dernières Offres d'Emploi</h2>
+        </div>
+        <div class="row pt-45">
+            @foreach (var item in (Model ?? new List<CvParsing.Models.OffreEmploi>()))
+            {
+                <div class="col-lg-4 col-md-6">
+                    <div class="blog-card">
+                        <div class="blog-img">
+                            <a href="/Offre/Details/@item.Id">
+                                <img src="@Url.Content("~/images/blog/blog-img1.jpg")" alt="Offre @item.Titre">
+                            </a>
+                            <div class="blog-tag">
+                                <h3>@item.DateCreation.Year</h3>
+                            </div>
+                        </div>
+                        <div class="content">
+                            <h3><a href="/Offre/Details/@item.Id">@item.Titre</a></h3>
+                            <a href="/Offre/Details/@item.Id" class="read-btn">Voir plus</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<!-- Blog Area End -->

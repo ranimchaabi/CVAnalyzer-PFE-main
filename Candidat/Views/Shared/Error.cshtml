@@ -1,0 +1,25 @@
+﻿@model ErrorViewModel
+@{
+    ViewData["Title"] = "Erreur";
+}
+
+<h1 class="text-danger">Erreur.</h1>
+<h2 class="text-danger">Une erreur s'est produite lors du traitement de votre demande.</h2>
+
+@if (Model.ShowRequestId)
+{
+    <p>
+        <strong>ID de requ�te :</strong> <code>@Model.RequestId</code>
+    </p>
+}
+
+<h3>Mode d�veloppement</h3>
+<p>
+    Le passage � l�environnement <strong>Development</strong> affichera des informations plus d�taill�es sur l�erreur.
+</p>
+<p>
+    <strong>L�environnement Development ne doit pas �tre activ� en production.</strong>
+    Il peut exposer des informations sensibles. Pour le d�bogage local, d�finissez la variable
+    <strong>ASPNETCORE_ENVIRONMENT</strong> sur <strong>Development</strong> puis red�marrez l�application.
+</p>
+

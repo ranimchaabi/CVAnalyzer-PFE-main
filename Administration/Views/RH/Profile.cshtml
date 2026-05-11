@@ -1,0 +1,573 @@
+@model Administration.ViewModels.ProfileEditViewModel
+@{
+    ViewData["Title"] = "Mon Profil";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .profile-container {
+        background: #f8fafc;
+        min-height: calc(100vh - 100px);
+        padding: 32px;
+    }
+
+    .profile-header {
+        margin-bottom: 32px;
+    }
+
+    .profile-header h4 {
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0;
+    }
+
+    .breadcrumb-custom {
+        color: #64748b;
+        font-size: 14px;
+        margin: 0;
+    }
+
+    .breadcrumb-custom a {
+        color: #64748b;
+        text-decoration: none;
+    }
+
+    .profile-wrapper {
+        display: grid;
+        grid-template-columns: 380px 1fr;
+        gap: 24px;
+        align-items: start;
+    }
+
+    /* Left Sidebar Card */
+    .profile-sidebar {
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .profile-banner {
+        height: 140px;
+        background: linear-gradient(135deg, #f5a623 0%, #f7931e 25%, #ff6b6b 50%, #4ecdc4 100%);
+        position: relative;
+    }
+
+    .profile-avatar-wrapper {
+        position: relative;
+        margin-top: -60px;
+        padding: 0 24px;
+    }
+
+    .profile-avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        border: 4px solid white;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 48px;
+        font-weight: 700;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .profile-name-section {
+        padding: 16px 24px 24px;
+        text-align: center;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .profile-name {
+        font-size: 20px;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 12px 0 4px;
+    }
+
+    .profile-email {
+        color: #64748b;
+        font-size: 14px;
+    }
+
+    .personal-info {
+        padding: 24px;
+    }
+
+    .personal-info-title {
+        font-size: 16px;
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 20px;
+    }
+
+    .info-row {
+        display: flex;
+        margin-bottom: 16px;
+        font-size: 14px;
+    }
+
+    .info-label {
+        font-weight: 600;
+        color: #475569;
+        min-width: 120px;
+    }
+
+    .info-value {
+        color: #64748b;
+        flex: 1;
+    }
+
+    .info-value.bio {
+        line-height: 1.6;
+    }
+
+    /* Main Content */
+    .profile-main {
+        background: white;
+        border-radius: 16px;
+        padding: 32px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .profile-tabs {
+        display: flex;
+        gap: 8px;
+        border-bottom: 1px solid #e2e8f0;
+        margin-bottom: 32px;
+        padding-bottom: 16px;
+    }
+
+    .tab-item {
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.2s;
+        color: #64748b;
+        background: transparent;
+        border: none;
+    }
+
+    .tab-item.active {
+        background: #eff6ff;
+        color: #3b82f6;
+    }
+
+    .tab-item:hover:not(.active) {
+        background: #f1f5f9;
+    }
+
+    .form-section-title {
+        font-size: 14px;
+        font-weight: 600;
+        color: #1e293b;
+        margin-bottom: 20px;
+    }
+
+    .profile-image-section {
+        margin-bottom: 32px;
+    }
+
+    .profile-image-label {
+        font-size: 14px;
+        font-weight: 600;
+        color: #1e293b;
+        margin-bottom: 12px;
+        display: block;
+    }
+
+    .image-upload-wrapper {
+        position: relative;
+        display: inline-block;
+    }
+
+    .image-upload {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background: #e2e8f0;
+        border: 2px solid #3b82f6;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .image-upload i {
+        font-size: 40px;
+        color: #94a3b8;
+    }
+
+    .image-upload-camera {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 32px;
+        height: 32px;
+        background: #3b82f6;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        border: 2px solid white;
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group.full-width {
+        grid-column: 1 / -1;
+    }
+
+    .form-label {
+        display: block;
+        font-size: 14px;
+        font-weight: 600;
+        color: #1e293b;
+        margin-bottom: 8px;
+    }
+
+    .form-label .required {
+        color: #ef4444;
+        margin-left: 2px;
+    }
+
+    .form-control-custom {
+        width: 100%;
+        padding: 10px 14px;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 14px;
+        transition: all 0.2s;
+        background: white;
+    }
+
+    .form-control-custom:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .password-input-wrapper {
+        position: relative;
+    }
+
+    .password-toggle-btn {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: #94a3b8;
+        cursor: pointer;
+        font-size: 16px;
+        padding: 4px;
+    }
+
+    .password-toggle-btn:hover {
+        color: #64748b;
+    }
+
+    .password-input-wrapper .form-control-custom {
+        padding-right: 40px;
+    }
+
+    .form-control-custom::placeholder {
+        color: #94a3b8;
+    }
+
+    textarea.form-control-custom {
+        min-height: 100px;
+        resize: vertical;
+    }
+
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 32px;
+        padding-top: 24px;
+        border-top: 1px solid #e2e8f0;
+    }
+
+    .btn-cancel {
+        padding: 10px 24px;
+        border: 1px solid #dc2626;
+        background: white;
+        color: #dc2626;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .btn-cancel:hover {
+        background: #fef2f2;
+    }
+
+    .btn-save {
+        padding: 10px 32px;
+        border: none;
+        background: #2563eb;
+        color: white;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .btn-save:hover {
+        background: #1d4ed8;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    }
+
+    @@media (max-width: 1024px) {
+        .profile-wrapper {
+            grid-template-columns: 1fr;
+        }
+
+        .profile-sidebar {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+    }
+
+    @@media (max-width: 768px) {
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .profile-container {
+            padding: 16px;
+        }
+
+        .profile-main {
+            padding: 20px;
+        }
+    }
+</style>
+
+<div class="profile-container">
+    <!-- Header -->
+    <div class="profile-header d-flex justify-content-between align-items-center">
+        <h4>Mon profil</h4>
+        <div class="breadcrumb-custom">
+            <a asp-controller="RH" asp-action="Dashboard">Tableau de bord</a> / Mon profil
+        </div>
+    </div>
+
+    <div class="profile-wrapper">
+        <!-- Left Sidebar -->
+        <div class="profile-sidebar">
+            <div class="profile-banner"></div>
+            <div class="profile-avatar-wrapper">
+                <div class="profile-avatar" id="profileAvatar">
+                    @if (!string.IsNullOrEmpty(Model.CurrentPhotoUrl))
+                    {
+                        <img src="@Model.CurrentPhotoUrl" alt="Photo de profil" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;" />
+                    }
+                    else
+                    {
+                        @(Model.NomUtilisateur.Length >= 2 ? Model.NomUtilisateur[..2].ToUpper() : Model.NomUtilisateur.ToUpper())
+                    }
+                </div>
+            </div>
+            <div class="profile-name-section">
+                <div class="profile-name">@Model.NomUtilisateur</div>
+                <div class="profile-email">@Model.Email</div>
+            </div>
+            <div class="personal-info">
+                <div class="personal-info-title">Informations personnelles</div>
+                
+                <div class="info-row">
+                    <div class="info-label">Nom</div>
+                    <div class="info-value">: @Model.NomUtilisateur</div>
+                </div>
+                
+                <div class="info-row">
+                    <div class="info-label">Email</div>
+                    <div class="info-value">: @Model.Email</div>
+                </div>
+                
+                
+                
+            
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="profile-main">
+            <!-- Tabs -->
+            <div class="profile-tabs">
+                <button type="button" class="tab-item active" onclick="showTab('profile')">Modifier le profil</button>
+                <button type="button" class="tab-item" onclick="showTab('password')">Changer le mot de passe</button>
+            </div>
+
+            <form method="post" enctype="multipart/form-data" id="profileForm">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="CurrentPhotoUrl" />
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2 mb-4"></div>
+
+                <div id="profileSection">
+                <!-- Profile Image -->
+                <div class="profile-image-section">
+                    <label class="profile-image-label">Photo de profil</label>
+                    <div class="image-upload-wrapper">
+                        <div class="image-upload" onclick="document.getElementById('rhProfileImage').click()">
+                            @if (!string.IsNullOrEmpty(Model.CurrentPhotoUrl))
+                            {
+                                <img src="@Model.CurrentPhotoUrl" alt="Photo" style="width: 100%; height: 100%; object-fit: cover;" />
+                            }
+                            else
+                            {
+                                <i class="bi bi-person"></i>
+                            }
+                        </div>
+                        <div class="image-upload-camera">
+                            <i class="bi bi-camera" style="font-size: 14px;"></i>
+                        </div>
+                        <input type="file" id="rhProfileImage" asp-for="ProfileImage" style="display: none;" accept="image/*" />
+                    </div>
+                </div>
+
+                <!-- Form Fields -->
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Nom d'utilisateur <span class="required">*</span></label>
+                        <input type="text" asp-for="NomUtilisateur" class="form-control-custom" placeholder="Nom d'utilisateur" required />
+                        <span asp-validation-for="NomUtilisateur" class="text-danger small"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Email <span class="required">*</span></label>
+                        <input type="email" asp-for="Email" class="form-control-custom" placeholder="Adresse email" />
+                        <span asp-validation-for="Email" class="text-danger small"></span>
+                    </div>
+                </div>
+                </div>
+
+                <div id="passwordSection" style="display: none;">
+                    <div class="form-section-title">Changer le mot de passe</div>
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label class="form-label">Mot de passe actuel <span class="required">*</span></label>
+                            <div class="password-input-wrapper">
+                                <input type="password" asp-for="CurrentPassword" id="currentPassword" class="form-control-custom" placeholder="Entrez votre mot de passe actuel" />
+                                <button type="button" class="password-toggle-btn" onclick="togglePassword('currentPassword', 'currentPasswordIcon')">
+                                    <i id="currentPasswordIcon" class="bi bi-eye"></i>
+                                </button>
+                            </div>
+                            <span asp-validation-for="CurrentPassword" class="text-danger small"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Nouveau mot de passe</label>
+                            <div class="password-input-wrapper">
+                                <input type="password" asp-for="NewPassword" id="newPassword" class="form-control-custom" placeholder="Entrez le nouveau mot de passe" />
+                                <button type="button" class="password-toggle-btn" onclick="togglePassword('newPassword', 'newPasswordIcon')">
+                                    <i id="newPasswordIcon" class="bi bi-eye"></i>
+                                </button>
+                            </div>
+                            <span asp-validation-for="NewPassword" class="text-danger small"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Confirmer le mot de passe</label>
+                            <div class="password-input-wrapper">
+                                <input type="password" asp-for="ConfirmNewPassword" id="confirmNewPassword" class="form-control-custom" placeholder="Confirmez le nouveau mot de passe" />
+                                <button type="button" class="password-toggle-btn" onclick="togglePassword('confirmNewPassword', 'confirmNewPasswordIcon')">
+                                    <i id="confirmNewPasswordIcon" class="bi bi-eye"></i>
+                                </button>
+                            </div>
+                            <span asp-validation-for="ConfirmNewPassword" class="text-danger small"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="form-actions">
+                    <a asp-controller="RH" asp-action="Dashboard" class="btn-cancel">Annuler</a>
+                    <button type="submit" class="btn-save">Enregistrer les modifications</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        // Password Toggle Function
+        function togglePassword(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('bi-eye');
+                icon.classList.add('bi-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('bi-eye-slash');
+                icon.classList.add('bi-eye');
+            }
+        }
+
+        function showTab(tab) {
+            const profileSection = document.getElementById('profileSection');
+            const passwordSection = document.getElementById('passwordSection');
+            const tabs = document.querySelectorAll('.tab-item');
+            tabs.forEach(t => t.classList.remove('active'));
+            if (tab === 'profile') {
+                profileSection.style.display = 'block';
+                passwordSection.style.display = 'none';
+                tabs[0].classList.add('active');
+            } else {
+                profileSection.style.display = 'none';
+                passwordSection.style.display = 'block';
+                tabs[1].classList.add('active');
+            }
+        }
+
+        document.getElementById('rhProfileImage').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(ev) {
+                    const upload = document.querySelector('.image-upload');
+                    upload.innerHTML = `<img src="${ev.target.result}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">`;
+                    upload.innerHTML += `<div class="image-upload-camera"><i class="bi bi-camera" style="font-size: 14px;"></i></div>`;
+                    upload.onclick = function() { document.getElementById('rhProfileImage').click(); };
+                };
+                reader.readAsDataURL(file);
+                
+                // Also update the sidebar avatar preview
+                const sidebarAvatar = document.getElementById('profileAvatar');
+                if (sidebarAvatar) {
+                    const sidebarReader = new FileReader();
+                    sidebarReader.onload = function(e) {
+                        sidebarAvatar.innerHTML = `<img src="${e.target.result}" alt="Photo de profil" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;" />`;
+                    };
+                    sidebarReader.readAsDataURL(file);
+                }
+            }
+        });
+    </script>
+}

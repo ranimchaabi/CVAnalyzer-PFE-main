@@ -1,0 +1,36 @@
+@model List<Administration.Models.Notification>
+@{
+    ViewData["Title"] = "Notifications";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card shadow-sm">
+    <div class="card-header bg-white">
+        <h5 class="mb-0">Notifications</h5>
+    </div>
+    <div class="card-body p-0">
+        @if (!Model.Any())
+        {
+            <div class="p-4 text-muted">Aucune notification.</div>
+        }
+        else
+        {
+            <div class="list-group list-group-flush">
+                @foreach (var n in Model)
+                {
+                    <form asp-action="Open" method="post" class="list-group-item list-group-item-action">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@n.Id" />
+                        <button type="submit" class="btn btn-link text-start w-100 p-0 text-decoration-none">
+                            <div class="d-flex justify-content-between">
+                                <strong class="@(n.IsRead ? "text-muted" : "text-dark")">@n.Title</strong>
+                                <small class="text-muted">@n.CreatedAt.ToString("dd/MM/yyyy HH:mm")</small>
+                            </div>
+                            <div class="text-muted">@n.Message</div>
+                        </button>
+                    </form>
+                }
+            </div>
+        }
+    </div>
+</div>

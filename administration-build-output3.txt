@@ -1,0 +1,34 @@
+﻿  Determining projects to restore...
+C:\Users\ranim\Desktop\CVAnalyzer-PFE-main\Administration\Administration.csproj : warning NU1902: Package 'MailKit' 4.12.1 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-9j88-vvj5-vhgr
+  All projects are up-to-date for restore.
+C:\Users\ranim\Desktop\CVAnalyzer-PFE-main\Administration\Administration.csproj : warning NU1902: Package 'MailKit' 4.12.1 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-9j88-vvj5-vhgr
+C:\Users\ranim\Desktop\CVAnalyzer-PFE-main\Administration\Controllers\AdminController.cs(64,34): warning CS8602: Dereference of a possibly null reference. [C:\Users\ranim\Desktop\CVAnalyzer-PFE-main\Administration\Administration.csproj]
+C:\Users\ranim\Desktop\CVAnalyzer-PFE-main\Administration\Views\Shared\_Layout.cshtml(241,40): warning CS8602: Dereference of a possibly null reference. [C:\Users\ranim\Desktop\CVAnalyzer-PFE-main\Administration\Administration.csproj]
+C:\Users\ranim\Desktop\CVAnalyzer-PFE-main\Administration\Views\Shared\_Layout.cshtml(245,40): warning CS8602: Dereference of a possibly null reference. [C:\Users\ranim\Desktop\CVAnalyzer-PFE-main\Administration\Administration.csproj]
+C:\Users\ranim\Desktop\CVAnalyzer-PFE-main\Administration\Views\Shared\_Layout.cshtml(249,40): warning CS8602: Dereference of a possibly null reference. [C:\Users\ranim\Desktop\CVAnalyzer-PFE-main\Administration\Administration.csproj]
+C:\Users\ranim\Desktop\CVAnalyzer-PFE-main\Administration\Views\Shared\_Layout.cshtml(253,40): warning CS8602: Dereference of a possibly null reference. [C:\Users\ranim\Desktop\CVAnalyzer-PFE-main\Administration\Administration.csproj]
+C:\Users\ranim\Desktop\CVAnalyzer-PFE-main\Administration\Controllers\AdminController.cs(387,29): warning CS8602: Dereference of a possibly null reference. [C:\Users\ranim\Desktop\CVAnalyzer-PFE-main\Administration\Administration.csproj]
+C:\Users\ranim\Desktop\CVAnalyzer-PFE-main\Administration\Controllers\AdminController.cs(437,33): warning CS8602: Dereference of a possibly null reference. [C:\Users\ranim\Desktop\CVAnalyzer-PFE-main\Administration\Administration.csproj]
+C:\Users\ranim\Desktop\CVAnalyzer-PFE-main\Administration\Controllers\AdminController.cs(444,33): warning CS8602: Dereference of a possibly null reference. [C:\Users\ranim\Desktop\CVAnalyzer-PFE-main\Administration\Administration.csproj]
+C:\Users\ranim\Desktop\CVAnalyzer-PFE-main\Administration\Controllers\AdminController.cs(471,29): warning CS8602: Dereference of a possibly null reference. [C:\Users\ranim\Desktop\CVAnalyzer-PFE-main\Administration\Administration.csproj]
+C:\Users\ranim\Desktop\CVAnalyzer-PFE-main\Administration\Controllers\AdminController.cs(478,29): warning CS8602: Dereference of a possibly null reference. [C:\Users\ranim\Desktop\CVAnalyzer-PFE-main\Administration\Administration.csproj]
+  Administration -> C:\Users\ranim\Desktop\CVAnalyzer-PFE-main\Administration\Administration\bin2\Administration.dll
+
+Build succeeded.
+
+C:\Users\ranim\Desktop\CVAnalyzer-PFE-main\Administration\Administration.csproj : warning NU1902: Package 'MailKit' 4.12.1 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-9j88-vvj5-vhgr
+C:\Users\ranim\Desktop\CVAnalyzer-PFE-main\Administration\Administration.csproj : warning NU1902: Package 'MailKit' 4.12.1 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-9j88-vvj5-vhgr
+C:\Users\ranim\Desktop\CVAnalyzer-PFE-main\Administration\Controllers\AdminController.cs(64,34): warning CS8602: Dereference of a possibly null reference. [C:\Users\ranim\Desktop\CVAnalyzer-PFE-main\Administration\Administration.csproj]
+C:\Users\ranim\Desktop\CVAnalyzer-PFE-main\Administration\Views\Shared\_Layout.cshtml(241,40): warning CS8602: Dereference of a possibly null reference. [C:\Users\ranim\Desktop\CVAnalyzer-PFE-main\Administration\Administration.csproj]
+C:\Users\ranim\Desktop\CVAnalyzer-PFE-main\Administration\Views\Shared\_Layout.cshtml(245,40): warning CS8602: Dereference of a possibly null reference. [C:\Users\ranim\Desktop\CVAnalyzer-PFE-main\Administration\Administration.csproj]
+C:\Users\ranim\Desktop\CVAnalyzer-PFE-main\Administration\Views\Shared\_Layout.cshtml(249,40): warning CS8602: Dereference of a possibly null reference. [C:\Users\ranim\Desktop\CVAnalyzer-PFE-main\Administration\Administration.csproj]
+C:\Users\ranim\Desktop\CVAnalyzer-PFE-main\Administration\Views\Shared\_Layout.cshtml(253,40): warning CS8602: Dereference of a possibly null reference. [C:\Users\ranim\Desktop\CVAnalyzer-PFE-main\Administration\Administration.csproj]
+C:\Users\ranim\Desktop\CVAnalyzer-PFE-main\Administration\Controllers\AdminController.cs(387,29): warning CS8602: Dereference of a possibly null reference. [C:\Users\ranim\Desktop\CVAnalyzer-PFE-main\Administration\Administration.csproj]
+C:\Users\ranim\Desktop\CVAnalyzer-PFE-main\Administration\Controllers\AdminController.cs(437,33): warning CS8602: Dereference of a possibly null reference. [C:\Users\ranim\Desktop\CVAnalyzer-PFE-main\Administration\Administration.csproj]
+C:\Users\ranim\Desktop\CVAnalyzer-PFE-main\Administration\Controllers\AdminController.cs(444,33): warning CS8602: Dereference of a possibly null reference. [C:\Users\ranim\Desktop\CVAnalyzer-PFE-main\Administration\Administration.csproj]
+C:\Users\ranim\Desktop\CVAnalyzer-PFE-main\Administration\Controllers\AdminController.cs(471,29): warning CS8602: Dereference of a possibly null reference. [C:\Users\ranim\Desktop\CVAnalyzer-PFE-main\Administration\Administration.csproj]
+C:\Users\ranim\Desktop\CVAnalyzer-PFE-main\Administration\Controllers\AdminController.cs(478,29): warning CS8602: Dereference of a possibly null reference. [C:\Users\ranim\Desktop\CVAnalyzer-PFE-main\Administration\Administration.csproj]
+    12 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:17.88

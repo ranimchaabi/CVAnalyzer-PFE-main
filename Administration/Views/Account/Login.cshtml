@@ -1,0 +1,65 @@
+@model LoginViewModel
+@{
+    Layout = "_LoginLayout";
+    ViewData["Title"] = "Sign In";
+}
+
+<style>
+    .login-password-wrap { position: relative; }
+    .login-password-wrap .form-control { padding-right: 2.75rem; }
+    .login-password-toggle {
+        position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%);
+        background: none; border: none; color: #6b7280; cursor: pointer; padding: 0.25rem;
+        font-size: 1.1rem;
+    }
+    .login-password-toggle:hover { color: #374151; }
+</style>
+
+<div class="card p-4">
+    <h2 class="text-center mb-2">Connexion</h2>
+    <p class="text-center text-muted">Bonjour!</p>
+
+    <form method="post">
+        @Html.AntiForgeryToken()
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+        <div class="mb-3">
+            <label class="form-label">Nom Utilisateur</label>
+            <input asp-for="NomUtilisateur" class="form-control" placeholder="Nom utilisateur" autocomplete="username">
+            <span asp-validation-for="NomUtilisateur" class="text-danger small"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Mot de passe</label>
+            <div class="login-password-wrap">
+                <input asp-for="MotPasse" type="password" id="loginMotPasse" class="form-control" placeholder="Mot de passe" autocomplete="current-password">
+                <button type="button" class="login-password-toggle" onclick="toggleLoginPassword()" aria-label="Afficher le mot de passe">
+                    <i id="loginPasswordIcon" class="bi bi-eye"></i>
+                </button>
+            </div>
+            <span asp-validation-for="MotPasse" class="text-danger small"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">Connexion</button>
+        <div class="mt-3 text-center">
+            <a asp-action="ForgotPassword">Mot de passe oublié ?</a>
+        </div>
+    </form>
+</div>
+
+<script>
+    function toggleLoginPassword() {
+        var input = document.getElementById('loginMotPasse');
+        var icon = document.getElementById('loginPasswordIcon');
+        if (!input || !icon) return;
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.remove('bi-eye');
+            icon.classList.add('bi-eye-slash');
+        } else {
+            input.type = 'password';
+            icon.classList.remove('bi-eye-slash');
+            icon.classList.add('bi-eye');
+        }
+    }
+</script>

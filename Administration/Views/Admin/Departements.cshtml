@@ -1,0 +1,330 @@
+@model List<Administration.Models.Departement>
+@{
+    ViewData["Title"] = "Gestion des départements";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var search = ViewBag.Search as string ?? "";
+    var directors = ViewBag.Directeurs as List<Administration.Models.Utilisateur> ?? new List<Administration.Models.Utilisateur>();
+}
+
+<style>
+    .section-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        overflow: hidden;
+    }
+
+    .section-header {
+        padding: 24px;
+        border-bottom: 1px solid #e5e7eb;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+    }
+
+    .section-title {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #0f172a;
+        margin: 0;
+    }
+
+    .section-title i {
+        font-size: 1.35rem;
+        color: #4f46e5;
+    }
+
+    .search-form {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex: 1;
+        min-width: 240px;
+    }
+
+    .search-input {
+        width: 100%;
+        padding: 12px 16px;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        background: #f8fafc;
+        color: #0f172a;
+    }
+
+    .table-card {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .table-card thead th {
+        background: #f8fafc;
+        color: #475569;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.1em;
+        font-weight: 700;
+        padding: 16px;
+        border: none;
+        text-align: left;
+    }
+
+    .table-card tbody td {
+        padding: 16px;
+        border-top: 1px solid #f1f5f9;
+        vertical-align: middle;
+        font-size: 0.95rem;
+        color: #334155;
+    }
+
+    .table-card tbody tr:hover {
+        background: #f8fafc;
+    }
+
+    .badge-count {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 6px 12px;
+        border-radius: 999px;
+        background: #eff6ff;
+        color: #2563eb;
+        font-size: 0.8rem;
+        font-weight: 700;
+    }
+
+    .btn-action-sm {
+        width: 34px;
+        height: 34px;
+        border-radius: 10px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        margin-right: 6px;
+        font-size: 1rem;
+    }
+
+    .btn-view { background: #eff6ff; color: #3b82f6; }
+    .btn-edit { background: #dcfce7; color: #15803d; }
+    .btn-delete { background: #fee2e2; color: #b91c1c; }
+
+    .btn-action-sm:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+    }
+
+    .empty-state {
+        padding: 48px;
+        text-align: center;
+        color: #64748b;
+    }
+
+    .empty-state i {
+        font-size: 40px;
+        margin-bottom: 16px;
+    }
+
+    .badge-active {
+        background: #dcfce7;
+        color: #166534;
+        padding: 6px 12px;
+        border-radius: 999px;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+</style>
+
+<div class="section-card">
+    <div class="section-header">
+        <div>
+            <h2 class="section-title"><i class="bi bi-building"></i> Gestion des départements</h2>
+            <p style="margin: 0.5rem 0 0; color: #64748b;">Liste des départements et accès aux directeurs rattachés.</p>
+        </div>
+        <div class="search-form">
+            <input id="departmentSearch" type="text" value="@search" placeholder="Rechercher un département" class="search-input" />
+        </div>
+    </div>
+
+    <div class="section-header" style="padding-top: 0; padding-bottom: 0;">
+        <button id="toggleCreateDepartment" class="btn btn-primary" type="button">
+            <i class="bi bi-plus-lg"></i> Ajouter un département
+        </button>
+    </div>
+
+    <div id="createDepartmentCard" class="card create-card" style="display:none; margin: 0 24px 24px;">
+        <div class="card-body" style="padding: 20px; background: #f8fafc; border-radius: 16px; border: 1px solid #e2e8f0;">
+            <h3 style="margin-top:0; margin-bottom: 12px;">Nouveau département</h3>
+            <div class="mb-3">
+                <label for="newDepartmentName" class="form-label">Nom du département</label>
+                <input id="newDepartmentName" type="text" class="form-control" placeholder="Ex: Finance" />
+            </div>
+            <div class="mb-3">
+                <label for="newDepartmentDesc" class="form-label">Description (optionnelle)</label>
+                <textarea id="newDepartmentDesc" class="form-control" rows="2" placeholder="Description courte"></textarea>
+            </div>
+            <div style="display:flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+                <button id="createDepartmentBtn" type="button" class="btn btn-success">Créer</button>
+                <button id="cancelCreateDepartment" type="button" class="btn btn-outline-secondary">Annuler</button>
+                <span id="createDepartmentMessage" style="margin-left: auto; color: #dc2626;"></span>
+            </div>
+        </div>
+    </div>
+
+    @if (Model == null || !Model.Any())
+    {
+        <div class="empty-state">
+            <i class="bi bi-building"></i>
+            <div>Aucun département trouvé.</div>
+        </div>
+    }
+    else
+    {
+        <div style="overflow-x: auto;">
+            <table id="departementsTable" class="table-card" style="width: 100%;">
+                <thead>
+                    <tr>
+                        <th>Département</th>
+                        <th>Description</th>
+                        <th>Directeurs</th>
+                        <th>Date de création</th>
+                        <th style="text-align: right;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var departement in Model)
+                    {
+                        var count = directors.Count(d => d.Departements?
+                            .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                            .Select(x => x.Trim())
+                            .Any(x => string.Equals(x, departement.Nom, StringComparison.OrdinalIgnoreCase)) ?? false);
+                        <tr>
+                            <td style="min-width: 220px; font-weight: 600;">@departement.Nom</td>
+                            <td>@(string.IsNullOrWhiteSpace(departement.Description) ? "—" : departement.Description)</td>
+                            <td><span class="badge-count">@count</span></td>
+                            <td>@departement.DateCreation.ToString("dd MMM yyyy")</td>
+                            <td style="text-align: right; white-space: nowrap;">
+                                <a asp-action="DepartmentDetails" asp-route-id="@departement.Id" class="btn-action-sm btn-view" title="Voir directeurs"><i class="bi bi-eye"></i></a>
+                                <a asp-action="EditDepartement" asp-route-id="@departement.Id" class="btn-action-sm btn-edit" title="Modifier"><i class="bi bi-pencil-square"></i></a>
+                                <form asp-action="DeleteDepartement" method="post" style="display:inline-block;" onsubmit="return confirm('Supprimer ce département ? Cette action est irréversible.');">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@departement.Id" />
+                                    <button type="submit" class="btn-action-sm btn-delete" title="Supprimer"><i class="bi bi-trash"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div id="noResultsMessage" class="empty-state" style="display:none; margin-top: 16px;">
+                <i class="bi bi-search"></i>
+                <div>Aucun département ne correspond à votre recherche.</div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        const departmentSearchInput = document.getElementById('departmentSearch');
+        const departmentTable = document.getElementById('departementsTable');
+        const noResultsMessage = document.getElementById('noResultsMessage');
+        const createDepartmentCard = document.getElementById('createDepartmentCard');
+        const toggleCreateDepartment = document.getElementById('toggleCreateDepartment');
+        const cancelCreateDepartment = document.getElementById('cancelCreateDepartment');
+        const createDepartmentBtn = document.getElementById('createDepartmentBtn');
+        const createDepartmentMessage = document.getElementById('createDepartmentMessage');
+
+        if (departmentSearchInput && departmentTable) {
+            departmentSearchInput.addEventListener('input', function () {
+                const query = this.value.trim().toLowerCase();
+                const rows = Array.from(departmentTable.querySelectorAll('tbody tr'));
+                let visibleCount = 0;
+
+                rows.forEach(row => {
+                    const name = row.cells[0].innerText.toLowerCase();
+                    const description = row.cells[1].innerText.toLowerCase();
+                    const matches = name.includes(query) || description.includes(query);
+                    row.style.display = matches ? '' : 'none';
+                    if (matches) visibleCount++;
+                });
+
+                if (noResultsMessage) {
+                    noResultsMessage.style.display = visibleCount === 0 ? 'block' : 'none';
+                }
+            });
+        }
+
+        if (toggleCreateDepartment && createDepartmentCard) {
+            toggleCreateDepartment.addEventListener('click', () => {
+                createDepartmentCard.style.display = 'block';
+                toggleCreateDepartment.style.display = 'none';
+                createDepartmentMessage.textContent = '';
+                document.getElementById('newDepartmentName').focus();
+            });
+        }
+
+        if (cancelCreateDepartment && createDepartmentCard && toggleCreateDepartment) {
+            cancelCreateDepartment.addEventListener('click', () => {
+                createDepartmentCard.style.display = 'none';
+                toggleCreateDepartment.style.display = 'inline-flex';
+                createDepartmentMessage.textContent = '';
+                document.getElementById('newDepartmentName').value = '';
+                document.getElementById('newDepartmentDesc').value = '';
+            });
+        }
+
+        if (createDepartmentBtn) {
+            createDepartmentBtn.addEventListener('click', async () => {
+                const nameInput = document.getElementById('newDepartmentName');
+                const descInput = document.getElementById('newDepartmentDesc');
+                const name = nameInput.value.trim();
+                const description = descInput.value.trim();
+
+                createDepartmentMessage.style.color = '#dc2626';
+                if (!name) {
+                    createDepartmentMessage.textContent = 'Le nom du département est requis.';
+                    return;
+                }
+
+                createDepartmentBtn.disabled = true;
+                createDepartmentBtn.textContent = 'Création...';
+                createDepartmentMessage.textContent = '';
+
+                try {
+                    const response = await fetch('@Url.Action("CreateDepartement", "Admin")', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify({ Nom: name, Description: description })
+                    });
+
+                    const result = await response.json();
+
+                    if (!result.success) {
+                        createDepartmentMessage.textContent = result.message || 'Erreur lors de la création du département.';
+                        return;
+                    }
+
+                    createDepartmentMessage.style.color = '#166534';
+                    createDepartmentMessage.textContent = result.message || 'Département créé.';
+                    setTimeout(() => location.reload(), 800);
+                } catch (error) {
+                    createDepartmentMessage.textContent = 'Impossible de créer le département. Veuillez réessayer.';
+                } finally {
+                    createDepartmentBtn.disabled = false;
+                    createDepartmentBtn.textContent = 'Créer';
+                }
+            });
+        }
+    </script>
+}
+

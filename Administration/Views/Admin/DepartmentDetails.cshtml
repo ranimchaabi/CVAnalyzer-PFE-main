@@ -1,0 +1,203 @@
+@model Administration.Models.Departement
+@{
+    ViewData["Title"] = "Détails du département";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var directeurs = ViewBag.Directeurs as List<Administration.Models.Utilisateur> ?? new List<Administration.Models.Utilisateur>();
+}
+
+<style>
+    .detail-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        overflow: hidden;
+        margin-bottom: 24px;
+    }
+
+    .detail-header {
+        padding: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .detail-title {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #0f172a;
+    }
+
+    .detail-title i {
+        font-size: 1.35rem;
+        color: #4f46e5;
+    }
+
+    .detail-body {
+        padding: 24px;
+    }
+
+    .info-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+        margin-bottom: 24px;
+    }
+
+    .info-block {
+        background: #f8fafc;
+        border-radius: 16px;
+        padding: 18px;
+    }
+
+    .info-label {
+        display: block;
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: #64748b;
+        margin-bottom: 8px;
+    }
+
+    .info-value {
+        font-size: 1rem;
+        color: #0f172a;
+        line-height: 1.6;
+    }
+
+    .table-modern {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .table-modern thead th {
+        background: #f8fafc;
+        color: #475569;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.1em;
+        padding: 16px;
+        border: none;
+        text-align: left;
+    }
+
+    .table-modern tbody td {
+        padding: 16px;
+        border-top: 1px solid #f1f5f9;
+        color: #334155;
+        vertical-align: middle;
+    }
+
+    .table-modern tbody tr:hover {
+        background: #f8fafc;
+    }
+
+    .badge-secondary {
+        background: #e2e8f0;
+        color: #334155;
+        padding: 6px 12px;
+        border-radius: 999px;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+
+    .empty-section {
+        padding: 40px;
+        text-align: center;
+        color: #64748b;
+    }
+
+    .empty-section i {
+        font-size: 40px;
+        margin-bottom: 16px;
+    }
+
+    .button-back {
+        padding: 10px 18px;
+        background: #eff6ff;
+        color: #1d4ed8;
+        border-radius: 12px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .button-back:hover {
+        background: #dbeafe;
+    }
+</style>
+
+<div class="detail-card">
+    <div class="detail-header">
+        <div>
+            <h2 class="detail-title"><i class="bi bi-building"></i> Département : @Model.Nom</h2>
+            <p style="margin: 8px 0 0; color: #64748b;">Liste des directeurs rattachés et informations du département.</p>
+        </div>
+        <a asp-action="Departements" class="button-back"><i class="bi bi-arrow-left"></i> Retour</a>
+    </div>
+    <div class="detail-body">
+        <div class="info-row">
+            <div class="info-block">
+                <span class="info-label">Nom du département</span>
+                <div class="info-value">@Model.Nom</div>
+            </div>
+            <div class="info-block">
+                <span class="info-label">Directeurs associés</span>
+                <div class="info-value">@directeurs.Count</div>
+            </div>
+        </div>
+
+        <div class="info-block" style="margin-bottom: 24px;">
+            <span class="info-label">Description</span>
+            <div class="info-value">@(string.IsNullOrWhiteSpace(Model.Description) ? "Aucune description fournie." : Model.Description)</div>
+        </div>
+
+        <div class="info-row" style="grid-template-columns: 1fr;">
+            <div class="info-block">
+                <span class="info-label">Date de création</span>
+                <div class="info-value">@Model.DateCreation.ToString("dd MMMM yyyy")</div>
+            </div>
+        </div>
+
+        <div style="margin-top: 24px;">
+            <h3 style="font-size: 1.1rem; margin-bottom: 16px; color: #0f172a;">Directeurs</h3>
+            @if (!directeurs.Any())
+            {
+                <div class="empty-section">
+                    <i class="bi bi-people"></i>
+                    <div>Aucun directeur lié à ce département pour le moment.</div>
+                </div>
+            }
+            else
+            {
+                <div style="overflow-x: auto;">
+                    <table class="table-modern">
+                        <thead>
+                            <tr>
+                                <th>Nom</th>
+                                <th>Email</th>
+                                <th>Statut</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var directeur in directeurs)
+                            {
+                                <tr>
+                                    <td>@directeur.NomUtilisateur</td>
+                                    <td>@directeur.Email</td>
+                                    <td><span class="badge-secondary">@(directeur.IsActive ? "Actif" : "Inactif")</span></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>

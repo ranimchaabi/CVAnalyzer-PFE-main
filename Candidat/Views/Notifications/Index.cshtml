@@ -1,0 +1,46 @@
+﻿@model List<CvParsing.Models.Notification>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Notifications";
+}
+
+<div class="page-strip">
+    <div class="container">
+        <nav class="page-strip__nav" aria-label="Breadcrumb">
+            <a href="/Home/Index">Accueil</a><span class="page-strip__sep">›</span><span class="page-strip__current">Notifications</span>
+        </nav>
+    </div>
+</div>
+
+<div class="container pt-100 pb-70">
+    <div class="section-title text-center">
+        <h2>Notifications</h2>
+        <p class="margin-auto">Vos messages et mises à jour récentes.</p>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">Aucune notification.</div>
+    }
+    else
+    {
+        <div class="list-group">
+            @foreach (var n in Model)
+            {
+                <form asp-action="Open" method="post" class="list-group-item list-group-item-action">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" value="@n.Id" />
+                    <button type="submit" class="btn btn-link text-start w-100 text-decoration-none p-0">
+                        <div class="d-flex justify-content-between">
+                            <strong class="@(n.IsRead ? "text-muted" : "text-dark")">@n.Title</strong>
+                            <small class="text-muted">@n.CreatedAt.ToString("dd/MM/yyyy HH:mm")</small>
+                        </div>
+                        <div class="text-muted">@n.Message</div>
+                    </button>
+                </form>
+            }
+        </div>
+    }
+</div>
+
+

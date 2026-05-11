@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - AdminPanel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            background: linear-gradient(135deg, #0f1117 0%, #1a1e2e 50%, #0f1117 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Animated background dots */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: radial-gradient(circle at 20% 50%, rgba(79,110,247,0.08) 0%, transparent 50%),
+                              radial-gradient(circle at 80% 20%, rgba(6,182,212,0.08) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .login-container {
+            max-width: 460px;
+            width: 100%;
+            margin: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .brand {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .brand-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, #4f6ef7, #06b6d4);
+            border-radius: 16px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.75rem;
+            box-shadow: 0 8px 24px rgba(79,110,247,0.3);
+        }
+
+        .brand-icon svg { width: 28px; height: 28px; stroke: white; fill: none; stroke-width: 2; }
+
+        .brand-name {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .brand-name span { color: #4f6ef7; }
+
+        .card {
+            border: none;
+            border-radius: 24px;
+            background: rgba(255,255,255,0.98);
+            box-shadow: 0 24px 64px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+        }
+
+        .card h2 { font-size: 1.5rem; font-weight: 700; color: #0f172a; }
+
+        .form-control {
+            border-radius: 12px;
+            padding: 12px 16px;
+            border: 1.5px solid #e2e8f0;
+            font-size: 0.95rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-control:focus {
+            border-color: #4f6ef7;
+            box-shadow: 0 0 0 3px rgba(79,110,247,0.15);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4f6ef7, #3a5be0);
+            border: none;
+            border-radius: 12px;
+            padding: 13px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: transform 0.15s, box-shadow 0.15s;
+            box-shadow: 0 4px 12px rgba(79,110,247,0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(79,110,247,0.4);
+        }
+
+        .btn-primary:active { transform: translateY(0); }
+
+        .form-label { color: #374151; font-weight: 600; font-size: 0.875rem; }
+
+        a { color: #4f6ef7; text-decoration: none; font-weight: 500; }
+        a:hover { color: #3a5be0; text-decoration: underline; }
+
+        .alert { border-radius: 12px; font-size: 0.875rem; }
+
+        .footer-note {
+            text-align: center;
+            color: rgba(255,255,255,0.4);
+            font-size: 0.8rem;
+            margin-top: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="brand">
+            <div class="brand-icon">
+                <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            </div>
+            <div class="brand-name">Astree</div>
+        </div>
+
+        @RenderBody()
+
+        <p class="footer-note">&copy; @DateTime.Now.Year Astree. Tous droits réservés.</p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

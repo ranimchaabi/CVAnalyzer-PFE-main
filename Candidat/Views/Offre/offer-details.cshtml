@@ -1,0 +1,492 @@
+﻿@model CvParsing.Models.OffreEmploi
+
+@{
+    ViewData["Title"] = "Détail Offre";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<<<<<<< HEAD
+<style>
+    .offer-description-body {
+        color: #475569;
+        line-height: 1.8;
+        margin-top: 16px;
+    }
+
+    .offer-description-body p {
+        margin: 0 0 1rem;
+    }
+
+    .offer-sidebar .sidebar-widget {
+        background: #ffffff;
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 10px 25px rgba(15, 23, 42, 0.05);
+        margin-bottom: 20px;
+    }
+
+    .offer-sidebar .sidebar-widget .sidebar-widget-title {
+        margin-bottom: 16px;
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: #0f172a;
+    }
+
+    .offer-detail-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        gap: 12px;
+    }
+
+    .offer-detail-list li {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 14px;
+        background: #f8fafc;
+        border-radius: 14px;
+        color: #334155;
+        font-size: 0.97rem;
+    }
+
+    .offer-detail-list li i {
+        color: #2563eb;
+        font-size: 1.1rem;
+    }
+
+    .offer-skills-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 8px;
+    }
+
+    .offer-skill-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: #eef2ff;
+        color: #1d4ed8;
+        padding: 8px 12px;
+        border-radius: 999px;
+        font-size: 0.95rem;
+        border: 1px solid #dbeafe;
+    }
+
+    .offer-skill-chip i {
+        font-size: 0.95rem;
+    }
+</style>
+
+@functions {
+    private static string FormatDescription(string? raw)
+    {
+        if (string.IsNullOrWhiteSpace(raw))
+        {
+            return "<p style=\"color:#6b7280; font-style:italic;\">Aucune description disponible pour cette offre.</p>";
+        }
+
+        var encoded = System.Net.WebUtility.HtmlEncode(raw.Trim())
+            .Replace("\r\n", "\n")
+            .Replace("\r", "\n")
+            .Replace("\n", "<br/>");
+
+        return $"<p>{encoded}</p>";
+    }
+
+    private static IEnumerable<string> ParseItems(string? raw)
+    {
+        if (string.IsNullOrWhiteSpace(raw))
+        {
+            yield break;
+        }
+
+        raw = raw.Trim();
+        var parsedItems = new List<string>();
+
+        if (raw.StartsWith("[") && raw.EndsWith("]"))
+        {
+            try
+            {
+                using var document = System.Text.Json.JsonDocument.Parse(raw);
+                if (document.RootElement.ValueKind == System.Text.Json.JsonValueKind.Array)
+                {
+                    foreach (var item in document.RootElement.EnumerateArray())
+                    {
+                        var value = item.ValueKind == System.Text.Json.JsonValueKind.String ? item.GetString() : item.ToString();
+                        if (!string.IsNullOrWhiteSpace(value))
+                        {
+                            parsedItems.Add(value.Trim());
+                        }
+                    }
+                }
+            }
+            catch
+            {
+            }
+
+            if (parsedItems.Count > 0)
+            {
+                foreach (var item in parsedItems)
+                {
+                    yield return item;
+                }
+
+                yield break;
+            }
+        }
+
+        if (raw.StartsWith("{") && raw.EndsWith("}"))
+        {
+            try
+            {
+                using var document = System.Text.Json.JsonDocument.Parse(raw);
+                if (document.RootElement.ValueKind == System.Text.Json.JsonValueKind.Object)
+                {
+                    foreach (var prop in document.RootElement.EnumerateObject())
+                    {
+                        var value = prop.Value.ToString();
+                        if (!string.IsNullOrWhiteSpace(value))
+                        {
+                            parsedItems.Add($"{prop.Name}: {value.Trim()}");
+                        }
+                    }
+                }
+            }
+            catch
+            {
+            }
+
+            if (parsedItems.Count > 0)
+            {
+                foreach (var item in parsedItems)
+                {
+                    yield return item;
+                }
+
+                yield break;
+            }
+        }
+
+        foreach (var part in raw.Split(new[] { ',', ';', '|', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
+        {
+            var trimmed = part.Trim();
+            if (!string.IsNullOrWhiteSpace(trimmed))
+            {
+                yield return trimmed;
+            }
+        }
+    }
+}
+
+=======
+>>>>>>> 364b0a3c7128899c3df393e4339086a493d07ccc
+<div class="page-strip">
+    <div class="container">
+        <nav class="page-strip__nav" aria-label="Fil d'Ariane">
+            <a href="/Home/Index">Accueil</a><span class="page-strip__sep">›</span><a href="/Offre/Index">Offres</a><span class="page-strip__sep">›</span><span class="page-strip__current">Détail</span>
+        </nav>
+    </div>
+</div>
+
+<!-- Case Details Area -->
+<div class="case-details-area pt-100 pb-70">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="case-article">
+                    <div class="case-article-content">
+                        <h2>@(Model?.Titre ?? "")</h2>
+<<<<<<< HEAD
+                        <div class="offer-description-body">
+                            @Html.Raw(FormatDescription(Model?.Description))
+                        </div>
+=======
+                        <p>@(Model?.Description ?? "")</p>
+>>>>>>> 364b0a3c7128899c3df393e4339086a493d07ccc
+                    </div>
+
+                    <!-- ========== SECTION POSTULER / UPLOAD CV ========== -->
+                    <div class="case-article-content mt-4">
+                        <h3>Postuler à cette offre</h3>
+
+                        @if (ViewBag.IsLoggedIn == true)
+                        {
+                            var hasSubmitted = ViewBag.HasCvSubmitted == true;
+                            @if (ViewBag.UploadSuccess == true)
+                            {
+                                <div class="alert alert-success" role="alert">
+                                    <i class='bx bx-check-circle'></i>
+                                    Votre CV a été soumis avec succès ! Nous vous contacterons prochainement.
+                                </div>
+                            }
+                            @if (TempData["CvSubmitted"] as string == "1" || hasSubmitted)
+                            {
+                                <div class="alert alert-success" role="alert">
+                                    <i class='bx bx-check-circle'></i>
+                                    CV soumis avec succès
+                                </div>
+                            }
+
+                            @if (!string.IsNullOrEmpty(ViewBag.UploadError as string))
+                            {
+                                <div class="alert alert-danger" role="alert">
+                                    <i class='bx bx-error-circle'></i>
+                                    @ViewBag.UploadError
+                                </div>
+                            }
+
+                            <div class="d-flex flex-wrap align-items-center gap-2" style="margin-top:14px;">
+                                @if (hasSubmitted)
+                                {
+                                    <button type="button" class="default-btn btn-bg-two" id="resendCvToggleBtn">
+                                        Modifier &amp; renvoyer le CV
+                                    </button>
+                                }
+                            </div>
+
+                            <div class="apply-form-area" id="applyCvFormWrap" style="background:#f9f9f9; border:1px solid #e0e0e0; border-radius:8px; padding:30px; margin-top:20px; @(hasSubmitted ? "display:none;" : "")">
+                                <form asp-action="UploadCv" asp-controller="Offre" method="post" enctype="multipart/form-data">
+                                    <input type="hidden" name="offreId" value="@Model?.Id" />
+
+<<<<<<< HEAD
+                                    <h4 style="margin-bottom:20px; color:#333;"><i class='bx bx-upload'></i> Votre CV</h4>
+
+                                    <div class="alert alert-info" role="alert" style="background:#e7f3ff; border:1px solid #b3d9ff; padding:12px; border-radius:6px; margin-bottom:20px;">
+                                        <i class='bx bx-info-circle'></i>
+                                        <strong>Important :</strong> Votre CV est le seul élément requis pour postuler. Vos informations personnelles seront récupérées depuis votre profil candidat.
+                                    </div>
+
+=======
+                                    <h4 style="margin-bottom:20px; color:#333;"><i class='bx bx-user'></i> Informations personnelles</h4>
+
+                                    <!-- Nom complet -->
+                                    <div class="form-group mb-3">
+                                        <label for="nomComplet" style="font-weight:600; margin-bottom:8px; display:block;">
+                                            Nom complet <span style="color:#e74c3c;">*</span>
+                                        </label>
+                                        <input type="text" name="nomComplet" id="nomComplet"
+                                               class="form-control"
+                                               placeholder="Votre nom et prénom"
+                                               required
+                                               style="width:100%; padding:12px; border:1px solid #ddd; border-radius:6px;">
+                                    </div>
+
+                                    <!-- Email -->
+                                    <div class="form-group mb-3">
+                                        <label for="email" style="font-weight:600; margin-bottom:8px; display:block;">
+                                            Email <span style="color:#e74c3c;">*</span>
+                                        </label>
+                                        <input type="email" name="email" id="email"
+                                               class="form-control"
+                                               placeholder="votre@email.com"
+                                               required
+                                               style="width:100%; padding:12px; border:1px solid #ddd; border-radius:6px;">
+                                    </div>
+
+                                    <!-- Téléphone -->
+                                    <div class="form-group mb-3">
+                                        <label for="telephone" style="font-weight:600; margin-bottom:8px; display:block;">
+                                            Téléphone
+                                        </label>
+                                        <input type="tel" name="telephone" id="telephone"
+                                               class="form-control"
+                                               placeholder="+33 6 12 34 56 78"
+                                               style="width:100%; padding:12px; border:1px solid #ddd; border-radius:6px;">
+                                    </div>
+
+                                    <hr style="margin:25px 0; border-color:#e0e0e0;">
+                                    <h4 style="margin-bottom:20px; color:#333;"><i class='bx bx-briefcase'></i> Expérience et compétences</h4>
+
+                                    <!-- Compétences -->
+                                    <div class="form-group mb-3">
+                                        <label for="competences" style="font-weight:600; margin-bottom:8px; display:block;">
+                                            Compétences
+                                        </label>
+                                        <textarea name="competences" id="competences"
+                                                  class="form-control"
+                                                  placeholder="Listez vos compétences principales (ex: C#, SQL, ASP.NET, React...)"
+                                                  rows="4"
+                                                  style="width:100%; padding:12px; border:1px solid #ddd; border-radius:6px; resize:vertical;"></textarea>
+                                    </div>
+
+                                    <!-- Expérience -->
+                                    <div class="form-group mb-3">
+                                        <label for="experience" style="font-weight:600; margin-bottom:8px; display:block;">
+                                            Expérience professionnelle
+                                        </label>
+                                        <textarea name="experience" id="experience"
+                                                  class="form-control"
+                                                  placeholder="Décrivez votre expérience professionnelle..."
+                                                  rows="4"
+                                                  style="width:100%; padding:12px; border:1px solid #ddd; border-radius:6px; resize:vertical;"></textarea>
+                                    </div>
+
+                                    <!-- Niveau d'éducation -->
+                                    <div class="form-group mb-3">
+                                        <label for="niveauEducation" style="font-weight:600; margin-bottom:8px; display:block;">
+                                            Niveau d'éducation
+                                        </label>
+                                        <select name="niveauEducation" id="niveauEducation"
+                                                class="form-control"
+                                                style="width:100%; padding:12px; border:1px solid #ddd; border-radius:6px; background:#fff;">
+                                            <option value="">-- Sélectionnez votre niveau --</option>
+                                            <option value="Bac">Baccalauréat</option>
+                                            <option value="Bac+2">Bac+2 (BTS, DUT)</option>
+                                            <option value="Bac+3">Bac+3 (Licence)</option>
+                                            <option value="Bac+5">Bac+5 (Master, Ingénieur)</option>
+                                            <option value="Doctorat">Doctorat</option>
+                                            <option value="Autre">Autre</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Autres informations -->
+                                    <div class="form-group mb-3">
+                                        <label for="autresInfos" style="font-weight:600; margin-bottom:8px; display:block;">
+                                            Autres informations (optionnel)
+                                        </label>
+                                        <textarea name="autresInfos" id="autresInfos"
+                                                  class="form-control"
+                                                  placeholder="Informations complémentaires, certifications, langues..."
+                                                  rows="3"
+                                                  style="width:100%; padding:12px; border:1px solid #ddd; border-radius:6px; resize:vertical;"></textarea>
+                                    </div>
+
+                                    <hr style="margin:25px 0; border-color:#e0e0e0;">
+                                    <h4 style="margin-bottom:20px; color:#333;"><i class='bx bx-upload'></i> Votre CV</h4>
+
+>>>>>>> 364b0a3c7128899c3df393e4339086a493d07ccc
+                                    <!-- Upload CV -->
+                                    <div class="form-group mb-3">
+                                        <label style="font-weight:600; margin-bottom:8px; display:block;">
+                                            Télécharger votre CV <span style="color:#e74c3c;">*</span>
+                                        </label>
+                                        <div style="border:2px dashed #ccc; border-radius:8px; padding:20px; text-align:center; background:#fff;">
+                                            <i class='bx bx-file' style="font-size:40px; color:#aaa;"></i>
+                                            <p style="color:#888; margin:10px 0 5px;">Glissez votre fichier ici ou cliquez pour parcourir</p>
+<<<<<<< HEAD
+                                            <small style="color:#aaa;">Format accepté : PDF uniquement (max 5 MB)</small>
+                                            <br><br>
+                                            <input type="file" name="cvFile" id="cvFile"
+                                                   accept=".pdf"
+=======
+                                            <small style="color:#aaa;">Formats acceptés : PDF, DOC, DOCX (max 5 MB)</small>
+                                            <br><br>
+                                            <input type="file" name="cvFile" id="cvFile"
+                                                   accept=".pdf,.doc,.docx"
+>>>>>>> 364b0a3c7128899c3df393e4339086a493d07ccc
+                                                   required
+                                                   style="display:none;"
+                                                   onchange="document.getElementById('fileName').textContent = this.files[0]?.name || ''">
+                                            <label for="cvFile" class="default-btn btn-bg-two" style="cursor:pointer; display:inline-block; padding:10px 25px;">
+                                                Parcourir
+                                            </label>
+                                            <p id="fileName" style="margin-top:10px; color:#333; font-weight:600;"></p>
+                                        </div>
+                                    </div>
+
+                                    <button type="submit" class="default-btn btn-bg-two" style="margin-top:10px; width:100%; padding:15px;">
+                                        <i class='bx bx-send'></i> Envoyer ma candidature
+                                    </button>
+                                </form>
+                            </div>
+                        }
+                        else
+                        {
+                            <div style="background:#fff3cd; border:1px solid #ffc107; border-radius:8px; padding:30px; text-align:center; margin-top:20px;">
+                                <i class='bx bx-lock-alt' style="font-size:50px; color:#ffc107;"></i>
+                                <h4 style="margin:15px 0 10px;">Connexion requise</h4>
+                                <p style="color:#666; margin-bottom:20px;">
+                                    Vous devez être connecté pour postuler à cette offre et télécharger votre CV.
+                                </p>
+                                <a href="/Account/Login?returnUrl=/Offre/Details/@ViewData["OffreId"]"
+                                   class="default-btn btn-bg-two" style="margin-right:10px;">
+                                    <i class='bx bx-log-in'></i> Se connecter
+                                </a>
+                                <a href="/Account/Register?returnUrl=/Offre/Details/@ViewData["OffreId"]" class="default-btn btn-bg-one">
+                                    <i class='bx bx-user-plus'></i> S'inscrire
+                                </a>
+                            </div>
+                        }
+                    </div>
+                    <!-- ========== FIN SECTION POSTULER ========== -->
+
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+<<<<<<< HEAD
+                @{ var offerSkills = ParseItems(Model?.CompetencesRequises).ToList(); }
+                <div class="side-bar-area offer-sidebar">
+                    <div class="side-bar-widget">
+                        <h3 class="sidebar-widget-title">Résumé de l'offre</h3>
+                        <div class="side-bar-categories">
+                            <ul class="offer-detail-list">
+                                <li><i class='bx bx-briefcase'></i><span>@Model?.Type</span></li>
+                                <li><i class='bx bx-time'></i><span>@Model?.Experience ans</span></li>
+                                <li><i class='bx bx-book'></i><span>@Model?.NiveauEducation</span></li>
+                                <li><i class='bx bx-award'></i><span>@Model?.TypeDiplome</span></li>
+=======
+                <div class="side-bar-area">
+                    <div class="side-bar-widget">
+                        <h3 class="title">Offre récente</h3>
+                        <div class="side-bar-categories">
+                            <ul>
+                                <li>
+                                    <div class="line-circle"></div>
+                                    <a href="/Offre/Details/@Model?.Id">@Model?.Titre</a>
+                                </li>
+>>>>>>> 364b0a3c7128899c3df393e4339086a493d07ccc
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="side-bar-widget">
+<<<<<<< HEAD
+                        <h3 class="sidebar-widget-title">Compétences requises</h3>
+                        <div class="offer-skills-list">
+                            @if (offerSkills.Any())
+                            {
+                                foreach (var skill in offerSkills)
+                                {
+                                    <span class="offer-skill-chip"><i class="bx bx-check"></i>@skill</span>
+                                }
+                            }
+                            else
+                            {
+                                <p class="text-muted">Aucune compétence renseignée pour cette offre.</p>
+                            }
+=======
+                        <div class="side-bar-categories">
+                            <ul>
+                                <li><i class='bx bx-briefcase'></i> @Model?.Type</li>
+                                <li><i class='bx bx-time'></i> @Model?.Experience ans</li>
+                                <li><i class='bx bx-book'></i> @Model?.NiveauEducation</li>
+                            </ul>
+>>>>>>> 364b0a3c7128899c3df393e4339086a493d07ccc
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- Case Details Area End -->
+
+@section Scripts {
+    <script>
+        (function () {
+            var toggle = document.getElementById('resendCvToggleBtn');
+            var wrap = document.getElementById('applyCvFormWrap');
+            if (!toggle || !wrap) return;
+            toggle.addEventListener('click', function () {
+                wrap.style.display = 'block';
+                toggle.style.display = 'none';
+            });
+        })();
+    </script>
+}
+

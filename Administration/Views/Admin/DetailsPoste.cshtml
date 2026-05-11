@@ -1,0 +1,902 @@
+@model Administration.Models.OffreEmploi
+@{
+    ViewData["Title"] = "Détails du poste - " + Model.Titre;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    
+    var statusColor = Model.Statut == "ACTIF" ? "#22c55e" : "#6b7280";
+    var statusBg = Model.Statut == "ACTIF" ? "#f0fdf4" : "#f3f4f6";
+    var candidateCount = Model.Cvs?.Count ?? 0;
+}
+
+<<<<<<< HEAD
+@functions {
+    private static IEnumerable<string> ParseTextItems(string? raw)
+    {
+        if (string.IsNullOrWhiteSpace(raw))
+        {
+            yield break;
+        }
+
+        raw = raw.Trim();
+        var parsedItems = new List<string>();
+
+        if (raw.StartsWith("[") && raw.EndsWith("]"))
+        {
+            try
+            {
+                using var document = System.Text.Json.JsonDocument.Parse(raw);
+                if (document.RootElement.ValueKind == System.Text.Json.JsonValueKind.Array)
+                {
+                    foreach (var item in document.RootElement.EnumerateArray())
+                    {
+                        var value = item.ValueKind == System.Text.Json.JsonValueKind.String ? item.GetString() : item.ToString();
+                        if (!string.IsNullOrWhiteSpace(value))
+                        {
+                            parsedItems.Add(value.Trim());
+                        }
+                    }
+                }
+            }
+            catch
+            {
+            }
+
+            if (parsedItems.Count > 0)
+            {
+                foreach (var item in parsedItems)
+                {
+                    yield return item;
+                }
+
+                yield break;
+            }
+        }
+
+        if (raw.StartsWith("{") && raw.EndsWith("}"))
+        {
+            try
+            {
+                using var document = System.Text.Json.JsonDocument.Parse(raw);
+                if (document.RootElement.ValueKind == System.Text.Json.JsonValueKind.Object)
+                {
+                    foreach (var prop in document.RootElement.EnumerateObject())
+                    {
+                        var value = prop.Value.ToString();
+                        if (!string.IsNullOrWhiteSpace(value))
+                        {
+                            parsedItems.Add($"{prop.Name}: {value.Trim()}");
+                        }
+                    }
+                }
+            }
+            catch
+            {
+            }
+
+            if (parsedItems.Count > 0)
+            {
+                foreach (var item in parsedItems)
+                {
+                    yield return item;
+                }
+
+                yield break;
+            }
+        }
+
+        foreach (var part in raw.Split(new[] { ',', ';', '|', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
+        {
+            var trimmed = part.Trim();
+            if (!string.IsNullOrWhiteSpace(trimmed))
+            {
+                yield return trimmed;
+            }
+        }
+    }
+
+    private static string FormatDescription(string? raw)
+    {
+        if (string.IsNullOrWhiteSpace(raw))
+        {
+            return "<p style=\"color:#9ca3af; font-style:italic;\">Aucune description disponible pour ce poste.</p>";
+        }
+
+        var encoded = System.Net.WebUtility.HtmlEncode(raw.Trim())
+            .Replace("\r\n", "\n")
+            .Replace("\r", "\n")
+            .Replace("\n", "<br/>");
+
+        return $"<p>{encoded}</p>";
+    }
+}
+
+=======
+>>>>>>> 364b0a3c7128899c3df393e4339086a493d07ccc
+<style>
+    .poste-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 32px 24px;
+    }
+
+    .poste-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 32px;
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+
+    .poste-title-section {
+        flex: 1;
+    }
+
+    .poste-breadcrumb {
+        font-size: 13px;
+        color: #6b7280;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .poste-breadcrumb a {
+        color: #6b7280;
+        text-decoration: none;
+        transition: color 0.2s;
+    }
+
+    .poste-breadcrumb a:hover {
+        color: #3b82f6;
+    }
+
+    .poste-title {
+        font-size: 28px;
+        font-weight: 700;
+        color: #1f2937;
+        margin: 0;
+    }
+
+    .poste-meta {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-top: 12px;
+        flex-wrap: wrap;
+    }
+
+    .poste-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 600;
+        background: @statusBg;
+        color: @statusColor;
+    }
+
+    .poste-department {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 14px;
+        color: #6b7280;
+    }
+
+    .poste-date {
+        font-size: 13px;
+        color: #9ca3af;
+    }
+
+    .btn-back {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 20px;
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        color: #374151;
+        font-size: 14px;
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.2s;
+    }
+
+    .btn-back:hover {
+        background: #f9fafb;
+        border-color: #d1d5db;
+        color: #1f2937;
+    }
+
+    .poste-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 24px;
+    }
+
+    .info-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        overflow: hidden;
+    }
+
+    .card-header-custom {
+        padding: 20px 24px;
+        border-bottom: 1px solid #f3f4f6;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .card-header-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+    }
+
+    .card-header-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: #1f2937;
+    }
+
+    .card-body-custom {
+        padding: 24px;
+    }
+
+    .description-text {
+        font-size: 15px;
+        line-height: 1.7;
+        color: #4b5563;
+        margin: 0;
+    }
+
+    .details-grid {
+        display: grid;
+<<<<<<< HEAD
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+=======
+        grid-template-columns: repeat(2, 1fr);
+>>>>>>> 364b0a3c7128899c3df393e4339086a493d07ccc
+        gap: 20px;
+    }
+
+    .detail-item {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .detail-label {
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #9ca3af;
+    }
+
+    .detail-value {
+        font-size: 15px;
+        font-weight: 500;
+        color: #1f2937;
+    }
+
+    .candidates-section {
+        margin-top: 32px;
+    }
+
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .section-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: #1f2937;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .candidate-count {
+        background: #eff6ff;
+        color: #3b82f6;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .candidate-grid {
+        display: grid;
+        gap: 16px;
+<<<<<<< HEAD
+        margin-bottom: 24px;
+=======
+>>>>>>> 364b0a3c7128899c3df393e4339086a493d07ccc
+    }
+
+    .candidate-card {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        transition: all 0.2s;
+    }
+
+    .candidate-card:hover {
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        transform: translateY(-2px);
+    }
+
+    .candidate-avatar {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        font-weight: 600;
+        flex-shrink: 0;
+    }
+
+    .candidate-info {
+        flex: 1;
+    }
+
+    .candidate-name {
+        font-size: 16px;
+        font-weight: 600;
+        color: #1f2937;
+        margin-bottom: 4px;
+    }
+
+    .candidate-email {
+        font-size: 13px;
+        color: #6b7280;
+    }
+
+<<<<<<< HEAD
+    .candidate-status {
+        margin-top: 8px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 10px;
+        border-radius: 9999px;
+        font-size: 12px;
+        font-weight: 600;
+        color: #334155;
+        background: #f1f5f9;
+    }
+
+    .candidate-status.accepted {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .candidate-status.rejected {
+        background: #fee2e2;
+        color: #991b1b;
+    }
+
+    .candidate-status.pending {
+        background: #f8fafc;
+        color: #334155;
+    }
+
+=======
+>>>>>>> 364b0a3c7128899c3df393e4339086a493d07ccc
+    .candidate-score {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        padding: 0 16px;
+        border-right: 1px solid #e5e7eb;
+    }
+
+    .score-value {
+        font-size: 20px;
+        font-weight: 700;
+        color: #3b82f6;
+    }
+
+    .score-label {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #9ca3af;
+    }
+
+    .btn-view {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 10px 18px;
+        background: #eff6ff;
+        color: #3b82f6;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.2s;
+        white-space: nowrap;
+    }
+
+    .btn-view:hover {
+        background: #3b82f6;
+        color: white;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 60px 24px;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .empty-state-icon {
+        width: 80px;
+        height: 80px;
+        background: #f3f4f6;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        font-size: 36px;
+        color: #9ca3af;
+    }
+
+    .empty-state-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 8px;
+    }
+
+    .empty-state-text {
+        font-size: 14px;
+        color: #6b7280;
+    }
+
+<<<<<<< HEAD
+    .pagination-container {
+        padding: 1.5rem;
+        border-top: 1px solid #e2e8f0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .pagination-info {
+        color: #64748b;
+        font-size: 0.875rem;
+    }
+
+    .pagination-custom {
+        display: flex;
+        gap: 0.25rem;
+    }
+
+    .page-btn {
+        padding: 0.5rem 0.75rem;
+        border: 1px solid #e2e8f0;
+        background: white;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-size: 0.875rem;
+    }
+
+    .page-btn:hover {
+        background: #f8fafc;
+    }
+
+    .page-btn.active {
+        background: #6366f1;
+        color: white;
+        border-color: #6366f1;
+    }
+
+    .description-text {
+        line-height: 1.85;
+        color: #374151;
+        white-space: pre-wrap;
+    }
+
+    .detail-skills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .skill-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: #eef2ff;
+        color: #1d4ed8;
+        border: 1px solid #dbeafe;
+        font-size: 0.95rem;
+    }
+
+    .detail-list {
+        margin: 8px 0 0;
+        padding-left: 18px;
+        color: #334155;
+    }
+
+    .detail-list li {
+        margin-bottom: 6px;
+    }
+
+    .detail-value ul {
+        margin: 0;
+        padding: 0;
+        list-style: disc inside;
+    }
+
+    .detail-value ul li {
+        margin-bottom: 6px;
+    }
+
+    @@media (max-width: 1200px) {
+        .details-grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+    }
+
+=======
+>>>>>>> 364b0a3c7128899c3df393e4339086a493d07ccc
+    @@media (max-width: 968px) {
+        .poste-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @@media (max-width: 640px) {
+        .details-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .candidate-card {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .candidate-score {
+            border-right: none;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 16px 0;
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="poste-container">
+    <!-- Header -->
+    <div class="poste-header">
+        <div class="poste-title-section">
+            <div class="poste-breadcrumb">
+                <a asp-action="Postes"><i class="bi bi-briefcase-fill"></i> Postes</a>
+                <i class="bi bi-chevron-right" style="font-size: 12px;"></i>
+                <span>Détails du poste</span>
+            </div>
+            <h1 class="poste-title">@Model.Titre</h1>
+            <div class="poste-meta">
+                <span class="poste-status">
+                    <i class="bi bi-@(Model.Statut == "ACTIF" ? "check-circle-fill" : "pause-circle-fill")"></i>
+                    @Model.Statut
+                </span>
+                <span class="poste-department">
+                    <i class="bi bi-building"></i>
+                    @Model.Departement
+                </span>
+                <span class="poste-date">
+                    <i class="bi bi-calendar3"></i>
+                    Créé le @Model.DateCreation.ToString("dd MMMM yyyy", new System.Globalization.CultureInfo("fr-FR"))
+                </span>
+            </div>
+        </div>
+        <a asp-action="Postes" class="btn-back">
+            <i class="bi bi-arrow-left"></i>
+            Retour
+        </a>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div class="poste-grid">
+        <!-- Left Column - Description -->
+        <div class="info-card">
+            <div class="card-header-custom">
+                <div class="card-header-icon" style="background: #eff6ff; color: #3b82f6;">
+                    <i class="bi bi-file-text-fill"></i>
+                </div>
+                <div class="card-header-title">Description du poste</div>
+            </div>
+            <div class="card-body-custom">
+<<<<<<< HEAD
+                @Html.Raw(FormatDescription(Model.Description))
+=======
+                @if (!string.IsNullOrWhiteSpace(Model.Description))
+                {
+                    <p class="description-text">@Model.Description</p>
+                }
+                else
+                {
+                    <p class="description-text" style="color: #9ca3af; font-style: italic;">
+                        Aucune description disponible pour ce poste.
+                    </p>
+                }
+>>>>>>> 364b0a3c7128899c3df393e4339086a493d07ccc
+            </div>
+        </div>
+
+        <!-- Right Column - Details -->
+        <div class="info-card">
+            <div class="card-header-custom">
+                <div class="card-header-icon" style="background: #f0fdf4; color: #22c55e;">
+                    <i class="bi bi-info-circle-fill"></i>
+                </div>
+                <div class="card-header-title">Informations</div>
+            </div>
+            <div class="card-body-custom">
+                <div class="details-grid">
+                    <div class="detail-item">
+                        <span class="detail-label">Type de contrat</span>
+                        <span class="detail-value">@Model.Type</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Expérience requise</span>
+                        <span class="detail-value">@Model.Experience an(s)</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Niveau d'éducation</span>
+                        <span class="detail-value">@Model.NiveauEducation</span>
+                    </div>
+                    <div class="detail-item">
+<<<<<<< HEAD
+                        <span class="detail-label"><i class="bi bi-award"></i> Type de diplôme</span>
+                        <div class="detail-value">
+                            @{ var diplomas = ParseTextItems(Model.TypeDiplome).ToList(); }
+                            @if (diplomas.Any())
+                            {
+                                <ul class="detail-list">
+                                    @foreach (var diploma in diplomas)
+                                    {
+                                        <li>@diploma</li>
+                                    }
+                                </ul>
+                            }
+                            else
+                            {
+                                @Model.TypeDiplome
+                            }
+                        </div>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label"><i class="bi bi-check2-square"></i> Compétences requises</span>
+                        <div class="detail-value detail-skills">
+                            @{ var skills = ParseTextItems(Model.CompetencesRequises).ToList(); }
+                            @if (skills.Any())
+                            {
+                                foreach (var skill in skills)
+                                {
+                                    <span class="skill-chip">@skill</span>
+                                }
+                            }
+                            else
+                            {
+                                <span class="text-muted">Aucune compétence renseignée.</span>
+                            }
+                        </div>
+                    </div>
+                    <div class="detail-item">
+=======
+>>>>>>> 364b0a3c7128899c3df393e4339086a493d07ccc
+                        <span class="detail-label">Date de création</span>
+                        <span class="detail-value">@Model.DateCreation.ToString("dd/MM/yyyy")</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Candidates Section -->
+    <div class="candidates-section">
+        <div class="section-header">
+            <h2 class="section-title">
+                <i class="bi bi-people-fill" style="color: #6366f1;"></i>
+                Candidats ayant postulé
+            </h2>
+            @if (candidateCount > 0)
+            {
+                <span class="candidate-count">@candidateCount candidat@(candidateCount > 1 ? "s" : "")</span>
+            }
+        </div>
+
+        @if (Model.Cvs == null || !Model.Cvs.Any())
+        {
+            <div class="empty-state">
+                <div class="empty-state-icon">
+                    <i class="bi bi-inbox"></i>
+                </div>
+                <div class="empty-state-title">Aucun candidat</div>
+                <div class="empty-state-text">Aucun CV n'a encore été déposé pour ce poste.</div>
+            </div>
+        }
+        else
+        {
+<<<<<<< HEAD
+            <div class="candidate-grid" id="candidateGrid">
+=======
+            <div class="candidate-grid">
+>>>>>>> 364b0a3c7128899c3df393e4339086a493d07ccc
+                @foreach (var cv in Model.Cvs)
+                {
+                    var match = cv.Matches.FirstOrDefault();
+                    var score = match?.GlobalScore ?? 0;
+                    var candidateName = cv.NomCandidat ?? "Candidat inconnu";
+                    var candidateEmail = cv.Email ?? "Email non disponible";
+<<<<<<< HEAD
+                    var candidateStatus = cv.ValidationStatus ?? "Pending";
+                    var statusLabel = candidateStatus == "Accepted" ? "Accepté"
+                        : candidateStatus == "Rejected" ? "Refusé"
+                        : "En attente";
+                    var statusClass = candidateStatus == "Accepted" ? "accepted"
+                        : candidateStatus == "Rejected" ? "rejected"
+                        : "pending";
+                    var initial = !string.IsNullOrEmpty(candidateName) && candidateName.Length > 0 
+                        ? candidateName.Substring(0, 1).ToUpper() 
+                        : "?";
+                    <div class="candidate-card" data-candidate>
+=======
+                    var initial = !string.IsNullOrEmpty(candidateName) && candidateName.Length > 0 
+                        ? candidateName.Substring(0, 1).ToUpper() 
+                        : "?";
+                    <div class="candidate-card">
+>>>>>>> 364b0a3c7128899c3df393e4339086a493d07ccc
+                        <div class="candidate-avatar">@initial</div>
+                        <div class="candidate-info">
+                            <div class="candidate-name">@candidateName</div>
+                            <div class="candidate-email">
+                                <i class="bi bi-envelope-fill me-1"></i>@candidateEmail
+                            </div>
+<<<<<<< HEAD
+                            <div class="candidate-status @statusClass">
+                                <i class="bi bi-circle-fill" style="font-size: 0.65rem;"></i>@statusLabel
+                            </div>
+=======
+>>>>>>> 364b0a3c7128899c3df393e4339086a493d07ccc
+                        </div>
+                        <div class="candidate-score">
+                            <span class="score-value">@(match != null ? score.ToString("F0") + "%" : "0%")</span>
+                            <span class="score-label">Score</span>
+                        </div>
+                        <a asp-action="CvResult" asp-route-offreId="@Model.Id" asp-route-cvId="@cv.Id" class="btn-view">
+                            <i class="bi bi-eye-fill"></i>
+                            Voir analyse
+                        </a>
+                    </div>
+                }
+            </div>
+<<<<<<< HEAD
+
+            <div class="pagination-container">
+                <div class="pagination-info" id="paginationInfo">
+                    Affichage de 1 à @Model.Cvs.Count sur @Model.Cvs.Count candidats
+                </div>
+                <div class="pagination-custom" id="paginationControls">
+                    <!-- Generated by JS -->
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        let currentPage = 1;
+        const itemsPerPage = 10;
+        let allCards = [];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const grid = document.getElementById('candidateGrid');
+            if (grid) {
+                const cards = grid.querySelectorAll('.candidate-card[data-candidate]');
+                allCards = Array.from(cards);
+                renderPagination();
+                showPage(1);
+            }
+        });
+
+        function renderPagination() {
+            const totalPages = Math.ceil(allCards.length / itemsPerPage);
+            const container = document.getElementById('paginationControls');
+            if (!container) return;
+            container.innerHTML = '';
+            
+            if (totalPages === 0) {
+                const info = document.getElementById('paginationInfo');
+                if(info) info.innerHTML = `Affichage de 0 à 0 sur 0 candidats`;
+                return;
+            }
+
+            // Prev
+            const prevBtn = document.createElement('button');
+            prevBtn.className = `page-btn`;
+            if(currentPage === 1) prevBtn.style.opacity = '0.5';
+            prevBtn.innerHTML = `<i class="bi bi-chevron-left"></i>`;
+            prevBtn.onclick = () => { if(currentPage > 1) showPage(currentPage - 1); };
+            container.appendChild(prevBtn);
+
+            // Pages
+            for (let i = 1; i <= totalPages; i++) {
+                const btn = document.createElement('button');
+                btn.className = `page-btn ${currentPage === i ? 'active' : ''}`;
+                btn.innerText = i;
+                btn.onclick = () => showPage(i);
+                container.appendChild(btn);
+            }
+
+            // Next
+            const nextBtn = document.createElement('button');
+            nextBtn.className = `page-btn`;
+            if(currentPage === totalPages) nextBtn.style.opacity = '0.5';
+            nextBtn.innerHTML = `<i class="bi bi-chevron-right"></i>`;
+            nextBtn.onclick = () => { if(currentPage < totalPages) showPage(currentPage + 1); };
+            container.appendChild(nextBtn);
+        }
+
+        function showPage(page) {
+            currentPage = page;
+            allCards.forEach(card => card.style.display = 'none');
+            
+            const totalItems = allCards.length;
+            if (totalItems === 0) return;
+
+            const start = (page - 1) * itemsPerPage;
+            const end = Math.min(start + itemsPerPage, totalItems);
+
+            for (let i = start; i < end; i++) {
+                allCards[i].style.display = 'flex';
+            }
+
+            const info = document.getElementById('paginationInfo');
+            if(info) info.innerHTML = `Affichage de ${start + 1} à ${end} sur ${totalItems} candidats`;
+            renderPagination();
+        }
+    </script>
+}
+=======
+        }
+    </div>
+</div>
+>>>>>>> 364b0a3c7128899c3df393e4339086a493d07ccc

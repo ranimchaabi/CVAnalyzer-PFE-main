@@ -1,0 +1,14 @@
+﻿  Determining projects to restore...
+C:\Users\ranim\Desktop\CVAnalyzer-PFE-main\Administration\Administration.csproj : warning NU1902: Package 'MailKit' 4.12.1 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-9j88-vvj5-vhgr
+  All projects are up-to-date for restore.
+C:\Users\ranim\Desktop\CVAnalyzer-PFE-main\Administration\Administration.csproj : warning NU1902: Package 'MailKit' 4.12.1 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-9j88-vvj5-vhgr
+  Administration -> C:\Users\ranim\Desktop\CVAnalyzer-PFE-main\Administration\Administration\bin2\Administration.dll
+
+Build succeeded.
+
+C:\Users\ranim\Desktop\CVAnalyzer-PFE-main\Administration\Administration.csproj : warning NU1902: Package 'MailKit' 4.12.1 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-9j88-vvj5-vhgr
+C:\Users\ranim\Desktop\CVAnalyzer-PFE-main\Administration\Administration.csproj : warning NU1902: Package 'MailKit' 4.12.1 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-9j88-vvj5-vhgr
+    2 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:03.14
